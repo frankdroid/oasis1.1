@@ -1,0 +1,14 @@
+<?php //View::content(); ?>
+<?php
+/*
+$num_line = 1;
+ echo "<input name='unidad"+$num_line + "' id='unidad"+$num_line + "' type='text' readonly size='10' value=$unidades->unidad>";
+*/
+
+$unidad_medida = array (
+        "idunidad" => "$unidades->idunidad",
+        "unidad" =>  "$unidades->unidad");
+echo json_encode($unidad_medida);
+?>
+	 
+

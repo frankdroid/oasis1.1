@@ -1,0 +1,35 @@
+<div class="content">
+    
+<?php echo View::content(); ?>
+  <h2>Clientes</h2>
+  <hr>
+  <table border="1" align="center">
+      <tr>
+          <th>Id</th>
+          <th>Tipo Documento</th>
+          <th>Identificaci&oacute;n</th>
+          <th>Nombre</th>
+          <th>Apellido</th>
+          <th>Tel&eacute;fono</th>
+          <th>Correo</th>
+          <th>Condicion</th>
+      </tr>
+      <?php foreach ($proveedores->items as $item) : ?>
+      <?php //foreach ($listUsuarios->items as $item) : ?>
+      <tr>
+          <td><?php echo $item->idprov ?></td>
+          <td><?php echo $item->idtipodoc ?></td>
+          <td><?php echo $item->identificacion ?></td>
+          <td><?php echo $item->nombre ?></td>
+          <td><?php echo $item->apellido ?></td>
+          <td><?php echo $item->telefono ?></td>
+          <td><?php echo $item->correo ?></td>
+          <td><?php echo $item->idcondicion ?></td>
+          
+      </tr>
+      <?php endforeach; ?>
+  </table>
+  <?php //echo Html::link("tipos_proveedores/edit/$item->idtipocliente", Html::img('edit.gif','',array('title'=>'Editar')), 'div_create') ?>
+  <?php if($proveedores->prev) echo Html::link("proveedores/listar/$proveedores->prev", '<< Anterior |'); ?>
+  <?php if($proveedores->next) echo Html::link("proveedores/listar/$proveedores->next", 'Próximo >>'); ?>
+</div>

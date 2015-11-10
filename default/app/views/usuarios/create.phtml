@@ -1,0 +1,20 @@
+<?php View::content(); ?>
+<h3>Crear Usuario<h3>
+ 
+<?php echo Form::open(); // por defecto llama a la misma url ?>
+ 
+        <label>Usuario
+        <?php echo Form::text('usuarios.usuario') ?></label>
+ 
+        <label>Password
+        <?php echo Form::pass('usuarios.password') ?></label>
+        
+        <label>Nombre
+        <?php echo Form::text('usuarios.nombre') ?></label>
+        
+        <label>Email
+        <?php echo Form::text('usuarios.email') ?></label>
+ 
+        <?php echo Form::submit('Agregar') ?>
+ 
+<?php echo Form::close() ?>

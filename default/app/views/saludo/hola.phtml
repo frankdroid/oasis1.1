@@ -1,0 +1,22 @@
+
+
+<?php echo YsUIDialog::initWidget('dialogId','style="display:none" title="Integrando KumbiaPHP con jQuery4PHP"') ?>
+  <br>
+  <p>Hola <?php echo $nombre ?></p>
+  <?php echo $fecha ?>
+<?php echo YsUIDialog::endWidget() ?> 
+ 
+<?php
+echo
+YsJQuery::newInstance()
+  ->execute(
+    YsUIDialog::build('#dialogId')
+      ->_modal(true)
+      ->_show(YsUIConstant::SLIDE_EFFECT)
+      ->_beforeclose(new YsJsFunction('alert("Adios")'))
+      ->_buttons(array(
+          'Ok' => new YsJsFunction('alert("Hola jQuery4PHP")'),
+          'Close' =>  new YsJsFunction(YsUIDialog::close('this')))
+       )
+  );
+?>

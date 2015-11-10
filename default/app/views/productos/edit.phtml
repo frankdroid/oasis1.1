@@ -1,0 +1,60 @@
+
+<div class="span12">
+    <?php View::content(); ?><br>
+	
+</div>
+
+<div class="span12">
+    <h2><?php echo $titulo;  ?></h2>
+    <br>
+</div>
+
+    <div class="span2">&nbsp;</div>
+    
+    <?php echo Form::open(); // por defecto llama a la misma url ?>
+    
+        <div id="div_create" class="span5">
+            <!--
+            <label>Producto
+            <?php //echo Form::text('productos.unidad') ?></label>
+            -->
+        <label>Marca
+        <?php
+        echo Form::dbSelect('productos.idmarca','marca', array('marcas','getSelect'));
+        ?>
+            
+        <label>Tipo de Producto
+        <?php
+        echo Form::dbSelect('productos.idtipoprod','tipo_prod', array('tipo_productos','getSelect'));
+        ?>
+            
+        <label>presentacion
+            <?php echo Form::text('productos.presentacion') ?></label>
+           
+        <label>cantidad por empaque
+            <?php echo Form::text('productos.cant_empaque') ?></label>
+        
+        <label>Unidad de Medida
+        <?php
+            //echo Form::dbSelect('clientes.idtipodoc','tipo_doc', array('tipo_documentos','getSelect'),'Seleccione',array('onchange'=>'buscarCliente(this)'));
+            echo Form::dbSelect('productos.idunidad','unidad', array('unidades','getSelect'));
+        ?>
+        <label>Merma Estimada
+            <?php echo Form::text('productos.merma_estimada') ?></label>
+    </div>
+    
+    <div id="list" class="span3" style="width: 300px; height:400px;">
+        <?php echo Html::link("productos/create", 'Crear nuevo') ?>
+        <br>
+        <?php View::partial('productos/list_productos',FALSE,array('list'=>$list))?>
+    </div>     
+    
+    <div class="span2">&nbsp;</div>
+
+    <div class="span12" style="text-align:center">
+        <?php echo Form::submit('Actualizar','class="btn btn-primary"') ?>
+        <?php echo Form::reset('Cancelar','class="btn btn-primary"') ?>
+    </div>
+        
+<?php echo Form::close() ?> 
+

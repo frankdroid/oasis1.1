@@ -1,0 +1,17 @@
+<div class="footer">
+  <div class="footer-inner">
+    <div class="container">
+      <div class="row">
+        <div class="span6"> &copy; <?php echo date('Y');?> Desarrollado por <a href='http://www.goweb.com.ve'>GoWeb</a>.</div>
+        <div class="alignright"> 
+        <?php echo 'Tiempo: '.round((microtime(1)-START_TIME),4).' seg.'; echo ', Memoria Usada: '.number_format(memory_get_usage() / 1048576, 2).' MB';?>
+        </div>
+      </div>
+      <!-- /row --> 
+    </div>
+    <!-- /container --> 
+  </div>
+  <!-- /footer-inner --> 
+</div>
+<!-- /footer --> 
+

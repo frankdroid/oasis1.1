@@ -1,0 +1,131 @@
+<h2>Nueva Factura<h2>
+ 
+<?php echo Form::open(); // por defecto llama a la misma url ?>
+ <div class="span4">
+ 		<?php echo Form::hidden('id_facturactemp',NULL,$id_facturactemp->id) ?>
+        <label>Tipo Cliente
+        <?php $tipo = array('V','E','J','G');
+		echo Form::select('clientes.tipo_fiscal',$tipo) ?></label>
+        <label>Cedula/RIF
+        <?php echo Form::text('clientes.identificacion','onChange="buscaCliente(this.value)" autocomplete="off"') ?></label>
+        
+</div>
+<div class="span4">
+		<label>Nombres
+		<?php echo Form::text('clientes.nombres') ?></label>
+        <label>Apellidos
+        <?php echo Form::text('clientes.apellidos') ?></label>
+</div>
+        
+<div class="span4">
+        <label>Direccion
+        <?php echo Form::text('clientes.direccion') ?></label>
+        <label>Teléfono
+        <?php echo Form::text('clientes.telefono') ?></label>
+        
+</div>
+<?php echo Form::close() ?>
+
+         <a href="#agregarItem" role="button" class="btn" data-toggle="modal">Agregar item</a>
+         
+         
+		<!-- Modal -->
+    <div id="agregarItem" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 id="myModalLabel">Cargar producto</h3>
+      </div>
+      <div class="modal-body">
+        <div id="productos" class="span12">
+                <p><?php echo Html::link('productos/create','<i class="icon-user"></i> Nuevo Producto','class="btn btn-large"')?></p>
+          <h3>Clientes</h3>
+                    <table id="productos" class="table table-striped table-bordered">
+                      <thead>
+                        <tr>
+                          <th scope="col">ID</th>
+                          <th scope="col">Código Producto</th>
+                          <th scope="col">Código Proveedor</th>
+                          <th scope="col">Descripción</th>
+                          <th scope="col">Cantidad</th>
+                          <th scope="col">Seleccionar</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                    <?php foreach($listaProductos->items as $producto): ?>
+                        <tr>
+                          <td><?php echo $producto->id_producto ?></td>
+                          <td><?php echo $producto->cod_producto ?></td>
+                          <td><?php echo $producto->cod_proveedor ?></td>
+                          <td><?php echo $producto->descripcion ?></td>
+                          <td><input name="cantidad" type="text" id="cantidad" size="5" onKeyUp="agregaCantidad(this.value)"></td>
+                          <td><?php echo Ajax::linkAction("agregaritem/$producto->id_producto/$id_facturactemp->id", 'Agregar','items','btn btn-primary','data-dismiss="modal"'); ?></td>
+                        </tr>
+                    <?php endforeach; ?>
+                      </tbody>
+                    </table>
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <button class="btn" data-dismiss="modal" aria-hidden="true">Cerrar</button>
+      </div>
+    </div>
+
+<table class="table table-striped table-bordered">
+          <thead>
+            <tr>
+              <th scope="col">Cod Producto</th>
+              <th scope="col">Descripción</th>
+              <th scope="col">Cantidad</th>
+              <th scope="col">Precio Venta</th>
+              <th scope="col">&nbsp;</th>
+            </tr>
+          </thead>
+          <tbody id="items">
+            <tr>
+              <td>&nbsp;</td>
+              <td>&nbsp;</td>
+              <td>&nbsp;</td>
+              <td>&nbsp;</td>
+              <td>&nbsp;</td>
+            </tr>
+          </tbody>
+        </table>
+ 
+<script>
+		$("#linkagregador").hide();
+		
+		function buscaCliente(cedula) {
+				$.ajax({
+					type: "POST",
+					dataType:"json",
+					url: "<?php echo PUBLIC_PATH . 'ventas/buscarcliente/' ?>" + cedula,
+					success: llegadaCliente
+				});
+				
+				function llegadaCliente(cliente) {
+						if (cliente.nombres == "") {
+							$("#clientes_nombres").val(cliente.nombres); $("#clientes_nombres").removeAttr("readonly");
+							$("#clientes_apellidos").val(cliente.apellidos); $("#clientes_apellidos").removeAttr("readonly");
+							$("#clientes_telefono").val(cliente.telefono); $("#clientes_telefono").removeAttr("readonly");
+							$("#clientes_direccion").val(cliente.direccion); $("#clientes_direccion").removeAttr("readonly");
+						} else {
+							$("#clientes_nombres").val(cliente.nombres); $("#clientes_nombres").attr("readonly","readonly");
+							$("#clientes_apellidos").val(cliente.apellidos); $("#clientes_apellidos").attr("readonly","readonly");
+							$("#clientes_telefono").val(cliente.telefono); $("#clientes_telefono").attr("readonly","readonly");
+							$("#clientes_direccion").val(cliente.direccion); $("#clientes_direccion").attr("readonly","readonly");
+						}
+				} 
+		}
+		
+		function agregaCantidad(cantidad) {
+			if (cantidad!="" && cantidad!="0") {
+					var enlace = $("#linkagregador").attr("href");
+					enlace = enlace + "/" + cantidad;
+					$("#linkagregador").attr("href",enlace);
+					$("#linkagregador").show();
+			} else {
+					$("#linkagregador").hide();	
+			}
+		}		
+</script>

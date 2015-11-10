@@ -1,0 +1,24 @@
+ 
+<?php echo View::content(); 
+//echo var_dump($productos);
+?>
+<table border='1' style='border-collapse: collapse; border-color: #ccc; border:2px;'>
+    <?php foreach ($producto_prov as $items => $item) : ?>
+
+    <tr>
+        <th align='left'><?php echo $item->marca."/".$item->tipo_prod."/".$item->cant_empaque; ?>&nbsp;</th>
+    </tr>
+   <?php endforeach; ?>
+</table>
+
+<span id='result_add_product' style='display: none;'> <?php echo $result; ?></span>
+    
+<!--    <li>; 
+        <?php //echo $item->id ?>&nbsp;
+        <?php //echo $item->idproducto ?>&nbsp;
+        <?php //echo $item->idprov ?>
+        <?php //echo $item->nombre ?>
+    </li>
+    
+    </ul>
+  -->

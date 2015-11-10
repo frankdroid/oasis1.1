@@ -1,0 +1,48 @@
+
+<div class="span12"><?php View::content(); ?><br></div>
+    <div class="span12">
+	<h2><?php echo $titulo;  ?></h2>
+        <br>
+    </div>
+
+    <div class="span1">&nbsp;</div>
+    
+    <?php echo Form::open(); // por defecto llama a la misma url ?>
+    
+    <div class="span4">
+        
+        <label>Condicion de Pago
+            <?php echo Form::text('condicionPago.cond_pago') ?></label>
+     
+            <label>Descripción
+            <?php echo Form::text('condicionPago.descripcion') ?></label>
+            
+            <label>Identificador
+            <?php echo Form::text('condicionPago.identificador') ?></label>
+            
+            <label>Forma de pago </label>
+            Pago de Contado<?php echo Form::check('condicionPago.contado','1') ?>
+            <br>
+            Pago a Credito<?php echo Form::check('condicionPago.credito','1') ?>
+            <br>
+            Mixto
+            <?php echo Form::check('condicionPago.mixto','1') ?>
+            
+            
+        <br>
+            <label>Comentario
+            <?php echo Form::textarea('condicionPago.comentario','rows=5') ?></label>
+            
+    </div>
+    
+    <div class="span7">
+        <div id="list" class="span3" style="width: 300px; height:400px;">
+        <?php View::partial('facturas/list_condicion_pago',FALSE,array('list'=>$list))?>
+        </div> 
+    </div>       
+    
+
+<div class="span10" style="text-align:center"><?php echo Form::submit('Agregar','class="btn btn-primary"') ?></div>
+        
+<?php echo Form::close() ?> 
+

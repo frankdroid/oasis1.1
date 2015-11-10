@@ -1,0 +1,19 @@
+<?php View::helpers('tags'); ?>
+<?php View::content(); ?>
+<div style='width: 330px;'>
+ <h2>Editar Marca</h2>
+ <?php echo form_tag('marca/editar/') ?>
+  <?php echo hidden_field_tag("marca.id")?>
+  <fieldset>
+   <legend>Datos de la Marca</legend>
+   <label>Nombre</label>
+   <?php echo text_field_tag('marca.nombre') ?>
+   <br/>
+   <label>Siglas</label>
+   <?php echo text_field_tag('marca.siglas', 'size: 3','maxlength: 2') ?>
+   <br />
+   <?php echo submit_tag("Guardar","id: save", "class: submit")?>
+   <?php echo link_to("marca/","Cancelar", "class: cancel")?>
+  </fieldset>
+ </form>
+</div>

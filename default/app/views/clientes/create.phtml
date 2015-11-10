@@ -1,0 +1,248 @@
+<?php View::content(); ?>
+<h3>Crear Nuevo Cliente</h3>
+ 
+<?php echo Form::open(); // por defecto llama a la misma url ?>
+ <div class="span12">
+         Identificaci&oacute;n
+                     <?php
+                        //echo Form::dbSelect('clientes.idtipodoc','tipo_doc', array('tipo_documentos','getSelect'),'Seleccione',array('onchange'=>'buscarCliente(this)'));
+                        echo Form::dbSelect('clientes.idtipodoc','tipo_doc', array('tipo_documentos','getSelect'),'Seleccione' ,array('onchange'=>'accionRif(this)', 'style'=>'margin-bottom:10px'));
+                        echo Form::text('clientes.identificacion');
+                     ?>
+                     
+                     <span id="div_digito_rif" style="display: none"> - <?php echo Form::text('digito_rif', array('size'=>'1', 'id'=>'digito_rif',  'maxlenght'=>'1')); ?></span>
+                     <?php echo Form::button("Siguiente", array('onclick'=>'buscarCliente()'))?>
+</div>
+
+<p>&nbsp;</p>
+
+<div id="form" style='display: none'>
+
+   
+    <div class="span4" >
+                    <!--    Datos generales-->
+                        <legend>Datos Generales</legend>
+                        <?php echo Form::hidden('clientes.idcliente') ?>
+                        <label>Nombre
+                           <?php echo Form::text('clientes.nombre') ?></label>
+    
+                        <label>Apellido
+                        <?php echo Form::text('clientes.apellido') ?></label>
+    
+                        <label>Dirección
+                            <?php echo Form::textarea('clientes.direccion','rows=3') ?></label>          
+    
+                        <label>Telefono
+                        <?php echo Form::text('clientes.telefono') ?></label>
+    </div>
+    
+    <div class="span4">
+                    <!-- datos generales -->
+                        <legend>Contactos Adicionales</legend>
+                        <label>Contactos 
+							<?php echo Form::text('clientes.contacto_adic1') ?></label>
+                            <?php echo Form::text('clientes.contacto_adic2') ?>
+                            <br>
+                            <?php echo Form::text('clientes.contacto_adic3') ?>
+                            <br>
+                            <?php echo Form::text('clientes.contacto_adic4') ?>
+                            <br>
+                            <?php echo Form::text('clientes.contacto_adic5') ?>
+                            <br>
+                        <label>Correo electr&oacute;nico
+                        
+                            <?php echo Form::text('clientes.correo') ?></label>
+    </div>
+    
+    <div class="span12">&nbsp;</div>
+            
+    <div class="span4">
+                    <!--     aspectos adicionales -->
+                        <legend>Aspectos Adicionales</legend>
+                        <label>Tipo de Cliente
+                        <?php
+                            echo Form::dbSelect('clientes.idtipocliente','tipo_cliente', array('tipo_clientes','getSelect'));
+                         ?>
+                         </label>   
+                        <label>Fecha de Nacimiento
+                        <?php
+                            echo Form::date('clientes.fe_nac')            ?>
+                         </label>  
+                        <label>Gustos y Preferencias
+                        <?php echo Form::textarea('clientes.gusto_preferencia','rows=5') ?></label>
+    </div>
+                
+    <div class="span4">
+                    <!--     aspectos varios -->
+                        <legend>Aspectos Varios</legend>
+                        
+                        <label>Consideraciones
+                        <?php echo Form::textarea('clientes.consideracion','rows=5') ?></label>
+                 
+                        <label>Comentario
+                        <?php echo Form::textarea('clientes.comentario','rows=5') ?></label>
+                
+    </div>
+        
+    <div class="span8" style="text-align:center">
+		<?php echo Form::submit('Agregar','id="bt_accion" class="btn btn-primary"') ?>
+    </div>       
+            
+            
+      
+     
+</div>
+
+<?php echo Form::close() ?>
+
+<script>
+    
+    function accionRif(str){
+       var tipo_doc = $("#clientes_idtipodoc option:selected").html();
+       if(tipo_doc.toUpperCase() == 'RIF'){
+           document.getElementById('div_digito_rif').style.display = '';
+           
+       }else{
+           document.getElementById('div_digito_rif').style.display = 'none';
+           document.getElementById('digito_rif').value = '';
+       }
+        
+    }
+    
+    function  buscarCliente(){
+        if($('#clientes_idtipodoc').val() == ''){
+            alert('Seleccione el tipo de documento');
+            return false;
+        }
+        if($('#clientes_identificacion').val() == ''){
+            alert('Ingrese el numero de identificacion');
+            return false;
+        }
+            
+		var identificacion = $('#clientes_identificacion').val();
+        var idtipodoc = $('#clientes_idtipodoc').val();
+        if($('#digito_rif').val() != '')
+            identificacion = identificacion + "-" + $('#digito_rif').val();
+        
+        $.ajax({
+        dataType:"json",
+        type: "POST",
+        url: "<?php echo PUBLIC_PATH . 'clientes/buscarCliente/'; ?>",
+        data: "idtipodoc=" + idtipodoc + "&identificacion=" + identificacion,
+        success: cargarDatos
+        
+        /*
+        success: function(html){
+            //alert(html);
+            $("#clientes_nombre").val(html['nombre']); 
+            $("#form").html(html);
+        }
+        */
+       
+        });
+        
+        
+        function cargarDatos(cliente) {
+                $("#clientes_accion").val(cliente.idcliente); 
+                $("#clientes_idcliente").val(cliente.idcliente); 
+                //$("#clientes_identificacion").val(cliente.identificacion); 
+                $("#clientes_nombre").val(cliente.nombre); 
+                $("#clientes_apellido").val(cliente.apellido); 
+                $("#clientes_telefono").val(cliente.telefono); 
+                $("#clientes_direccion").val(cliente.direccion); 
+                $("#clientes_idtipocliente").val(cliente.idtipocliente); 
+                //$("#clientes_idtipodoc").val(cliente.idtipodoc); 
+                $("#clientes_fe_nac").val(cliente.fe_nac); 
+                $("#clientes_gusto_preferencia").val(cliente.gusto_preferencia); 
+                $("#clientes_contacto_adic1").val(cliente.contacto_adic1);
+                $("#clientes_contacto_adic2").val(cliente.contacto_adic2);
+                $("#clientes_contacto_adic3").val(cliente.contacto_adic3);
+                $("#clientes_contacto_adic4").val(cliente.contacto_adic4);
+                $("#clientes_contacto_adic5").val(cliente.contacto_adic5);
+                $("#clientes_correo").val(cliente.correo);
+                $("#clientes_consideracion").val(cliente.consideracion);
+                $("#clientes_comentario").val(cliente.comentario);
+                
+                $("#bt_accion").val(cliente.bt_accion);
+                
+                //muestra el formulario
+                document.getElementById('form').style.display = '';
+            
+        }   
+    }    
+        
+        //});
+        /*
+        if(num_identif != ''){
+            var rowSelected=$("body").find('#' + 'form' )
+            //rowSelected.html('<td colspan="4"> <img src="<?php //echo PUBLIC_PATH ?>/img/ui/ajax-loader.gif" /> Eliminando ...</td>');
+            rowSelected.html('<span> <img src="<?php //echo PUBLIC_PATH ?>/img/ui/ajax-loader.gif" /> Carcgando ...</span>');
+            $.ajax({
+            type: "POST",
+            dataType:"html",
+            //type: "GET",
+            url: "<?php //echo PUBLIC_PATH . 'clientes/tipos' ?>",
+            success:
+            function(data){
+                $(rowSelected).hide();
+                $('#form').html(data);
+            }
+            });
+         }else{
+            alert('Debe ingresar el numero de identificacion');
+            document.getElementById("clientes_identificacion").focus;
+            return;
+         }
+        
+        */
+        
+       /*
+        for(i=0; i<theForm.elements.length; i++){
+            var alertText = ""
+                alertText = "Element id: " + theForm.elements[i].id + "\n"
+               
+                alertText = "Element Name: " + theForm.elements[i].name + "\n"
+                
+                alertText += "Element Type: " + theForm.elements[i].type + "\n"
+
+                if(theForm.elements[i].type == "text" || theForm.elements[i].type == "textarea" || theForm.elements[i].type == "button"){
+                alertText += "Element Value: " + theForm.elements[i].value + "\n"
+                }
+                else if(theForm.elements[i].type == "checkbox"){
+                alertText += "Element Checked? " + theForm.elements[i].checked + "\n"
+                }
+                else if(theForm.elements[i].type == "select-one"){
+                alertText += "Selected Option's Text: " + theForm.elements[i].options[theForm.elements[i].selectedIndex].text + "\n"
+                }
+            alert(alertText)
+        }
+        */
+   
+        /*
+        var rowSelected=$("body").find('#' + 'identificacion');
+        alert(rowSelected.val);
+        alert('entro');*/
+
+        /*
+        var rowSelected=$("body").find('#' + 'identificacion' )
+
+
+        rowSelected.html('<td colspan="4"> <img src="<?php //echo PUBLIC_PATH ?>/img/ui/ajax-loader.gif" /> Eliminando ...</td>');
+        $.ajax({
+        type: "GET",
+        url: "<?php //echo PUBLIC_PATH . 'tipos_documentos/borrar/' ?>" + id,
+        success:
+        function(data){
+        $(rowSelected).hide();
+        $('#list').html(data);
+        }
+
+        });*/
+        /*if(document.getElementByName('clientes[identificacion]').value == ''){
+            alert('esta ');
+        }*/
+        
+   
+
+
+    </script>

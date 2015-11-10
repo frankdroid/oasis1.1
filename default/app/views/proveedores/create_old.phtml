@@ -1,0 +1,380 @@
+<?php View::content(); ?>
+<h3>Crear Nuevo Proveedor</h3>
+ 
+<?php echo Form::open(); // por defecto llama a la misma url ?>
+ <div class="span6">
+     <fieldset style="border: 1px solid #ccc;">
+         <table>
+             <tr>
+                 <th>Identificaci&oacute;n</th>
+                 <td>
+                     <?php
+                        //echo Form::dbSelect('proveedores.idtipodoc','tipo_doc', array('tipo_documentos','getSelect'),'Seleccione',array('onchange'=>'buscarProveedor(this)'));
+                        echo Form::dbSelect('proveedores.idtipodoc','tipo_doc', array('tipo_documentos','getSelect'),'Seleccione' ,array('onchange'=>'accionRif(this)'));
+                        echo Form::text('proveedores.identificacion');
+                     ?>
+                     
+                     <span id="div_digito_rif" style="display: none"> - <?php echo Form::text('digito_rif', array('size'=>'1', 'id'=>'digito_rif',  'maxlenght'=>'1')); ?></span>
+                     <?php echo Form::button("Siguiente", array('onclick'=>'buscarProveedor()'))?>
+                 </td>
+             </tr>
+         </table>
+     </fieldset> 
+<!--     
+     <div class="span6"  >  
+         
+     </div>
+     -->
+     
+     <br>       
+</div>
+<div class="span7" id='form' style='display: '>
+    <table width="100%" border='2'>
+        <tr>
+            <td>
+                <!--   datos generales-->
+                <fieldset style="border: 1px solid #ccc;">
+                    <legend>Datos Generales</legend>
+                    <?php echo Form::hidden('proveedores.idprov') ?>
+                    Nombre &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                       <?php echo Form::text('proveedores.nombre') ?>
+                    <br>    
+                    Apellido &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <?php echo Form::text('proveedores.apellido') ?>
+                    <br>
+                    Direccion &nbsp;&nbsp;&nbsp;
+                    <?php echo Form::textarea('proveedores.direccion','rows=5') ?>          
+                    <br>
+                    Telefono &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <?php echo Form::text('proveedores.telefono') ?>
+                    <br>
+                    Comentario &nbsp;
+                    <?php echo Form::textarea('proveedores.comentario','rows=5') ?>          
+
+                
+                </fieldset>
+                <br>
+                <!-- Contactos Adicionales -->
+                <fieldset style="border: 1px solid #ccc;">
+                    <legend>Contactos Adicionales</legend>
+                    <table>
+                        <tr> 
+                            <td>
+                                Contacto Alternativo 1 &nbsp;
+                                <?php echo Form::text('proveedores.contacto1') ?>
+                                <br>
+                                 Contacto Alternativo 2 &nbsp;
+                                <?php echo Form::text('proveedores.contacto2') ?>
+                                <br>
+                                 Correo Electr&oacute;nico 1
+                                 &nbsp;&nbsp;&nbsp;
+                                <?php echo Form::text('proveedores.correo1') ?>
+                                <br>
+                                
+                                 Correo Electr&oacute;nico 2 
+                                 &nbsp;&nbsp;&nbsp; 
+                                <?php echo Form::text('proveedores.correo2') ?>
+                                
+                            </td>
+                        </tr>
+                    </table>
+                </fieldset>
+            </td>
+            
+            <!--            TIPO DE PROVEEDORES-->
+            <td valign='top'>
+                    <label>Tipo de Proveedor
+                    <?php //'multiple'=>'false',
+                        echo Form::dbSelect('proveedores.idcondicion','condicion', array('condicion_prov','getSelect'),'Seleccione'); //array('size'=>'10')
+                     ?>
+                
+                <br>
+                <p>SELECCION DE PRODUCTOS</p>
+                
+                <?php echo Form::button('Agregar Producto',array('id'=>'bt_add')) ?>
+                <br>
+                
+                <!-- Listar productos   -->
+                <fieldset>
+                <label>Productos<b></label>
+                <select name='productos[]' id='productos' multiple="true" size='10'>
+                    <?php
+                      foreach($productos as $items => $item):
+                        $prod = $item->marca."/".$item->tipo_prod."/".$item->presentacion;
+                        ?>
+                        <option value='<?php echo $item->idproducto ?>'> <?php echo $prod ?>  </option>
+                      
+                    <?php endforeach; ?>
+                </select>   
+                </fieldset>    
+                
+            </td>
+            
+            <!--   productos del proveedor -->
+            <td valign='top'>
+                
+                <!-- Listar productos   -->
+                <fieldset>
+                <label>Productos distribuidos por este proveedor<b></label>
+                <div id="list_prod">
+                    <?php //View::partial('proveedores/list_productos_prov',FALSE,array('list'=>$list))?>
+        
+                </div>
+                
+                </fieldset>  
+            
+            </td>           
+            
+        </tr>
+    </table>    
+        
+        
+  <?php echo Form::submit('Agregar',array('id'=>'bt_accion')) ?>      
+</div>
+ 
+        
+ 
+<?php echo Form::close() ?>
+
+<script>
+    
+    $(document).ready(function() {
+    //$('#bt_add').click(function(e) {
+    $('#productos').change(function(e) {
+        var selectedOpts = $('#productos option:selected');
+        
+        if (selectedOpts.length == 0) {
+            alert("Seleccione el producto");
+            return;
+        }
+        
+        var idprod = selectedOpts.val();
+        var idprov = $("#proveedores_idprov").val();
+        
+        if(idprov == ''){
+            alert("El proveedor no esta registrado");
+            return;
+        }
+        /*
+        alert(idprod);
+        alert(idprov);
+        return;*/
+        
+        $.ajax({
+        //dataType:"json",
+        type: "POST",
+        url: "<?php echo PUBLIC_PATH . 'proveedores/agregarProducto/'; ?>",
+        data: "idprod=" + idprod + "&idprov=" + idprov,
+        //success: cargarDatos
+        
+        success: function(html){
+            $("#list_prod").html(html);
+            $(selectedOpts).remove();
+        }
+        });
+        
+        /*
+        function cargarDatos(proveedor) {
+                $("#proveedores_idprov").val(proveedor.idprov); 
+                $("#proveedores_identificacion").val(proveedor.identificacion); 
+        }  */
+        
+        
+        
+        
+        
+        
+        //$('#productos_prov').append($(selectedOpts).clone());
+        //$(selectedOpts).remove();
+        //e.preventDefault();
+    });
+    /*
+    $('.masterTooltip').hover(function(){
+        // Hover over code
+        var title = $(this).attr('title');
+        $(this).data('tipText', title).removeAttr('title');
+        $('<p class="tooltip"></p>')
+        .text(title)
+        .appendTo('body')
+        .fadeIn('slow');
+    }, function() {
+            // Hover out code
+            $(this).attr('title', $(this).data('tipText'));
+            $('.tooltip').remove();
+    }).mousemove(function(e) {
+            var mousex = e.pageX + 20; //Get X coordinates
+            var mousey = e.pageY + 10; //Get Y coordinates
+            $('.tooltip')
+            .css({ top: mousey, left: mousex })
+    });
+        */
+    //});
+    
+});
+
+
+
+    function accionRif(str){
+       var tipo_doc = $("#proveedores_idtipodoc option:selected").html();
+       if(tipo_doc.toUpperCase() == 'RIF'){
+           document.getElementById('div_digito_rif').style.display = '';
+           
+       }else{
+           document.getElementById('div_digito_rif').style.display = 'none';
+           document.getElementById('digito_rif').value = '';
+       }
+        
+    }
+    
+    function  buscarProveedor(){
+        if($('#proveedores_idtipodoc').val() == ''){
+            alert('Seleccione el tipo de documento');
+            return false;
+        }
+        if($('#proveedores_identificacion').val() == ''){
+            alert('Ingrese el numero de identificacion');
+            return false;
+        }
+            
+	var identificacion = $('#proveedores_identificacion').val();
+        var idtipodoc = $('#proveedores_idtipodoc').val();
+        if($('#digito_rif').val() != '')
+            identificacion = identificacion + "-" + $('#digito_rif').val();
+        
+        
+        $.ajax({
+        dataType:"json",
+        type: "POST",
+        url: "<?php echo PUBLIC_PATH . 'proveedores/buscarProveedor/'; ?>",
+        data: "idtipodoc=" + idtipodoc + "&identificacion=" + identificacion,
+        success: cargarDatos 
+        /*
+        success: function(html){
+            $("#form").html(html);
+        }*/
+        
+       
+        });
+        
+        
+        function cargarDatos(proveedor) {
+                $("#proveedores_idprov").val(proveedor.idprov); 
+                $("#proveedores_identificacion").val(proveedor.identificacion); 
+                
+                $("#proveedores_nombre").val(proveedor.nombre); 
+                $("#proveedores_apellido").val(proveedor.apellido); 
+                
+                $("#proveedores_telefono").val(proveedor.telefono); 
+                $("#proveedores_direccion").val(proveedor.direccion); 
+                $("#proveedores_idcondicion").val(proveedor.idcondicion); 
+                $("#proveedores_idtipodoc").val(proveedor.idtipodoc); 
+                $("#proveedores_contacto1").val(proveedor.contacto1);
+                $("#proveedores_contacto2").val(proveedor.contacto2);
+                $("#proveedores_correo1").val(proveedor.correo1);
+                $("#proveedores_correo2").val(proveedor.correo2);
+                $("#proveedores_comentario").val(proveedor.comentario);
+        
+            
+                $("#bt_accion").val(proveedor.bt_accion);
+                
+                //muestra el formulario
+                document.getElementById('form').style.display = '';
+                listarProductosDelProveedor();
+                
+                
+            
+        }
+        
+        function listarProductosDelProveedor(){
+            
+           var idprov = $('#proveedores_idprov').val(); 
+           $.ajax({
+            //dataType:"json",
+            type: "POST",
+            url: "<?php echo PUBLIC_PATH . 'proveedores/listarProductosProveedor/'; ?>",
+            data: "idprov=" + idprov,
+            //success: cargarDatos
+
+            success: function(html){
+                $("#list_prod").html(html);
+                //$(selectedOpts).remove();
+            }
+            }); 
+            }
+    }    
+        
+        //});
+        /*
+        if(num_identif != ''){
+            var rowSelected=$("body").find('#' + 'form' )
+            //rowSelected.html('<td colspan="4"> <img src="<?php //echo PUBLIC_PATH ?>/img/ui/ajax-loader.gif" /> Eliminando ...</td>');
+            rowSelected.html('<span> <img src="<?php //echo PUBLIC_PATH ?>/img/ui/ajax-loader.gif" /> Carcgando ...</span>');
+            $.ajax({
+            type: "POST",
+            dataType:"html",
+            //type: "GET",
+            url: "<?php //echo PUBLIC_PATH . 'proveedores/tipos' ?>",
+            success:
+            function(data){
+                $(rowSelected).hide();
+                $('#form').html(data);
+            }
+            });
+         }else{
+            alert('Debe ingresar el numero de identificacion');
+            document.getElementById("proveedores_identificacion").focus;
+            return;
+         }
+        
+        */
+        
+       /*
+        for(i=0; i<theForm.elements.length; i++){
+            var alertText = ""
+                alertText = "Element id: " + theForm.elements[i].id + "\n"
+               
+                alertText = "Element Name: " + theForm.elements[i].name + "\n"
+                
+                alertText += "Element Type: " + theForm.elements[i].type + "\n"
+
+                if(theForm.elements[i].type == "text" || theForm.elements[i].type == "textarea" || theForm.elements[i].type == "button"){
+                alertText += "Element Value: " + theForm.elements[i].value + "\n"
+                }
+                else if(theForm.elements[i].type == "checkbox"){
+                alertText += "Element Checked? " + theForm.elements[i].checked + "\n"
+                }
+                else if(theForm.elements[i].type == "select-one"){
+                alertText += "Selected Option's Text: " + theForm.elements[i].options[theForm.elements[i].selectedIndex].text + "\n"
+                }
+            alert(alertText)
+        }
+        */
+   
+        /*
+        var rowSelected=$("body").find('#' + 'identificacion');
+        alert(rowSelected.val);
+        alert('entro');*/
+
+        /*
+        var rowSelected=$("body").find('#' + 'identificacion' )
+
+
+        rowSelected.html('<td colspan="4"> <img src="<?php //echo PUBLIC_PATH ?>/img/ui/ajax-loader.gif" /> Eliminando ...</td>');
+        $.ajax({
+        type: "GET",
+        url: "<?php //echo PUBLIC_PATH . 'tipos_documentos/borrar/' ?>" + id,
+        success:
+        function(data){
+        $(rowSelected).hide();
+        $('#list').html(data);
+        }
+
+        });*/
+        /*if(document.getElementByName('proveedores[identificacion]').value == ''){
+            alert('esta ');
+        }*/
+        
+   
+
+
+    </script>

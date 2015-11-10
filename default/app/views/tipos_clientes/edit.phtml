@@ -1,0 +1,95 @@
+
+<div class="span12">
+	<h2>Actualizacion de Tipo de Identificación</h2><br>
+</div>
+
+<div class="span12"><?php View::content(); ?><br></div>
+
+    <div class="span2">&nbsp;</div>
+    
+    <?php echo Form::open(); // por defecto llama a la misma url ?>
+    
+        <div id="div_create" class="span5">
+            
+            <?php echo Form::hidden('tipo_clientes.idtipocliente') ?>
+            <label>Tipo de Cliente
+            <?php echo Form::text('tipo_clientes.tipo_cliente') ?></label>
+     
+            <label>Descripción
+            <?php echo Form::text('tipo_clientes.descripcion') ?></label>
+            
+            <label>Prefijo
+            <?php echo Form::text('tipo_clientes.prefijo') ?></label>
+            
+            Aplica IVA
+            <?php echo Form::check('tipo_clientes.iva','1','') ?><br>
+            
+            Aplica Suplemento
+            <?php echo Form::check('tipo_clientes.suplemento','1','') ?><br>
+            
+            Aplica Descuento
+            <?php echo Form::check('tipo_clientes.descuento','1','') ?><br>
+            
+            <br>
+            <label>Comentario
+            <?php echo Form::textarea('tipo_clientes.comentario','rows=5') ?></label>
+            
+    </div>
+    
+    <div id="list" class="span3" style="width: 300px; height:400px;">
+        <?php echo Html::link("tipos_clientes/create", 'Crear nuevo') ?>
+        <br>
+        <?php View::partial('clientes/list_tipo_clientes',FALSE,array('list'=>$list))?>
+    </div>     
+    
+    <div class="span2">&nbsp;</div>
+
+    <div class="span12" style="text-align:center">
+        <?php echo Form::submit('Actualizar','class="btn btn-primary"') ?>
+        <?php echo Form::reset('Cancelar','class="btn btn-primary"') ?>
+    </div>
+        
+<?php 
+echo Form::close() ?> 
+
+
+<script style='javascript'>
+/*
+function borrar(id){
+ var rowSelected=$("body").find('#' + 'c' + id)
+ rowSelected.html('<td colspan="4"> <img src="<?php //echo PUBLIC_PATH ?>/img/ui/ajax-loader.gif" /> Eliminando ...</td>');
+ $.ajax({
+  type: "GET",
+  url: "<?php //echo PUBLIC_PATH . 'tipos_documentos/borrar/' ?>" + id,
+  success:
+   function(data){
+    $(rowSelected).hide();
+    $('#list').html(data);
+   }
+  
+ });
+}*/
+</script>
+
+
+<script style='javascript'>
+//cargarLista('1');
+
+function cargarLista(page){
+    
+ //var rowSelected=$("body").find('#list')
+ //rowSelected.html('<td colspan="4"> <img src="<?php //echo PUBLIC_PATH ?>/img/ui/ajax-loader.gif" /> cargando ...</td>');
+  $.ajax({
+  type: "GET",
+  url: "<?php echo PUBLIC_PATH . 'tipos_documentos/lista'; ?>",
+  success:
+   function(data){
+    //$(rowSelected).hide();
+    $('#list').html(data);
+   }
+  
+  
+ });
+}
+
+</script>

@@ -1,0 +1,48 @@
+<?php
+//echo "id: ".  $dato;
+//echo var_dump($recetas_prod);
+if($existe){
+    $receta = array (
+                    "idreceta" =>  "$recetas->idreceta",
+                    "cant" =>    "$recetas->cant",
+            );
+            
+            $receta_prod = array();
+            foreach ($recetas_productos as $items =>$item){
+               $receta_prod[] = array(
+                   "idproducto" => $item->idproducto,
+                   "producto" => $item->marca.'/'.$item->tipo_prod.'/'.$item->cant_empaque,
+                    "id"=>$item->id,
+                    "idunidad" => $item->idunidad,
+                    "minima" => $item->minima,
+                    "maxima" => $item->maxima,
+                    "unidad" => $item->unidad);
+                //$prod_proveedor[] = array("idproducto" => $item->idproducto, "producto" => $item->marca.'/'.$item->tipo_prod.'/'.$item->cant_empaque); 
+            }
+            
+            $receta = array_merge($receta, $receta_prod);
+            
+            /*
+            $prod_proveedor = array();
+            foreach ($productos_proveedor as $items => $item){
+                $prod_proveedor[] = array("idproducto" => $item->idproducto, "producto" => $item->marca.'/'.$item->tipo_prod.'/'.$item->cant_empaque);
+                //$prod_proveedor[] = array("idproducto" => $item->idproducto, "producto" => $item->marca.'/'.$item->tipo_prod.'/'.$item->cant_empaque); 
+            }
+            
+            $proveedor = array_merge($proveedor, $prod_proveedor);
+            //$proveedor = $prod_proveedor;
+             * 
+             */
+            
+            //$prod_proveed_JSON_array = json_encode($prod_proveedor);
+            
+    //$productos_prov = $productos_proveedor;
+}else{
+     $receta = array (
+    "idreceta" => "",
+    "cant" =>    "",
+    );
+}
+
+echo json_encode($receta);
+?>

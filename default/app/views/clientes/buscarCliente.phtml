@@ -1,0 +1,56 @@
+<?php 
+//echo var_dump($clientes);
+if($existe){
+    $cliente = array (
+                    "idcliente" => "$clientes->idcliente",
+                    "idtipocliente" => "$clientes->idtipocliente",
+                    "idtipodoc" => "$clientes->idtipodoc",
+                    "identificacion" => "$clientes->identificacion",
+                    "nombre" => "$clientes->nombre",
+                    "apellido" => "$clientes->apellido",
+                    "direccion" => "$clientes->direccion",
+                    "telefono" => "$clientes->telefono",
+                    "fe_nac" => "$clientes->fe_nac",
+                    "gusto_preferencia" => "$clientes->gusto_preferencia",
+                    "contacto_adic1" => "$clientes->contacto_adic1",
+                    "contacto_adic2" => "$clientes->contacto_adic2",
+                    "contacto_adic3" => "$clientes->contacto_adic3",
+                    "contacto_adic4" => "$clientes->contacto_adic4",
+                    "contacto_adic5" => "$clientes->contacto_adic5",
+                    "correo" => "$clientes->correo",
+                    "consideracion" => "$clientes->consideracion",
+                    "comentario" => "$clientes->comentario",
+        
+                    "bt_accion" => "Actualizar",
+                    
+
+            );
+}else{
+     $cliente = array (
+    "idcliente" => "",
+    "idtipocliente" => "",
+    //"idtipodoc" => "",
+    //"identificacion" => "",
+    "nombre" => "",
+    "apellido" => "",
+    "direccion" => "",
+    "telefono" => "",
+    "fe_nac" => "",
+    "gusto_preferencia" => "",
+    "contacto_adic1" => "",
+    "contacto_adic2" => "",
+    "contacto_adic3" => "",
+    "contacto_adic4" => "",
+    "contacto_adic5" => "",
+    "correo" => "",
+    "consideracion" => "",
+    "comentario" => "",
+         
+    "bt_accion" => "Agregar",
+    );
+}
+
+echo json_encode($cliente);
+?>
+	 
+

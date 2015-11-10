@@ -1,0 +1,42 @@
+ <?php if(isset($list)){ ?>
+               <table class="table table-striped table-bordered">
+                    <tbody>
+                      <tr style="background-color: #E5E5E5;">
+                        <th>Marca</th>
+                        <th colspan="2">Acci&oacute;n</th>
+                      </tr>
+                      <?php 
+                      //echo var_dump($list);
+                      $n = 0;
+                      foreach($list as $items => $item): 
+                          $n++; 
+                            if($n%2 ==0){
+                                    $trClass="light";
+                            }else{
+                                    $trClass="dark";
+                            }
+                          ?>
+                      <tr class="<?php echo $trClass ?>">
+                        <td><?php echo $item->marca ?></td>
+                        <td>
+                            <?php echo Html::link("marcas/edit/$item->idmarca", Html::img('edit.gif','',array('title'=>'Editar')), 'div_create') ?>
+                        </td>
+                        <td>
+                            <?php echo Html::link("marcas/borrar/$item->idmarca", Html::img('delete.png','',array('title'=>'Eliminar', "onclick"=> "return borrar($item->idmarca)"))) ?>
+
+                        </td>
+                        <?php //$subtotal = 0; $subtotal = $subtotal + $detalle->importe ?$item->idmarca> ?>
+                      </tr>
+                      <?php endforeach; ?>
+                    </tbody>
+                  </table>
+    <?php } ?>
+<script>   
+function borrar(id){
+    if(!confirm('Esta seguro de eliminar el registro'))
+    {
+        return false;
+    }else
+        return true;
+}    
+</script>

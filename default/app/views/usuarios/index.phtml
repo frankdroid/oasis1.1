@@ -1,0 +1,16 @@
+<div class="content">
+    <?php View::content(); ?>
+    <h3>Usuarios</h3>
+    <ul>
+    <?php foreach ($listaUsuarios->items as $item) : ?>
+    <li>
+        <?php echo Js::linkAction("edit/$item->id/", 'Editar','Esta seguro?'); ?>
+        <?php echo Js::linkAction("del/$item->id/", 'Borrar','Esta seguro?'); ?>
+        <strong><?php echo $item->nombre ?> - <?php echo $item->titulo ?></strong>
+    </li>
+    <?php endforeach; ?>
+    </ul>
+ 
+    <?php if($listaUsuarios->prev) echo Html::linkAction("index/$listaUsuarios->prev/", '<< Anterior |'); ?>
+    <?php if($listaUsuarios->next) echo Html::linkAction("index/$listaUsuarios->next/", 'Próximo >>'); ?>
+</div>

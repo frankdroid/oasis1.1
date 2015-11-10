@@ -1,0 +1,387 @@
+<style>
+fieldset {
+    padding: 0px 10px 5px 10px;
+    margin: 0 0 10px 0;
+    border: 1px solid #00598D;
+    width:inherit;
+    background-color:#F2F2F2;      /*   F2F2F2  DBF1FF;*/
+}
+</style>
+<h2><?php echo $titulo;  ?></h2>
+<?php View::content(); ?>
+<div id="resultado"></div>
+<div id="prueba"></div>
+<?php //echo Form::open(); ?>
+<?php echo Ajax::form("resultado"); ?>
+<table>
+<!--    INFORMACION DE LA FACTURA-->
+    <tr>
+        <td colspan="15" class="span13">
+            <fieldset>
+                <table border="0" style="border: #000 solid; border-collapse: collapse;">
+                    <tr>
+                        <th>Tipo de Prepaci&oacute;n </th>
+                        <td>
+                            <?php
+                            echo Form::dbSelect('recetas.idtipoprep','tipo_prep', array('tipo_preparacion','getSelect'),'Seleccione',array('onchange'=>'buscarReceta(this);'));
+                             ?>
+                        </td>
+                        
+                        <th>Cantidad de Raciones </th>
+                        <td>
+                            <?php echo Form::hidden('recetas.idreceta'); ?>
+                            <?php echo Form::text('recetas.cant'); ?>
+                        </td>
+                    </tr>
+                </table>    
+            </fieldset>
+        </td>
+    </tr>
+ <!--  FIN DE  INFORMACION DE LA FACTURA-->   
+    
+    <tr>
+<!--        LISTADO DE PRODUCTOS-->
+        <td class="span4" valign="top">
+            <fieldset>
+                <h5>Listado de Productos a Seleccionar</h5>
+                <br>
+                 <select name='productos[]' id='productos' multiple="true" size='15' onchange="agregarProducto(this)">
+                     <?php
+                     foreach($productos as $items => $item):
+                         $prod = $item->marca."/".$item->tipo_prod."/".$item->presentacion;
+                         ?>
+                         <option value='<?php echo $item->idproducto ?>'> <?php echo $prod ?>  </option>
+
+                     <?php endforeach; ?>
+                 </select>  
+            </fieldset> 
+        </td>
+        
+        <td valign="top"> 
+            <div id="prod">
+            <table bgcolor="#000000" border cellspadding="20" cellspacing="20" id="prod_detalle">
+                <tr>
+                    <td></td>
+                    <th colspan="2">CANTIDADES</th>
+                    <td></td>
+                </tr>
+                
+                <tr id="fila1">
+                    <!--  PRODUCTOS SELECCIONADOS -->
+                    <th  bgcolor="#ffffff" class="span6">
+                        Producto Seleccionado
+                    </th>
+
+                    <!--  Caducidad -->
+                    <th  bgcolor="#ffffff" width="300">
+                        Minima
+                    </th>
+
+                    <!--  cantidad -->
+                    <th  bgcolor="#ffffff" width="300">
+                         Maxima
+                    </th>
+
+                    <th width="300">
+                        Unidad
+                    </th>
+                </tr>
+            </table>
+            </div>    
+        </td>
+<!--        RECETAS INGRESADAS-->
+        <td>
+            <fieldset>
+                <leyend>RECETAS INGRESAS</leyend>
+                
+                <table>
+                    <tr><td></td></tr>
+                </table>
+                
+            </fieldset>
+        </td>
+    </tr>
+    
+</table> 
+<input name="cant_row" id="cant_row" type="hidden" value="0">
+<center><?php echo Form::submit('Guardar') ?></center>
+
+<?php echo Form::close() ?> 
+
+
+<script type="text/javascript">
+    
+    function sumar(item){
+        
+        var cant = parseFloat($("#cant"+item).val());
+        var precio = parseFloat($("#precio"+item).val());
+        var des = parseFloat($("#des"+item).val());
+        var sup = parseFloat($("#sup"+item).val());
+        var iva = parseFloat($("#iva"+item).val());
+        var preciotot = (precio*cant);
+        var total = (preciotot-((preciotot*(des/100)))+((preciotot*(sup/100))))*(1+(iva/100));
+        
+        var subtotal = 
+        $("#total"+item).val(total);
+
+        //actualiza el subtotal
+        var cant_row = $("#cant_row").val(); //cantidad de lineas
+        var subtotal = 0;
+        var total_iva = 0;
+        for(var i=1; i<=cant_row; i++){
+            //calculo del subtotal
+            var sub = parseFloat($("#total"+i).val());
+            subtotal = subtotal + sub;
+            
+            //sumas del iva
+            var ivaf = parseFloat($("#iva"+i).val());
+            total_iva = total_iva + ivaf;
+            
+        }
+        
+        $("#subtotal").val(subtotal);
+        $("#iva").val(total_iva);
+	
+    }
+    
+    function agregarProducto(str){
+       
+        var tablaElementos = document.getElementById('prod_detalle');
+        //var tr_total = document.getElementById('totales');
+        
+        var tr =  document.createElement('tr');
+        var td1 = document.createElement('td');
+        var td2 = document.createElement('td');
+        var td3 = document.createElement('td');
+        var td4 = document.createElement('td');
+        
+        var idprod = $('#productos option:selected').val();
+        var prod = $('#productos option:selected').text();
+        
+        var num_line = $('#cant_row').val();
+        num_line++;
+        
+        $('#cant_row').val(num_line);
+         
+        //var num_line = tablaElementos.childElementCount;
+
+        td1.innerHTML = "<input name='idproducto"+num_line + "' id='idproducto"+num_line + "' type='hidden' value='" + idprod + "'> <input name='producto"+num_line + "' id='producto"+num_line + "' type='text' size='60' value='" + prod + "'>";
+        td2.innerHTML = "<input name='minima"+num_line + "' id='minima"+num_line + "' type='text' size='10' value='" + num_line + "' >";
+        td3.innerHTML = "<input name='maxima"+num_line + "' id='maxima"+num_line + "' type='text' size='10' value='" + num_line + "'>";
+        //td4.innerHTML = "<div id='div_unidad"+num_line + "'>";      
+        td4.innerHTML = "<input name='unidad"+num_line + "' id='unidad"+num_line + "' type='text' readonly size='10'> <input name='idunidad"+num_line + "' id='idunidad"+num_line + "' type='hidden'>";
+       
+        tr.appendChild(td1);
+        tr.appendChild(td2);
+        tr.appendChild(td3);
+        tr.appendChild(td4);
+        
+        //var total_row = document.getElementById('totales');
+        //total_row.parentNode.insertBefore(tr, total_row);
+        tablaElementos.appendChild(tr);
+        
+       
+        //var ar = <?php //echo $unidad ?>;
+        getUnidadMedida(idprod,num_line);
+        //$('#productos option:selected').remove(); 
+    }
+    
+    
+    function getUnidadMedida(idproducto, line){
+        $.ajax({
+        dataType:"json",
+        type: "POST",
+        url: "<?php echo PUBLIC_PATH . 'recetas/getUnidades/'; ?>",
+        data: "idproducto="+idproducto,
+        success: function (unidad_medida){
+            //$("#prueba").html(unidad_medida); 
+            $("#unidad"+line).val(unidad_medida.unidad); 
+            $("#idunidad"+line).val(unidad_medida.idunidad); 
+        }  
+        });
+//        function cargarDatos(unidad_medida) {
+//            alert(unidad_medida.unidad);
+//                //$("#unidad1").val(unidad_medida.unidad); 
+//            }
+    }
+    
+    function buscarReceta(str){
+        idtipoprep = str.value;
+        var num_line = $('#cant_row').val();
+        var tablaElementos = document.getElementById('prod_detalle');
+        
+        //$('#prod').html($('#prod').html);
+        
+        
+        if(num_line > 0){
+           var cont = num_line;
+           
+            for(var i=1; i<=num_line; i++){
+                //alert(i);
+                
+                if(cont > 0){
+                    //alert('siiis');
+                    if(tablaElementos.hasChildNodes([cont])){
+                        tablaElementos.removeChild(tablaElementos.childNodes[cont]);
+                    }
+                    //$('#cant_row').val(cont);
+                    cont=cont-1;
+                }//else
+                    //$('#cant_row').val(0);
+                
+                
+                //$('#cant_row').val(cont);
+                //alert($('#cant_row').val());
+                
+            }
+            $('#cant_row').val(cont);
+            //alert(cont);
+        }
+        
+        //return;
+        $('#cant_row').val(0);
+        
+//        //var cont = num_line;
+//        var fc = tablaElementos.firstChild;
+//        while(!fc){
+//            tablaElementos.removeChild(fc)
+//            fc=tablaElementos.firstChild;
+//        }
+//        
+        
+        
+        //$('#cant_row').val(0);
+                 
+        $.ajax({
+        dataType:"json",
+        type: "POST",
+        url: "<?php echo PUBLIC_PATH . 'recetas/buscarReceta/'; ?>",
+        data: "idtipoprep="+str.value,
+        success: function (receta){
+            
+            var tr =  document.createElement('tr');
+            
+            //limpiar campos
+//            if(num_line > 0){
+//                for(var i=0; i<=num_line; i++){
+//                    tablaElementos.removeChild(tablaElementos.childNodes[i+1]);
+//                }
+//            }
+            
+            
+            if(receta.idreceta != ''){
+                $("#recetas_cant").val(receta.cant); 
+                $("#recetas_idreceta").val(receta.idreceta);
+                var td1 = document.createElement('td');
+                var td2 = document.createElement('td');
+                var td3 = document.createElement('td');
+                var td4 = document.createElement('td');
+                
+                var i=0;
+                $.each(receta, function(k,v){
+                    if(v.producto){
+                        var tr =  document.createElement('tr');
+
+                        //num_line++;
+                        i++;
+                        //$('#cant_row').val(num_line);
+
+
+                        //$("#prueba").html(v.producto);
+                        var id = v.id;
+                        var idprod = v.idproducto;
+                        var prod = v.producto;
+                        var minima = v.minima;
+                        var maxima = v.maxima;
+                        var unidad = v.unidad;
+                        var idunidad = v.idunidad;
+
+                        td1.innerHTML = "<input name='idproducto"+num_line + "' id='idproducto"+num_line + "' type='hidden' value='" + idprod + "'>\n\
+                                        <input name='producto"+num_line + "' id='producto"+num_line + "' type='text' size='60' value='" + prod + "'>\n\
+                                         <input name='id"+num_line + "' id='id"+num_line + "' type='hidden' value='" + id + "'>";
+                        td2.innerHTML = "<input name='minima"+num_line + "' id='minima"+num_line + "' type='text' size='10' value='" + minima + "'>";
+                        td3.innerHTML = "<input name='maxima"+num_line + "' id='maxima"+num_line + "' type='text' size='10' value='" + maxima + "'>";
+                        //td4.innerHTML = "<div id='div_unidad"+num_line + "'>";      
+                        td4.innerHTML = "<input name='unidad"+num_line + "' id='unidad"+num_line + "' type='text' readonly size='10' value='" + unidad + "'> <input name='idunidad"+num_line + "' id='idunidad"+num_line + "' type='hidden' value='" + idunidad + "'>";
+
+                        tr.appendChild(td1);
+                        tr.appendChild(td2);
+                        tr.appendChild(td3);
+                        tr.appendChild(td4);
+
+                        tablaElementos.appendChild(tr);
+                        
+                        //alert("linea:"+i);
+                    }       
+                        //productos_p.append('<option value="' + v.idproducto + '">' + v.producto + '</option>');
+                })
+                //alert("numline:"+num_line);
+                
+               $('#cant_row').val(i);
+                
+            }else{
+                $("#recetas_cant").val(""); 
+                $("#recetas_idreceta").val("");
+                //$('#cant_row').val(0);
+                
+//                if(num_line > 0){
+//                    for(var i=1; i<=num_line; i++){
+//                        tablaElementos.removeChild(tablaElementos.childNodes[i]);
+//                    }
+//                 }
+                //$('#cant_row').val(0);
+            }
+            //alert("elemntos:"+tablaElementos.childElementCount);
+            
+            
+            
+        
+        //var total_row = document.getElementById('totales');
+        //total_row.parentNode.insertBefore(tr, total_row);
+//        if(tr)
+//            tablaElementos.appendChild(tr);
+        
+            
+            
+//            
+//        //var tr_total = document.getElementById('totales');
+//        
+//        var tr =  document.createElement('tr');
+//        var td1 = document.createElement('td');
+//        var td2 = document.createElement('td');
+//        var td3 = document.createElement('td');
+//        var td4 = document.createElement('td');
+//        
+//        var idprod = $('#productos option:selected').val();
+//        var prod = $('#productos option:selected').text();
+//        
+//        var num_line = $('#cant_row').val();
+//        num_line++;
+//        
+//        $('#cant_row').val(num_line);
+//        
+//        //var num_line = tablaElementos.childElementCount;
+//
+//        td1.innerHTML = "<input name='idproducto"+num_line + "' id='idproducto"+num_line + "' type='hidden' value='" + idprod + "'> <input name='producto"+num_line + "' id='producto"+num_line + "' type='text' size='60' value='" + prod + "'>";
+//        td2.innerHTML = "<input name='minima"+num_line + "' id='minima"+num_line + "' type='text' size='10'>";
+//        td3.innerHTML = "<input name='maxima"+num_line + "' id='maxima"+num_line + "' type='text' size='10'>";
+//        //td4.innerHTML = "<div id='div_unidad"+num_line + "'>";      
+//        td4.innerHTML = "<input name='unidad"+num_line + "' id='unidad"+num_line + "' type='text' readonly size='10'> <input name='idunidad"+num_line + "' id='idunidad"+num_line + "' type='hidden'>";
+//       
+//        tr.appendChild(td1);
+//        tr.appendChild(td2);
+//        tr.appendChild(td3);
+//        tr.appendChild(td4);
+//        
+//        //var total_row = document.getElementById('totales');
+//        //total_row.parentNode.insertBefore(tr, total_row);
+//        tablaElementos.appendChild(tr);
+        
+            //$("#recetas_cant").val(receta.cant); 
+            //$("#idunidad"+line).val(unidad_medida.idunidad); 
+        }  
+        });
+    }
+</script>
+
+

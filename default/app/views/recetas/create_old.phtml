@@ -1,0 +1,84 @@
+<style>
+fieldset {
+    padding: 0px 10px 5px 10px;
+    margin: 0 0 10px 0;
+    border: 1px solid #00598D;
+    width:inherit;
+    background-color:#F2F2F2;      /*   F2F2F2  DBF1FF;*/
+}
+</style>
+<h2><?php echo $titulo;  ?></h2>
+<?php View::content(); ?>
+
+<div id="prueba"></div>
+<?php echo Form::open(); ?>
+<table border="3">
+<!--    INFORMACION DE LA FACTURA-->
+    <tr>
+        <td colspan="10">
+            <fieldset>
+                    
+            </fieldset>
+        </td>
+    </tr>
+ <!--  FIN DE  INFORMACION DE LA FACTURA-->   
+    
+    <tr>
+        <td class="span7">
+        </td>
+        
+        <td class="span5">
+        </td>
+        
+        <td class="span7">
+        </td>
+        
+        <td class="span7">
+        </td>
+        
+        <td class="span7">
+        </td>
+    </tr>
+</table>
+            
+
+
+
+<div class="span12"><?php View::content(); ?><br></div>
+    <div class="span12">
+	
+        <br>
+    </div>
+
+    <div class="span2">&nbsp;</div>
+    
+    <?php echo Form::open(); // por defecto llama a la misma url ?>
+    
+    <div class="span5">
+        <!--
+        <label>Producto
+            <?php //echo Form::text('recetas.unidad') ?></label>
+        -->
+            
+        <label>Tipo de Preparaci&oacute;n
+        <?php
+        echo Form::dbSelect('recetas.idtipoprep','tipo_prep', array('tipo_preparacion','getSelect'));
+        ?>
+            
+        <label>Cantidad
+            <?php echo Form::text('recetas.cant') ?></label>
+        
+    </div>
+    
+    <div class="span3">
+        <div id="list" class="span3" style="width: 300px; height:400px;">
+        <?php //View::partial('recetas/list_recetas',FALSE,array('list'=>$list))?>
+        </div> 
+    </div>       
+    
+    <div class="span2">&nbsp;</div>
+
+<div class="span12" style="text-align:center"><?php echo Form::submit('Agregar','class="btn btn-primary"') ?></div>
+        
+<?php echo Form::close() ?> 
+

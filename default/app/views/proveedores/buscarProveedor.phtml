@@ -1,0 +1,65 @@
+<?php 
+//echo var_dump($proveedores);
+//echo $existe;
+//echo View::content(); 
+//echo var_dump($productos_proveedor);
+
+if($existe){
+    $proveedor = array (
+                    "idprov" =>         "$proveedores->idprov",
+                    "idcondicion" =>    "$proveedores->idcondicion",
+                    "idtipodoc" =>      "$proveedores->idtipodoc",
+                    "identificacion" => "$proveedores->identificacion",
+                    "nombre" =>         "$proveedores->nombre",
+                    "apellido" =>       "$proveedores->apellido",
+                    "direccion" =>      "$proveedores->direccion",
+                    "telefono" =>       "$proveedores->telefono",
+                    "contacto1" =>      "$proveedores->contacto1",
+                    "contacto2" =>      "$proveedores->contacto2",
+                    "correo1" =>        "$proveedores->correo1",
+                    "correo2" =>        "$proveedores->correo2",
+                    "comentario" =>     "$proveedores->comentario",
+        
+                    //"bt_accion" => "Actualizar",
+                    //"operacion" => "Actualizacion de Proveedor",
+                    
+                    
+
+            );
+            
+            //$proveedor = array();
+            //$resources[] = array("id" => $key ,"name" => $value);
+            $prod_proveedor = array();
+            foreach ($productos_proveedor as $items => $item){
+                $prod_proveedor[] = array("idproducto" => $item->idproducto, "producto" => $item->marca.'/'.$item->tipo_prod.'/'.$item->cant_empaque);
+                //$prod_proveedor[] = array("idproducto" => $item->idproducto, "producto" => $item->marca.'/'.$item->tipo_prod.'/'.$item->cant_empaque); 
+            }
+            
+            $proveedor = array_merge($proveedor, $prod_proveedor);
+            //$proveedor = $prod_proveedor;
+            
+            //$prod_proveed_JSON_array = json_encode($prod_proveedor);
+            
+    //$productos_prov = $productos_proveedor;
+}else{
+     $proveedor = array (
+    "idprov" => "",
+    "idcondicion" => "",
+    "nombre" => "",
+    "apellido" => "",
+    "direccion" => "",
+    "telefono" => "",
+    "contacto1" => "",
+    "contacto2" => "",
+    "correo1" => "",
+    "correo2" => "",
+    "comentario" => "",    
+    //"bt_accion" => "Agregar",
+    //"operacion" => "Registro de Proveedor",
+    );
+}
+echo json_encode($proveedor);
+//echo json_encode($prod_proveedor);
+?>
+	 
+

@@ -1,0 +1,69 @@
+<?php View::helpers('tags'); ?>
+
+<?php //View::helpers('data_grid'); ?>
+
+<?php View::content(); ?>
+<h2>Marcas</h2>
+<?php echo link_to("marca/crear",'Agregar Marca'); ?></
+<?php //echo link_to("marca/crear", 'Nuevo', 'class: new'); ?>
+<div id="lista">
+<table>
+<thead>
+ <tr >
+  <th colspan="6" class="header">Lista de Marcas</th>
+ </tr>
+ <tr>
+  <th>N</th>
+  <th>Nombre</th>
+  <th>Siglas</th>
+  <th>Acciones</th>
+ </tr>
+</thead>
+
+<tbody>
+<?php $n=0; ?>
+<?php foreach($marcas->items as $item) : ?>
+	<?php 
+ 	$n++; 
+ 	if($n%2 ==0){
+  		$trClass="light";
+ 	}else{
+  		$trClass="dark";
+ 	}
+?>
+
+	<tr class="<?php echo $trClass ?>" id='<?php echo "c$item->id" ?>'>  
+	<td><?php echo $n ?></td>
+ 	<td><?php echo $item->nombre ?></td>
+ 	<td><?php echo $item->siglas ?></td>
+	<td class="table_actions">
+  		<?php echo link_to("marca/editar/$item->id", 'Editar','class: edit') ?>
+  		<?php echo link_to("marca/#", 'Borrar','class: del', "onclick: borrar($item->id)") ?>
+ 	</td>
+	</tr>
+<?php endforeach; ?>
+</tbody>
+</table>
+</div>
+
+
+<?php View::partial('paginators/classic', false, array('page' => $marcas, 'show' => 10, 'url' => 'marca/index')); ?>
+
+<script style='javascript'>
+
+function borrar(id){
+ var rowSelected=$("body").find('#' + 'c' + id)
+ rowSelected.html('<td colspan="4"> <img src="<?php echo PUBLIC_PATH ?>/img/ui/ajax-loader.gif" /> Eliminando ...</td>');
+ $.ajax({
+  type: "GET",
+  url: "<?php echo PUBLIC_PATH . 'marca/borrar/' ?>" + id,
+  success:
+   function(data){
+    $(rowSelected).hide();
+    $('#lista').html(data);
+   }
+  
+ });
+}
+</script>
+

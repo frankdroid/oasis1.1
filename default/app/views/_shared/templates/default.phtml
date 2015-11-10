@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title><?php echo $titulo_pagina; ?></title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<?php Tag::css('bootstrap.min') ?>
+<?php Tag::css('bootstrap-responsive.min') ?>
+<?php Tag::css('font-awesome.min') ?>
+<?php Tag::css('style') ?>
+<?php Tag::css('jquery.dataTables.min') ?>
+<?php Tag::css('pages/dashboard') ?>
+<?php Tag::css('pages/signin') ?>
+<?php echo Html::includeCss() ?>
+<?php echo Tag::js('jquery-1.7.2.min') ?>
+<?php echo Tag::js('jquery.dataTables.min'); ?>
+<!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+<!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+</head>
+<body>
+<?php View::partial('header',FALSE,array('nombre_usuario'=>$nombre_usuario))?>
+
+<?php View::partial($menu)?>
+
+
+<div class="main">
+  <div class="main-inner">
+    <div class="container">
+      <div class="row">
+          <?php View::content(); ?>
+      </div>
+      <!-- /row --> 
+    </div>
+    <!-- /container --> 
+  </div>
+  <!-- /main-inner --> 
+</div>
+<!-- /main -->
+
+<?php View::partial('footer')?>
+<!-- Le javascript
+================================================== --> 
+<!-- Placed at the end of the document so the pages load faster --> 
+<?php echo Tag::js('excanvas.min') ?>
+<?php echo Tag::js('chart.min') ?> 
+<?php echo Tag::js('bootstrap') ?>
+<?php echo Tag::js('kumbiaphp.min') ?>
+<?php echo Tag::js('base') ?>
+<?php echo Tag::js('signin') ?>
+
+</body>
+</html>

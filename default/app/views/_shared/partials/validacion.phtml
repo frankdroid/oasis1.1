@@ -1,0 +1,79 @@
+<script language="javascript">
+    $(document).ready(function() {
+      $("#formularioreg").validate({
+        rules: {
+          nombre: {
+            required: true,
+            minlength: 5
+          },
+	  cedula: {
+	    required: true,
+	    minlength: 7
+	  },
+	  confirmarcedula: {
+	    required: true,
+	    minlength: 7,
+	    equalTo: "#cedula"
+	  },
+          usuario: {
+            required: true,
+            minlength: 4
+          },
+          clave: {
+            required: true,
+            minlength: 5
+          },
+          confirmarclave: {
+            required: true,
+            minlength: 5,
+            equalTo: "#clave"
+          },
+          correo: {
+            required: true,
+            email: true
+          },
+          confirmarcorreo: {
+            required: true,
+            email: true,
+            equalTo: "#correo"
+          },
+       },
+       messages: {
+    	 nombre: {
+            required: "Por favor, ingresa tu Nombre y Apellido.",
+            minlength: "Este campo debe ser de al menos 5 caracteres."
+         },
+	 cedula: {
+	    required: "Por favor, ingresa tu numero de cedula.",
+	    minlength: "Este campo debe ser de al menos 7 digitos de longitud."
+	 },
+	 confirmarcedula: {
+	    required: "Por favor, vuelve a ingresar tu numero de cedula.",
+	    minlength: "Este campo debe ser de al menos 7 digitos de longitud.",
+            equalTo: "No coincide con tu cedula, por favor, verifica."
+	 },
+         usuario: {
+            required: "Por favor, ingresa tu nombre de usuario.",
+            minlength: "Tu nombre de usuario debe ser de al menos 4 caracteres o mas."
+         },
+         clave: {
+            required: "Por favor, ingresa una clave de usuario.",
+            minlength: "Tu clave debe ser de al menos 5 caracteres de longitud o mas."
+         },
+         confirmarclave: {
+            required: "Por favor, vuelve a ingresar tu clave.",
+            minlength: "Tu clave debe ser de al menos 5 caracteres de longitud o mas.",
+            equalTo: "No coincide con tu clave, por favor, verifica."
+         },
+         correo: {
+             required: "Por favor, ingresa un correo valido.",
+             equalTo: "No coincide con tu correo, por favor, verifica."
+         },
+         confirmarcorreo: {
+            required: "Por favor, ingresa un correo valido.",
+            equalTo: "No coincide con tu correo, por favor, verifica."
+         },
+      }
+     });
+    });
+</script>

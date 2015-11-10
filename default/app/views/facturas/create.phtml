@@ -1,0 +1,232 @@
+<style>
+fieldset {
+    padding: 0px 10px 5px 10px;
+    margin: 0 0 10px 0;
+    border: 1px solid #00598D;
+    width:inherit;
+    background-color:#F2F2F2;      /*   F2F2F2  DBF1FF;*/
+}
+</style>
+<h2><?php echo $titulo;  ?></h2>
+<?php View::content(); ?>
+<div id="resultado"></div>
+<div id="prueba"></div>
+<?php //echo Form::open(); ?>
+<?php echo Ajax::form("resultado"); ?>
+<table border="3">
+<!--    INFORMACION DE LA FACTURA-->
+    <tr>
+        <td colspan="15">
+            <fieldset>
+                <table border="2" style="border: #000 solid; border-collapse: collapse;">
+                    <tr>
+                        <th>Factura No </th>
+                        <th>Fecha Emisi&oacute;n </th>
+                        <th>Fecha de Vencimiento </th>
+                        <th>Proveedor </th>
+                    </tr>
+                    <tr bgcolor="#ffffff">
+                        <td><?php echo Form::text('facturas.no_factura'); ?></td>
+                        <td><?php echo Form::date('facturas.fe_emision'); ?></td>
+                        <td><?php echo Form::date('facturas.fe_vence'); ?></td>
+                        <td>
+                            <?php
+                            echo Form::dbSelect('facturas.idprov','nombre', array('proveedores','getSelect'));
+                             ?>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Condici&oacute;n de Pago</th>
+                        <td>
+                            <?php echo Form::check('facturas.contado','1'); ?>Contado
+                            <br>
+                            <?php echo Form::check('facturas.credito','1') ?>Credito
+                            <br>
+                            <?php echo Form::check('facturas.mixto','1') ?>Mixto
+            
+                        </td>
+                        <td colspan="2">
+                            <label>Comentario
+                            <?php echo Form::textarea('facturas.comentario','rows=5') ?>
+                            
+                        </label></td>
+                    </tr>
+                    
+                </table>    
+            </fieldset>
+        </td>
+    </tr>
+ <!--  FIN DE  INFORMACION DE LA FACTURA-->   
+    
+    <tr>
+<!--        LISTADO DE PRODUCTOS-->
+        <td class="span4" valign="top">
+            <fieldset>
+                <h5>Listado de Productos a Seleccionar</h5>
+                <br>
+                 <select name='productos[]' id='productos' multiple="true" size='15' onchange="agregarProducto(this)">
+                     <?php
+                     foreach($productos as $items => $item):
+                         $prod = $item->marca."/".$item->tipo_prod."/".$item->presentacion;
+                         ?>
+                         <option value='<?php echo $item->idproducto ?>'> <?php echo $prod ?>  </option>
+
+                     <?php endforeach; ?>
+                 </select>  
+            </fieldset> 
+        </td>
+        
+        
+        <td valign="top">  
+            <table border="1" bordercolor="#000000;" style="border-collapse: collapse;" id="prod_detalle">
+                <tr  bgcolor="#cccccc" id="fila1">
+                    <!--  PRODUCTOS SELECCIONADOS -->
+                    <th class="span6">
+                        Producto
+                    </th>
+
+                    <!--  Caducidad -->
+                    <th width="300">
+                        Caducidad
+                    </th>
+
+                    <!--  cantidad -->
+                     <th width="300">
+                         Cant
+                         
+                     </th>
+
+                    <th width="300">
+                        pvj unit sin iva
+                    </th>
+                    <th width="300">
+                        des
+                    </th>
+                    <th width="300">
+                        sup
+                    </th>
+                    <th width="300">
+                        iva
+                    </th>
+                    <th width="300">
+                        total
+                   </th>
+                </tr>
+                
+                
+                
+                <tr id="totales" bgcolor="#ffffff">  
+                    <th align="right" colspan="7" width="300">Sub total</th>
+                    <th align="right" colspan="4" width="300"><input readonly name='subtotal' id='subtotal' type='text' size='10'></th>
+                </tr> 
+                <tr id="iva" bgcolor="#ffffff">  
+                    <th align="right" colspan="7" width="300">IVA</th>
+                    <th align="right" colspan="4" width="300"><input readonly name='iva' id='iva' type='text' size='10'></th>
+                </tr> 
+                <tr id="totalg" bgcolor="#ffffff">  
+                    <th align="right" colspan="7" width="300">Total</th>
+                    <th align="right" colspan="4" width="300"><input readonly name='total' id='total' type='text' size='10'></th>
+                </tr> 
+                
+            </table>
+        </td>
+    </tr>
+    
+    <tr>
+        <td></td>
+        <td></td>
+    </tr>
+</table> 
+<input name="cant_row" id="cant_row" type="hidden" value="0">
+<center><?php echo Form::submit('Guardar') ?></center>
+<table>
+    
+</table>
+<?php echo Form::close() ?> 
+
+
+<script>
+    
+    function sumar(item){
+        
+        var cant = parseFloat($("#cant"+item).val());
+        var precio = parseFloat($("#precio"+item).val());
+        var des = parseFloat($("#des"+item).val());
+        var sup = parseFloat($("#sup"+item).val());
+        var iva = parseFloat($("#iva"+item).val());
+        var preciotot = (precio*cant);
+        var total = (preciotot-((preciotot*(des/100)))+((preciotot*(sup/100))))*(1+(iva/100));
+        
+        var subtotal = 
+        $("#total"+item).val(total);
+
+        //actualiza el subtotal
+        var cant_row = $("#cant_row").val(); //cantidad de lineas
+        var subtotal = 0;
+        var total_iva = 0;
+        for(var i=1; i<=cant_row; i++){
+            //calculo del subtotal
+            var sub = parseFloat($("#total"+i).val());
+            subtotal = subtotal + sub;
+            
+            //sumas del iva
+            var ivaf = parseFloat($("#iva"+i).val());
+            total_iva = total_iva + ivaf;
+            
+        }
+        
+        $("#subtotal").val(subtotal);
+        $("#iva").val(total_iva);
+	
+    }
+    
+    function agregarProducto(str){
+        var tablaElementos = document.getElementById('prod_detalle');
+        var tr_total = document.getElementById('totales');
+        
+        var tr =  document.createElement('tr');
+        var td1 = document.createElement('td');
+        var td2 = document.createElement('td');
+        var td3 = document.createElement('td');
+        var td4 = document.createElement('td');
+        var td5 = document.createElement('td');
+        var td6 = document.createElement('td');
+        var td7 = document.createElement('td');
+        var td8 = document.createElement('td'); 
+        
+        var idprod = $('#productos option:selected').val();
+        var prod = $('#productos option:selected').text();
+        
+        var num_line = $('#cant_row').val();
+        num_line++;
+        
+        $('#cant_row').val(num_line);
+        
+        //var num_line = tablaElementos.childElementCount;
+
+        td1.innerHTML = "<input name='idproducto"+num_line + "' id='idproducto"+num_line + "' type='hidden' value='" + idprod + "'> <input name='producto"+num_line + "' id='producto"+num_line + "' type='text' size='40' value='" + prod + "'>";
+        td2.innerHTML = "<input name='caducidad"+num_line + "' id='caducidad"+num_line + "' type='text' size='10'>";
+        td3.innerHTML = "<input name='cant"+num_line + "' id='cant"+num_line + "' type='text' size='10' value=0 onblur=sumar("+ num_line +")    >";
+        td4.innerHTML = "<input name='precio"+num_line + "' id='precio"+num_line + "' type='text' size='10' value=0 onblur=sumar("+ num_line +")>";
+        td5.innerHTML = "<input name='des"+num_line + "' id='des"+num_line + "' type='text' size='10' value=0 onblur=sumar("+ num_line +")>";
+        td6.innerHTML = "<input name='sup"+num_line + "' id='sup"+num_line + "' type='text' size='10' value=0 onblur=sumar("+ num_line +")>";
+        td7.innerHTML = "<input name='iva"+num_line + "' id='iva"+num_line + "' type='text' size='10' value=0 onblur=sumar("+ num_line +")>";
+        td8.innerHTML = "<input name='total"+num_line + "' id='total"+num_line + "' type='text' size='10' value=0>";
+        
+        tr.appendChild(td1);
+        tr.appendChild(td2);
+        tr.appendChild(td3);
+        tr.appendChild(td4);
+        tr.appendChild(td5);
+        tr.appendChild(td6);
+        tr.appendChild(td7);
+        tr.appendChild(td8);
+        //tr.appendChild(td9);
+        
+        var total_row = document.getElementById('totales');
+        total_row.parentNode.insertBefore(tr, total_row);
+        $('#productos option:selected').remove(); 
+    }
+</script>
+
+

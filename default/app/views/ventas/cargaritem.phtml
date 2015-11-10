@@ -1,0 +1,26 @@
+<?php foreach($listaDetalles as $items => $detalle): ?>
+    <tr>
+      <td><?php echo $detalle->cod_producto ?></td>
+      <td><?php echo $detalle->descripcion ?></td>
+      <td><?php echo $detalle->cantidad ?></td>
+      <td><?php echo $detalle->precio_venta ?></td>
+      <td><?php echo $detalle->importe ?></td>
+      <td><?php echo Form::hidden('importe'.$detalle->id,NULL,$detalle->importe,NULL,'0');
+	  echo Html::link('ventas/facturac#','Eliminar','onClick="borraProducto('.$detalle->id.')"') ?></td>
+    </tr>
+<?php endforeach; ?>
+
+<script>
+	var subtotal = parseFloat($("#subtotal").val());
+	var iva = parseFloat($("#iva").val());
+	var total = parseFloat($("#total").val());
+	var importeitem = parseFloat($("#importe<?php echo $detalle->id ?>").val());
+	
+	subtotal = subtotal + importeitem;
+	$("#subtotal").val(parseFloat(subtotal));
+	iva = subtotal * 0.12;
+	$("#iva").val(iva);
+	total = subtotal + iva;
+	$("#total").val(total);
+	
+</script>

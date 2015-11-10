@@ -1,0 +1,81 @@
+<?php View::content(); ?>
+<h2>Lista de Tipo de Productos</h2>
+<div class="content">
+	<?php echo View::content();?>
+	<ul>
+	<?php foreach ($list->items as $item):?>
+	<li>
+            <?php echo $item->tipo_doc; ?>
+		<?php  //if ($item->idtipodoc == 48) echo Html::link("consultardepartamentospais/index/1/$item->id", $item->codigo); else echo Html::link("consultarciudadespais/index/1/$item->id", $item->codigo);?> - <?php //echo $item->nombre?>
+	</li>
+	<?php endforeach;?>
+	</ul>
+	<?php if($list->prev) echo Html::linkAction("lista/$list->prev/", '<< Anterior |');?>
+	<?php if($list->next) echo Html::linkAction("lista/$list->next/", 'Próximo >>');?>
+</div>
+
+<br>
+<table border="3">
+ <tr>
+ <th>Id</th>
+ <th>Tipo Documento</th>
+  <th>Descripcion</th>
+  <th>Acciones</th>
+ </tr>
+
+<?php $n=0;  ?>
+    
+<?php foreach ($list->items as $item) : ?>
+	<?php
+        //echo var_dump($item);
+ 	$n++; 
+ 	if($n%2 ==0){
+  		$trClass="light";
+ 	}else{
+  		$trClass="dark";
+ 	}
+        
+        
+?>
+
+	<tr id='<?php echo "$item->idtipodoc" ?>'>  
+	<td><?php echo $item->tipo_doc; ?></td>
+ 	<td><?php echo $item->tipo_doc ?></td>
+ 	<td><?php echo $item->descripcion; ?></td>
+	<td class="table_actions">
+  		<?php //echo link_to("tipos_documentos/editar/$item->idtipodoc", 'Editar','class: edit') ?>
+  		<?php //echo link_to("marca/#", 'Borrar','class: del', "onclick: borrar($item->idtipodoc)") ?>
+ 	</td>
+	</tr>
+<?php endforeach; ?>
+        <tr align="center">
+              <td colspan="10" align="left">
+                  <?php if($list->prev) echo Html::linkAction("lista/$list->prev/", '<< Anterior |'); ?>
+                  <?php if($list->next) echo Html::linkAction("lista/$list->next/", 'Próximo >>');?>
+             </td>
+          </tr>
+</table>
+
+
+
+<?php //View::partial('paginators/classic', false, array('page' => $marcas, 'show' => 10, 'url' => 'marca/index')); ?>
+
+<script style='javascript'>
+/*
+function borrar(id){
+ var rowSelected=$("body").find('#' + 'c' + id)
+ rowSelected.html('<td colspan="4"> <img src="<?php //echo PUBLIC_PATH ?>/img/ui/ajax-loader.gif" /> Eliminando ...</td>');
+ $.ajax({
+  type: "GET",
+  url: "<?php //echo PUBLIC_PATH . 'marca/borrar/' ?>" + id,
+  success:
+   function(data){
+    $(rowSelected).hide();
+    $('#lista').html(data);
+   }
+  
+ });
+}
+*/
+</script>
+
