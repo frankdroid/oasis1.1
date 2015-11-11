@@ -10,7 +10,7 @@
     <?php echo Form::open(); // por defecto llama a la misma url ?>
     
     <div class="span4">
-        
+        <fieldset>
         <label>Condicion de Pago
             <?php echo Form::text('condicionPago.cond_pago') ?></label>
      
@@ -19,20 +19,23 @@
             
             <label>Identificador
             <?php echo Form::text('condicionPago.identificador') ?></label>
+        </fieldset>
+        
+        <fieldset>
             
-            <label>Forma de pago </label>
-            Pago de Contado<?php echo Form::check('condicionPago.contado','1') ?>
+            <h3>Forma de pago </h3>
+            Pago de Contado <?php echo Form::check('condicionPago.contado','1') ?>
             <br>
-            Pago a Credito<?php echo Form::check('condicionPago.credito','1') ?>
+            Pago a Credito <?php echo Form::check('condicionPago.credito','1') ?>
             <br>
-            Mixto
+            Mixto 
             <?php echo Form::check('condicionPago.mixto','1') ?>
             
-            
-        <br>
-            <label>Comentario
+        </fieldset>    
+        <fieldset>
+            <label>Comentarios
             <?php echo Form::textarea('condicionPago.comentario','rows=5') ?></label>
-            
+        </fieldset>    
     </div>
     
     <div class="span7">

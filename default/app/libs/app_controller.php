@@ -19,6 +19,7 @@ class AppController extends Controller
 
 	public $acl; //variable objeto ACL
 	public $menu = 'menu1';
+	public $active = "";
 	public $userRol = ""; //variable con el rol del usuario autenticado
 	protected $usuario;
 	

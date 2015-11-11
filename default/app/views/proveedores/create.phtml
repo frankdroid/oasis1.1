@@ -1,25 +1,10 @@
-<style>
-fieldset {
-    padding: 0px 10px 5px 10px;
-    margin: 0 0 10px 0;
-    border: 1px solid #00598D;
-    width:inherit;
-    background-color:#F2F2F2;      /*   F2F2F2  DBF1FF;*/
-}
-</style>
 <h2> Registro de Proveedores </h2>
 <?php View::content(); ?>
 
-<div id="prueba"></div>
 <?php echo Form::open(); ?>
-<table border="3">
-    <tr>
-        <td class="span7">
-            <fieldset style="border: 1px solid #ccc;">
-                    <table width="100%">
-                        <tr>
-                            <th>Identificaci&oacute;n</th>
-                                <td>
+        <div class="span4">
+            <fieldset>
+                            <legend>Identificaci&oacute;n</legend>
                                 <?php
                                     $ruta = PUBLIC_PATH.'proveedores/buscarProveedor/'; 
                                     
@@ -31,66 +16,52 @@ fieldset {
                                 <span id="div_digito_rif" style="display: none"> - <?php echo Form::text('digito_rif', array('size'=>'1', 'id'=>'digito_rif',  'maxlenght'=>'1')); ?></span>
                                 <?php //echo Html::img('flecha.jpg','',array('title'=>'Actualizar Proveedor','width'=>'30' , "onclick"=> "return actualizarProveedor()")) ?>
                                 <?php echo Form::button("Siguiente", array('onclick'=>'buscarProveedor()'))?>
-                            </td>
-                        </tr>
-                    </table>
                 </fieldset>
+        </div>
+        
+        <div class="span12">&nbsp;</div>
+        
+        <div class="span3">
                 
                  <!--   datos generales-->
-                <fieldset style="border: 1px solid #ccc;">
+                <fieldset>
                     <legend>Datos Generales</legend>
-                    <table>
-                        <tr> 
+                            <label>Nombre
+                            <?php echo Form::hidden('proveedores.idprov') ?>
+                            <?php echo Form::text('proveedores.nombre') ?></label>
+
+                            <label>Apellido
+                            <?php echo Form::text('proveedores.apellido') ?></label>
                             
-                            <th align="left" width="250">Nombre</th>
-                            <td>
-                                <?php echo Form::hidden('proveedores.idprov') ?>
-                                <?php echo Form::text('proveedores.nombre') ?>
-                            </td>
-                        </tr>
-                        <tr> 
-                            <th align="left">Apellido</th>
-                            <td><?php echo Form::text('proveedores.apellido') ?></td>
-                        </tr>
-                        <tr> 
-                            <th align="left">Direcci&oacute;n</th>
-                            <td><?php echo Form::textarea('proveedores.direccion',array('rows'=>'4','cols'=>'23')) ?>          
-                        </tr>
-                        
-                        <tr> 
-                            <th align="left">Telefono</th>
-                            <td><?php echo Form::text('proveedores.telefono') ?></td>
-                        </tr>
-                        <tr> 
-                            <th align="left">Comentario</th>
-                            <td><?php echo Form::textarea('proveedores.comentario',array('rows'=>'4','cols'=>'23')) ?></td>
-                        </tr>
-                    </table>
+                            <label>Direcci&oacute;n
+                            <?php echo Form::textarea('proveedores.direccion',array('rows'=>'4','cols'=>'23')) ?> </label> 
+                                    
+                            <label>Telefono
+                            <?php echo Form::text('proveedores.telefono') ?></label>
+                            <label>Comentario
+                            <?php echo Form::textarea('proveedores.comentario',array('rows'=>'4','cols'=>'23')) ?></label>
                 </fieldset> 
-                 
-                 <fieldset style="border: 1px solid #ccc;">
+     </div>  
+     
+     <div class="span3">          
+                 <fieldset>
                     <legend>Contactos Adicionales</legend>
-                    <table>
-                        <tr> 
-                            <th width="250" align="left">Contacto Alternativo 1 </th>
-                            <td><?php echo Form::text('proveedores.contacto1') ?></td>
-                        </tr>
-                        <tr> 
-                            <th align="left">Contacto Alternativo 2 </th>
-                            <td> <?php echo Form::text('proveedores.contacto2') ?> </td>
-                        <tr> 
-                                <th align="left">Correo Electr&oacute;nico 1</th>
-                                <td><?php echo Form::text('proveedores.correo1') ?> </td>
-                        </tr>
-                        <tr> 
-                            <th align="left">Correo Electr&oacute;nico 2 </th>
-                            <td> <?php echo Form::text('proveedores.correo2') ?> </td>
-                        </tr>
-                        </tr>
-                    </table>
+                            <label>Contacto Alternativo 1
+                            <?php echo Form::text('proveedores.contacto1') ?></label>
+                            
+                            <label>Contacto Alternativo 2 </th>
+                            <?php echo Form::text('proveedores.contacto2') ?> </label>
+                            
+                            <label>Correo Electr&oacute;nico 1
+                            <?php echo Form::text('proveedores.correo1') ?> </label>
+                            
+                            <label>Correo Electr&oacute;nico 2 
+                            <?php echo Form::text('proveedores.correo2') ?></label>
                 </fieldset>
-            
-        </td>
+      </div> 
+           
+		<div class="span12">&nbsp;</div>
+
         <!-- SELECCION DE  PRODUCTOS  -->
         <td class="span6" valign="top">
             <table border="4">
@@ -133,7 +104,7 @@ fieldset {
         <td class="span6">
             <td  valign='top'>
                          <label>Productos distribuidos por este proveedor<b></label>
-                        <fieldset style="background-color: #fff;">
+                        <fieldset>
                             
                             <div id="list_prod">
                                 <fieldset style="border:1px #ccc solid; width:250px; height: 500px;">

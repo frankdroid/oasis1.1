@@ -24,12 +24,15 @@ class ClientesController extends AppController {
     
     public function create ()
     {
+		$this->active = "Registro";
+		
         if(Input::hasPost('clientes')){
             /**
              * se le pasa al modelo por constructor los datos del form y ActiveRecord recoge esos datos
              * y los asocia al campo correspondiente siempre y cuando se utilice la convención
              * model.campo
              */
+			
             $cliente = new Clientes(Input::post('clientes'));
             if(Input::post('digito_rif') != '')
                 $cliente->identificacion = $cliente->identificacion + "-" + Input::post('digito_rif');

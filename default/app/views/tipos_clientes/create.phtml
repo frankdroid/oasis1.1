@@ -8,31 +8,33 @@
     
     <?php echo Form::open(); // por defecto llama a la misma url ?>
     
-    <div class="span4">
-        
-        <label>Tipo de Cliente
-            <?php echo Form::text('tipo_clientes.tipo_cliente') ?></label>
-     
-            <label>Descripción
-            <?php echo Form::text('tipo_clientes.descripcion') ?></label>
-            
-            <label>Prefijo
-            <?php echo Form::text('tipo_clientes.prefijo') ?></label>
-            
-            Aplica IVA
-            <?php echo Form::check('tipo_clientes.iva','1','') ?><br>
-            
-            Aplica Suplemento
-            <?php echo Form::check('tipo_clientes.suplemento','1','') ?><br>
-            
-            Aplica Descuento
-            <?php echo Form::check('tipo_clientes.descuento','1','') ?><br>
-            
-            <br>
-            <label>Comentario
-            <?php echo Form::textarea('tipo_clientes.comentario','rows=5') ?></label>
-            
+    <div class="span3">
+        <fieldset>
+            <label>Tipo de Cliente
+                <?php echo Form::text('tipo_clientes.tipo_cliente') ?></label>
+         
+                <label>Descripción
+                <?php echo Form::text('tipo_clientes.descripcion') ?></label>
+                
+                <label>Prefijo
+                <?php echo Form::text('tipo_clientes.prefijo') ?></label>
+                
+                Aplica IVA
+                <?php echo Form::check('tipo_clientes.iva','1','') ?><br>
+                
+                Aplica Suplemento
+                <?php echo Form::check('tipo_clientes.suplemento','1','') ?><br>
+                
+                Aplica Descuento
+                <?php echo Form::check('tipo_clientes.descuento','1','') ?><br>
+                
+                <br>
+                <label>Comentario
+                <?php echo Form::textarea('tipo_clientes.comentario','rows=5') ?></label>
+        </fieldset>    
     </div>
+    
+    <div class="span1">&nbsp;</div>
     
     <div class="span7">
         <div id="list" class="span3" style="width: 300px; height:400px;">

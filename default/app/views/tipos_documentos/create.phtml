@@ -5,11 +5,14 @@
 
 <div class="span12"><?php View::content(); ?><br></div>
     
-    <div class="span1">&nbsp;</div>
-    
-    <?php echo Form::open(); // por defecto llama a la misma url ?>
-    
-    <div id="div_create" class="span4">
+<div class="span1">&nbsp;</div>
+
+<?php echo Form::open(); // por defecto llama a la misma url ?>
+
+
+
+<div id="div_create" class="span3">
+    <fieldset>
         <label>Tipo de documento
             <?php echo Form::text('tipo_doc') ?>
         </label>
@@ -22,12 +25,14 @@
             
             <label>Comentario
             <?php echo Form::textarea('comentario','rows=5') ?></label>
-           
-    </div>
-    
-    <div id="list" class="span7" style="width: 300px; height:400px;">
-        <?php View::partial('clientes/list_tipo_documentos',FALSE,array('list'=>$list))?>
-    </div>     
+    </fieldset>   
+</div>
+
+<div class="span1">&nbsp;</div>
+
+<div id="list" class="span7" style="width: 300px; height:400px;">
+    <?php View::partial('clientes/list_tipo_documentos',FALSE,array('list'=>$list))?>
+</div>     
     
 <div class="span10" style="text-align:center">
     <?php echo Form::submit('Agregar','class="btn btn-primary"') ?>

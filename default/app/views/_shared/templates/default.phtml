@@ -23,7 +23,7 @@
 <body>
 <?php View::partial('header',FALSE,array('nombre_usuario'=>$nombre_usuario))?>
 
-<?php View::partial($menu)?>
+<?php View::partial($menu,FALSE,array('active'=>$active))?>
 
 
 <div class="main">

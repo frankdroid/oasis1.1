@@ -1,8 +1,9 @@
 <?php View::content(); ?>
-<h3>Crear Nuevo Cliente</h3>
+<h2>Crear Nuevo Cliente</h2><br>
  
 <?php echo Form::open(); // por defecto llama a la misma url ?>
- <div class="span12">
+ <div class="span5">
+ 		<fieldset>
          Identificaci&oacute;n
                      <?php
                         //echo Form::dbSelect('clientes.idtipodoc','tipo_doc', array('tipo_documentos','getSelect'),'Seleccione',array('onchange'=>'buscarCliente(this)'));
@@ -11,8 +12,13 @@
                      ?>
                      
                      <span id="div_digito_rif" style="display: none"> - <?php echo Form::text('digito_rif', array('size'=>'1', 'id'=>'digito_rif',  'maxlenght'=>'1')); ?></span>
-                     <?php echo Form::button("Siguiente", array('onclick'=>'buscarCliente()'))?>
+                     <?php echo Form::button("Siguiente",'onclick="buscarCliente()" class="btn btn-info" style="margin-bottom:10px"')?>
+       </fieldset>
 </div>
+
+<div class="span12">&nbsp;</div>
+
+
 
 <p>&nbsp;</p>
 
@@ -20,7 +26,7 @@
 
    
     <div class="span4" >
-                    <!--    Datos generales-->
+                    <fieldset>
                         <legend>Datos Generales</legend>
                         <?php echo Form::hidden('clientes.idcliente') ?>
                         <label>Nombre
@@ -34,10 +40,11 @@
     
                         <label>Telefono
                         <?php echo Form::text('clientes.telefono') ?></label>
+                    </fieldset>
     </div>
     
     <div class="span4">
-                    <!-- datos generales -->
+                    <fieldset>
                         <legend>Contactos Adicionales</legend>
                         <label>Contactos 
 							<?php echo Form::text('clientes.contacto_adic1') ?></label>
@@ -52,12 +59,13 @@
                         <label>Correo electr&oacute;nico
                         
                             <?php echo Form::text('clientes.correo') ?></label>
+                     </fieldset>
     </div>
     
     <div class="span12">&nbsp;</div>
             
     <div class="span4">
-                    <!--     aspectos adicionales -->
+                    <fieldset>
                         <legend>Aspectos Adicionales</legend>
                         <label>Tipo de Cliente
                         <?php
@@ -70,10 +78,11 @@
                          </label>  
                         <label>Gustos y Preferencias
                         <?php echo Form::textarea('clientes.gusto_preferencia','rows=5') ?></label>
+                   </fieldset>
     </div>
                 
     <div class="span4">
-                    <!--     aspectos varios -->
+                    <fieldset>
                         <legend>Aspectos Varios</legend>
                         
                         <label>Consideraciones
@@ -81,7 +90,7 @@
                  
                         <label>Comentario
                         <?php echo Form::textarea('clientes.comentario','rows=5') ?></label>
-                
+                	</fieldset>
     </div>
         
     <div class="span8" style="text-align:center">
