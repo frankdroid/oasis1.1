@@ -1,40 +1,43 @@
-
 <div class="span12"><?php View::content(); ?><br></div>
     <div class="span12">
 	<h2><?php echo $titulo;  ?></h2>
         <br>
     </div>
 
-    <div class="span2">&nbsp;</div>
+    <div class="span1">&nbsp;</div>
     
     <?php echo Form::open(); // por defecto llama a la misma url ?>
     
-    <div class="span5">
+    <div class="span3">
+    
+    	<fieldset>
+        	
+        	<legend>Crear Tipo Preparación</legend>
+            <label>Nombre
+                <?php echo Form::text('tipo_preparacion.tipo_prep') ?></label>
+         
+            <label>Descripción
+                <?php echo Form::text('tipo_preparacion.descripcion') ?></label>
+                
+            <label>Identificador
+                <?php echo Form::text('tipo_preparacion.identificador') ?></label>
+                
+            <label>Comentario
+                <?php echo Form::textarea('tipo_preparacion.comentario','rows=5') ?></label>
+		</fieldset>
         
-        <label>Tipo de Producto
-            <?php echo Form::text('tipo_preparacion.tipo_prep') ?></label>
-     
-        <label>Descripción
-            <?php echo Form::text('tipo_preparacion.descripcion') ?></label>
-            
-        <label>Identificador
-            <?php echo Form::text('tipo_preparacion.identificador') ?></label>
-            
-        <br>
-        <label>Comentario
-            <?php echo Form::textarea('tipo_preparacion.comentario','rows=5') ?></label>
+        <div class="centrado"><?php echo Form::submit('Agregar','class="btn btn-primary"') ?></div>
             
     </div>
     
-    <div class="span3">
-        <div id="list" class="span3" style="width: 300px; height:400px;">
+    <div class="span1">&nbsp;</div>
+    
+    <div class="span5">
+        <div id="list">
         <?php View::partial('preparacion/list_tipo_preparacion',FALSE,array('list'=>$list))?>
         </div> 
     </div>       
     
-    <div class="span2">&nbsp;</div>
-
-<div class="span12" style="text-align:center"><?php echo Form::submit('Agregar','class="btn btn-primary"') ?></div>
-        
+       
 <?php echo Form::close() ?> 
 

@@ -60,31 +60,20 @@
                 </fieldset>
       </div> 
            
-		<div class="span12">&nbsp;</div>
 
         <!-- SELECCION DE  PRODUCTOS  -->
-        <td class="span6" valign="top">
-            <table border="4">
-                <tr>
-                    <td>
+        <div class="span3">
+        	<fieldset>
+            			<legend>Selecionar Productos</legend>
                         <label>Tipo de Proveedor
                         <?php //'multiple'=>'false'
-                            echo Form::dbSelect('proveedores.idcondicion','condicion', array('condicion_prov','getSelect'),'Seleccione',array('size'=>'10')); //array('size'=>'10')
-                        ?>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <h5>AGREGAR DE PRODUCTOS 
-                            <?php echo Html::img('flecha.jpg','',array('title'=>'Actualizar Proveedor','width'=>'50' , "onclick"=> "return agregarProductos()")) ?>                
-                        </h5> 
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                       <fieldset>
-                           <laber>Productos</laber>
-                            <select name='productos[]' id='productos' multiple="true" size='15'>
+                            echo Form::dbSelect('proveedores.idcondicion','condicion', array('condicion_prov','getSelect'),'Seleccione',array('size'=>'9')); //array('size'=>'10')
+                        ?></label>
+                        <h4>AGREGAR DE PRODUCTOS 
+                            <?php echo Html::img('flecha.jpg','',array('title'=>'Actualizar Proveedor','width'=>'50' , "onclick"=> "return agregarProductos()")) ?></h4> 
+                       
+                           <label>Productos</label>
+                            <select name='productos[]' id='productos' multiple="true" size='12'>
                                 <?php
                                 foreach($productos as $items => $item):
                                     $prod = $item->marca."/".$item->tipo_prod."/".$item->presentacion;
@@ -93,42 +82,33 @@
 
                                 <?php endforeach; ?>
                             </select>   
-                        </fieldset> 
-                    </td>
-                </tr>
-            </table>
-        </td>
+             </fieldset> 
+        </div>
         
         <!-- PRODUCTOS DEL PROVEEDOR -->
         
-        <td class="span6">
-            <td  valign='top'>
-                         <label>Productos distribuidos por este proveedor<b></label>
-                        <fieldset>
-                            
+        <div class="span3">
+        
+        	<fieldset>
+                         <legend>Productos del proveedor</legend>
+                        
                             <div id="list_prod">
-                                <fieldset style="border:1px #ccc solid; width:250px; height: 500px;">
                                     <select name='productos_prov[]' id='productos_prov' multiple="true" size='20'>
                                         
                                     </select>
-                                </fieldset>
                                 <?php //View::partial('proveedores/list_productos_prov',FALSE,array('list'=>$list))?>
 
                             </div>
-                        </fieldset>  
-                        
-                    </td>
-                </tr>
-            </table>    
-        </td>
-    </tr>
-    <tr>
-        <td colspan="3"> 
-            <?php echo Form::button('Guardar', array("onclick"=> "guardarProveedor()")); 
+            </fieldset>  
+        </div>                
+ 		
+        <br>
+        
+        <div class="span12" style="text-align:center">
+            <?php echo Form::button('Guardar', 'onclick="guardarProveedor()" class="btn btn-primary"'); 
               //echo Form::submit('aceptar'); ?> 
-        </td>
-    </tr>
-</table>
+        </div>
+              
 <?php echo Form::close(); ?>
 
 

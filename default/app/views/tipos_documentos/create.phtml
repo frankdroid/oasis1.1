@@ -30,7 +30,7 @@
 
 <div class="span1">&nbsp;</div>
 
-<div id="list" class="span7" style="width: 300px; height:400px;">
+<div id="list" class="span7">
     <?php View::partial('clientes/list_tipo_documentos',FALSE,array('list'=>$list))?>
 </div>     
     
@@ -42,7 +42,8 @@
 echo Form::close() ?> 
 
 
-<script style='javascript'>
+<script>
+ 
 /*
 function borrar(id){
  var rowSelected=$("body").find('#' + 'c' + id)

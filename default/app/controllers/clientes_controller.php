@@ -11,7 +11,7 @@ class ClientesController extends AppController {
 	// funcion index
 	public function index() 
     {
-		
+		$this->active = "Registro";
     }
     
     public function listar($page=1, $per_page=2){

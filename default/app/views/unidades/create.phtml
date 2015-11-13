@@ -5,36 +5,38 @@
         <br>
     </div>
 
-    <div class="span2">&nbsp;</div>
+    <div class="span1">&nbsp;</div>
     
     <?php echo Form::open(); // por defecto llama a la misma url ?>
     
-    <div class="span5">
+    <div class="span3">
+    	<fieldset>
+        	<legend>Crear Unidad de Medida</legend>
+                <label>Nombre
+                <?php echo Form::text('unidades.unidad') ?></label>
+         
+                <label>Descripción
+                <?php echo Form::text('unidades.descripcion') ?></label>
+                
+                <label>Identificador
+                <?php echo Form::text('unidades.identificador') ?></label>
+                
+                <label>Comentario
+                <?php echo Form::textarea('unidades.comentario','rows=5') ?></label>
+        </fieldset>
         
-        <label>Unidad de Medida
-            <?php echo Form::text('unidades.unidad') ?></label>
-     
-            <label>Descripción
-            <?php echo Form::text('unidades.descripcion') ?></label>
-            
-            <label>Identificador
-            <?php echo Form::text('unidades.identificador') ?></label>
-            
-            <br>
-            <label>Comentario
-            <?php echo Form::textarea('unidades.comentario','rows=5') ?></label>
-            
+        <div class="centrado"><?php echo Form::submit('Agregar','class="btn btn-primary"') ?></div>
+          
     </div>
     
-    <div class="span3">
-        <div id="list" class="span3" style="width: 300px; height:400px;">
+    <div class="span1">&nbsp;</div>
+    
+    <div class="span4">
+        <div id="list">
         <?php View::partial('productos/list_unidades',FALSE,array('list'=>$list))?>
         </div> 
     </div>       
     
-    <div class="span2">&nbsp;</div>
-
-<div class="span12" style="text-align:center"><?php echo Form::submit('Agregar','class="btn btn-primary"') ?></div>
-        
+      
 <?php echo Form::close() ?> 
 

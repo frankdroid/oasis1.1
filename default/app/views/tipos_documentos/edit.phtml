@@ -5,18 +5,20 @@
 
 <div class="span12"><?php View::content(); ?><br></div>
 
-    <div class="span2">&nbsp;</div>
+<div class="span1">&nbsp;</div>
+
+<?php echo Form::open(); // por defecto llama a la misma url ?>
+
+<div id="div_create" class="span3">
+    <?php echo Form::hidden('accion',null,'hola') ?>
     
-    <?php echo Form::open(); // por defecto llama a la misma url ?>
+    <fieldset>
     
-    <div id="div_create" class="span5">
-        <?php echo Form::hidden('accion',null,'hola') ?>
-        
-        <label>Tipo de documento
+            <label>Tipo de documento
             <?php echo Form::text('tipodoc.tipo_doc') ?>
             
             <?php echo Form::hidden('tipodoc.idtipodoc') ?>
-        </label>
+            </label>
      
             <label>Descripción
             <?php echo Form::text('tipodoc.descripcion') ?></label>
@@ -26,21 +28,22 @@
             
             <label>Comentario
             <?php echo Form::textarea('tipodoc.comentario','rows=5') ?></label>
-           
-    </div>
-    
-    <div id="list" class="span3" style="width: 300px; height:400px;">
-        <?php echo Html::link("tipos_documentos/create", 'Crear nuevo') ?>
-        <br>
-        <?php View::partial('clientes/list_tipo_documentos',FALSE,array('list'=>$list))?>
-    </div>     
-    
-    <div class="span2">&nbsp;</div>
+   </fieldset>    
+</div>
 
-    <div class="span12" style="text-align:center">
-        <?php echo Form::submit('Actualizar','class="btn btn-primary"') ?>
-        <?php echo Form::reset('Cancelar','class="btn btn-primary"') ?>
-    </div>
+<div class="span1">&nbsp;</div>
+
+<div id="list" class="span4">
+    <?php echo Html::link("tipos_documentos/create", 'Crear nuevo','class="btn btn-info"') ?>
+    <br><br>
+    <?php View::partial('clientes/list_tipo_documentos',FALSE,array('list'=>$list))?>
+</div>     
+
+
+<div class="span12" style="text-align:center">
+    <?php echo Form::submit('Actualizar','class="btn btn-primary"') ?>
+    <?php echo Form::reset('Cancelar','class="btn btn-primary"') ?>
+</div>
         
 <?php 
 echo Form::close() ?> 

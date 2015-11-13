@@ -1,49 +1,29 @@
-<style>
-fieldset {
-    padding: 0px 10px 5px 10px;
-    margin: 0 0 10px 0;
-    border: 1px solid #00598D;
-    width:inherit;
-    background-color:#F2F2F2;      /*   F2F2F2  DBF1FF;*/
-}
-</style>
 <h2><?php echo $titulo;  ?></h2>
 <?php View::content(); ?>
 <div id="resultado"></div>
 <div id="prueba"></div>
 <?php //echo Form::open(); ?>
 <?php echo Ajax::form("resultado"); ?>
-<table>
-<!--    INFORMACION DE LA FACTURA-->
-    <tr>
-        <td colspan="15" class="span13">
+
+<div class="span6">
             <fieldset>
-                <table border="0" style="border: #000 solid; border-collapse: collapse;">
-                    <tr>
-                        <th>Tipo de Prepaci&oacute;n </th>
-                        <td>
+                        Tipo de Prepaci&oacute;n
                             <?php
                             echo Form::dbSelect('recetas.idtipoprep','tipo_prep', array('tipo_preparacion','getSelect'),'Seleccione',array('onchange'=>'buscarReceta(this);'));
                              ?>
-                        </td>
                         
-                        <th>Cantidad de Raciones </th>
-                        <td>
+                        Cantidad de Raciones
                             <?php echo Form::hidden('recetas.idreceta'); ?>
                             <?php echo Form::text('recetas.cant'); ?>
-                        </td>
-                    </tr>
-                </table>    
+
             </fieldset>
-        </td>
-    </tr>
- <!--  FIN DE  INFORMACION DE LA FACTURA-->   
-    
-    <tr>
+ </div>
+ 
+ <div class="span12">&nbsp;</div>  
 <!--        LISTADO DE PRODUCTOS-->
-        <td class="span4" valign="top">
-            <fieldset>
-                <h5>Listado de Productos a Seleccionar</h5>
+<div class="span3">
+	<fieldset>
+                <h4>Listado de Productos a Seleccionar</h4>
                 <br>
                  <select name='productos[]' id='productos' multiple="true" size='15' onchange="agregarProducto(this)">
                      <?php
@@ -54,12 +34,12 @@ fieldset {
 
                      <?php endforeach; ?>
                  </select>  
-            </fieldset> 
-        </td>
+	</fieldset> 
+</div>
         
-        <td valign="top"> 
+<div class="span6"> 
             <div id="prod">
-            <table bgcolor="#000000" border cellspadding="20" cellspacing="20" id="prod_detalle">
+            <table class="table table-striped table-bordered" id="prod_detalle">
                 <tr>
                     <td></td>
                     <th colspan="2">CANTIDADES</th>
@@ -68,31 +48,34 @@ fieldset {
                 
                 <tr id="fila1">
                     <!--  PRODUCTOS SELECCIONADOS -->
-                    <th  bgcolor="#ffffff" class="span6">
+                    <th>
                         Producto Seleccionado
                     </th>
 
                     <!--  Caducidad -->
-                    <th  bgcolor="#ffffff" width="300">
+                    <th>
                         Minima
                     </th>
 
                     <!--  cantidad -->
-                    <th  bgcolor="#ffffff" width="300">
+                    <th>
                          Maxima
                     </th>
 
-                    <th width="300">
+                    <th>
                         Unidad
                     </th>
                 </tr>
             </table>
             </div>    
         </td>
+</div>
+
+<div class="span3">
 <!--        RECETAS INGRESADAS-->
         <td>
             <fieldset>
-                <leyend>RECETAS INGRESAS</leyend>
+                <leyend>RECETAS INGRESADAS</leyend>
                 
                 <table>
                     <tr><td></td></tr>
@@ -102,9 +85,10 @@ fieldset {
         </td>
     </tr>
     
-</table> 
+</div> 
 <input name="cant_row" id="cant_row" type="hidden" value="0">
-<center><?php echo Form::submit('Guardar') ?></center>
+
+<div class="span12" style="text-align:center"><?php echo Form::submit('Guardar','class="btn btn-primary"') ?></div>
 
 <?php echo Form::close() ?> 
 
@@ -165,11 +149,11 @@ fieldset {
          
         //var num_line = tablaElementos.childElementCount;
 
-        td1.innerHTML = "<input name='idproducto"+num_line + "' id='idproducto"+num_line + "' type='hidden' value='" + idprod + "'> <input name='producto"+num_line + "' id='producto"+num_line + "' type='text' size='60' value='" + prod + "'>";
-        td2.innerHTML = "<input name='minima"+num_line + "' id='minima"+num_line + "' type='text' size='10' value='" + num_line + "' >";
-        td3.innerHTML = "<input name='maxima"+num_line + "' id='maxima"+num_line + "' type='text' size='10' value='" + num_line + "'>";
+        td1.innerHTML = "<input name='idproducto"+num_line + "' id='idproducto"+num_line + "' type='hidden' value='" + idprod + "'> <input name='producto"+num_line + "' id='producto"+num_line + "' type='text' size='25' value='" + prod + "'>";
+        td2.innerHTML = "<input name='minima"+num_line + "' id='minima"+num_line + "' type='text' size='5' value='" + num_line + "' >";
+        td3.innerHTML = "<input name='maxima"+num_line + "' id='maxima"+num_line + "' type='text' size='5' value='" + num_line + "'>";
         //td4.innerHTML = "<div id='div_unidad"+num_line + "'>";      
-        td4.innerHTML = "<input name='unidad"+num_line + "' id='unidad"+num_line + "' type='text' readonly size='10'> <input name='idunidad"+num_line + "' id='idunidad"+num_line + "' type='hidden'>";
+        td4.innerHTML = "<input name='unidad"+num_line + "' id='unidad"+num_line + "' type='text' readonly size='5'> <input name='idunidad"+num_line + "' id='idunidad"+num_line + "' type='hidden'>";
        
         tr.appendChild(td1);
         tr.appendChild(td2);
@@ -297,12 +281,12 @@ fieldset {
                         var idunidad = v.idunidad;
 
                         td1.innerHTML = "<input name='idproducto"+num_line + "' id='idproducto"+num_line + "' type='hidden' value='" + idprod + "'>\n\
-                                        <input name='producto"+num_line + "' id='producto"+num_line + "' type='text' size='60' value='" + prod + "'>\n\
+                                        <input name='producto"+num_line + "' id='producto"+num_line + "' type='text' size='25' value='" + prod + "'>\n\
                                          <input name='id"+num_line + "' id='id"+num_line + "' type='hidden' value='" + id + "'>";
-                        td2.innerHTML = "<input name='minima"+num_line + "' id='minima"+num_line + "' type='text' size='10' value='" + minima + "'>";
-                        td3.innerHTML = "<input name='maxima"+num_line + "' id='maxima"+num_line + "' type='text' size='10' value='" + maxima + "'>";
+                        td2.innerHTML = "<input name='minima"+num_line + "' id='minima"+num_line + "' type='text' size='5' value='" + minima + "'>";
+                        td3.innerHTML = "<input name='maxima"+num_line + "' id='maxima"+num_line + "' type='text' size='5' value='" + maxima + "'>";
                         //td4.innerHTML = "<div id='div_unidad"+num_line + "'>";      
-                        td4.innerHTML = "<input name='unidad"+num_line + "' id='unidad"+num_line + "' type='text' readonly size='10' value='" + unidad + "'> <input name='idunidad"+num_line + "' id='idunidad"+num_line + "' type='hidden' value='" + idunidad + "'>";
+                        td4.innerHTML = "<input name='unidad"+num_line + "' id='unidad"+num_line + "' type='text' readonly size='5' value='" + unidad + "'> <input name='idunidad"+num_line + "' id='idunidad"+num_line + "' type='hidden' value='" + idunidad + "'>";
 
                         tr.appendChild(td1);
                         tr.appendChild(td2);

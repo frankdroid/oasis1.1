@@ -31,7 +31,7 @@ class CondicionPagoController extends AppController {
 	//funcion identificacion
 	public function create() 
 	{ 
-            $this->titulo = 'Incorporaci&oacute;n de Condicion Pago'; 
+            $this->titulo = 'Incorporaci&oacute;n de Condición Pago'; 
             
             if(Input::hasPost('condicionPago')){	
                 

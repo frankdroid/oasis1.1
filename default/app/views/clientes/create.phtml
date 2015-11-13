@@ -2,7 +2,7 @@
 <h2>Crear Nuevo Cliente</h2><br>
  
 <?php echo Form::open(); // por defecto llama a la misma url ?>
- <div class="span5">
+ <div class="span6">
  		<fieldset>
          Identificaci&oacute;n
                      <?php
@@ -25,7 +25,7 @@
 <div id="form" style='display: none'>
 
    
-    <div class="span4" >
+    <div class="span3" >
                     <fieldset>
                         <legend>Datos Generales</legend>
                         <?php echo Form::hidden('clientes.idcliente') ?>
@@ -43,7 +43,7 @@
                     </fieldset>
     </div>
     
-    <div class="span4">
+    <div class="span3">
                     <fieldset>
                         <legend>Contactos Adicionales</legend>
                         <label>Contactos 
@@ -64,7 +64,7 @@
     
     <div class="span12">&nbsp;</div>
             
-    <div class="span4">
+    <div class="span3">
                     <fieldset>
                         <legend>Aspectos Adicionales</legend>
                         <label>Tipo de Cliente
@@ -81,7 +81,7 @@
                    </fieldset>
     </div>
                 
-    <div class="span4">
+    <div class="span3">
                     <fieldset>
                         <legend>Aspectos Varios</legend>
                         
@@ -92,8 +92,10 @@
                         <?php echo Form::textarea('clientes.comentario','rows=5') ?></label>
                 	</fieldset>
     </div>
+    
+    <div class="span12">&nbsp;</div>
         
-    <div class="span8" style="text-align:center">
+    <div class="span6" style="text-align:center">
 		<?php echo Form::submit('Agregar','id="bt_accion" class="btn btn-primary"') ?>
     </div>       
             
