@@ -1367,3 +1367,10 @@ fieldset {
 	background-color: #F9F9F9;     
 	border-radius: 3px;
 }
+
+.logoagua {
+	background-image:url(../img/OasisLogoAgua.gif);
+	background-repeat:no-repeat;
+	background-position:center;
+	min-height:300px;
+}

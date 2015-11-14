@@ -9,11 +9,13 @@
     <br>
 </div>
 
-    <div class="span2">&nbsp;</div>
+    <div class="span1">&nbsp;</div>
     
     <?php echo Form::open(); // por defecto llama a la misma url ?>
     
-        <div class="span5">
+    <div class="span5">
+    	
+        <fieldset>
         
         <label>Condicion de Pago
             <?php echo Form::text('condicionPago.cond_pago') ?></label>
@@ -35,20 +37,21 @@
             <br>
             <label>Comentario
             <?php echo Form::textarea('condicionPago.comentario','rows=5') ?></label>
+		</fieldset>
             
-    </div>
+	</div>
     
-    <div id="list" class="span3" style="width: 300px; height:400px;">
-        <?php echo Html::link("condicion_pago/create", 'Crear nuevo') ?>
-        <br>
+    <div class="span1">&nbsp;</div>
+    
+    <div id="list" class="span5">
+        <?php echo Html::link("condicion_pago/create", 'Crear nuevo','class="btn btn-info"') ?>
+        <br><br>
         <?php View::partial('facturas/list_condicion_pago',FALSE,array('list'=>$list))?>
     </div>     
     
-    <div class="span2">&nbsp;</div>
-
     <div class="span12" style="text-align:center">
         <?php echo Form::submit('Actualizar','class="btn btn-primary"') ?>
-        <?php echo Form::reset('Cancelar','class="btn btn-primary"') ?>
+        <?php echo Form::reset('Cancelar','class="btn btn-cancel"') ?>
     </div>
         
 <?php echo Form::close() ?> 

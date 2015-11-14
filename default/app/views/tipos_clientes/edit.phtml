@@ -5,13 +5,13 @@
 
 <div class="span12"><?php View::content(); ?><br></div>
 
-    <div class="span2">&nbsp;</div>
+<?php echo Form::open(); // por defecto llama a la misma url ?>
+
+    <div class="span1">&nbsp;</div>
     
-    <?php echo Form::open(); // por defecto llama a la misma url ?>
-    
-        <div id="div_create" class="span5">
-            
-            <?php echo Form::hidden('tipo_clientes.idtipocliente') ?>
+    <div id="div_create" class="span3">
+    	<fieldset>
+			<?php echo Form::hidden('tipo_clientes.idtipocliente') ?>
             <label>Tipo de Cliente
             <?php echo Form::text('tipo_clientes.tipo_cliente') ?></label>
      
@@ -33,20 +33,20 @@
             <br>
             <label>Comentario
             <?php echo Form::textarea('tipo_clientes.comentario','rows=5') ?></label>
-            
-    </div>
+        </fieldset>
+	</div>
     
-    <div id="list" class="span3" style="width: 300px; height:400px;">
-        <?php echo Html::link("tipos_clientes/create", 'Crear nuevo') ?>
-        <br>
+    <div class="span1">&nbsp;</div>
+    
+    <div id="list" class="span5">
+        <?php echo Html::link("tipos_clientes/create", 'Crear nuevo','class="btn btn-info"') ?>
+        <br><br>
         <?php View::partial('clientes/list_tipo_clientes',FALSE,array('list'=>$list))?>
-    </div>     
-    
-    <div class="span2">&nbsp;</div>
+    </div>    
 
     <div class="span12" style="text-align:center">
         <?php echo Form::submit('Actualizar','class="btn btn-primary"') ?>
-        <?php echo Form::reset('Cancelar','class="btn btn-primary"') ?>
+        <?php echo Form::reset('Cancelar','class="btn btn-cancel"') ?>
     </div>
         
 <?php 
