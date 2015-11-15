@@ -23,7 +23,8 @@ class RecetaProd extends ActiveRecord{
     public function getRecetaProductos($idreceta){
         //if($idreceta != ''){
         
-            $query = "select rp.id, rp.idproducto,rp.minima, rp.maxima, rp.idunidad, m.marca, t.tipo_prod, u.unidad, p.presentacion, p.cant_empaque, p.merma_estimada, p.producto from receta_prod rp, productos p, marcas m, tipo_productos t, unidades u
+            $query = "select rp.id, rp.idproducto,rp.minima, rp.maxima, rp.idunidad, m.marca, t.tipo_prod, u.unidad, p.presentacion, p.cant_empaque, p.merma_estimada, p.producto 
+                    from receta_prod rp, productos p, marcas m, tipo_productos t, unidades u
                 where
                 rp.idproducto = p.idproducto and
                 p.idmarca =m.idmarca and

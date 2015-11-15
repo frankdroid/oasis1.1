@@ -1,0 +1,29 @@
+<div class="subnavbar">
+  <div class="subnavbar-inner">
+    <div class="container">
+      <ul class="mainnav">
+        <li class="active"><?php echo Html::link('index','<i class="icon-desktop"></i><span>Escritorio</span>','title="Clic para ir al inicio"','')?></li>
+        <li class="dropdown"><a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" title="Ventas a Clientes"> <i class="icon-file-text"></i><span>Ventas</span> <b class="caret"></b></a>
+            	<ul class="dropdown-menu">
+                    <li><?php echo Html::link('clientes','Clientes')?></li>
+                    <li><?php echo Html::link('pedidos','Pedidos')?></li>
+                    <li><?php echo Html::link('facturas','Facturas')?></li>
+              	</ul>
+        </li>
+        <li><?php echo Html::link('compras','<i class="icon-shopping-cart"></i><span>Compras</span>','title="Compras"')?></li>
+        <li><?php echo Html::link('inventario','<i class="icon-barcode"></i><span>Inventario</span>','title="Inventario"')?></li>
+        <li><?php echo Html::link('gestión','<i class="icon-dashboard"></i><span>Gestión</span>','title="Gestión"')?></li>
+        <li class="dropdown"><a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" title="Administración"> <i class="icon-cogs"></i><span>Admin</span> <b class="caret"></b></a>
+          <ul class="dropdown-menu">
+            <li><?php echo Html::link('usuarios','Usuarios')?></li>
+            <li><?php echo Html::link('auditoria','Auditoria')?></li>
+            <li><?php echo Html::link('mantto','Mantenimiento')?></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+    <!-- /container --> 
+  </div>
+  <!-- /subnavbar-inner --> 
+</div>
+<!-- /subnavbar -->

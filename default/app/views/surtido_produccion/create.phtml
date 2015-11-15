@@ -1,0 +1,391 @@
+<style>
+fieldset {
+    padding: 0px 10px 5px 10px;
+    margin: 0 0 10px 0;
+    border: 1px solid #00598D;
+    width:inherit;
+    background-color:#cccccc;      /*   F2F2F2  DBF1FF;*/
+}
+</style>
+<h2><?php echo $titulo;  
+?></h2>
+<?php View::content(); ?>
+<div id="resultado"></div>
+<div id="prueba"></div>
+<?php echo Form::open(); ?>
+<?php //echo Ajax::form("resultado"); ?>
+<table border="01" style="border-collapse: collapse;">
+<!--    INFORMACION DE LA FACTURA-->
+    <tr>
+        <td colspan="15" class="span13">
+            <fieldset>
+                <table border="0">
+                    <tr>
+                        <th>Fecha </th> 
+                        
+                        <td>
+                            <?php echo Form::date('fecha','',date('Y-m-d')); 
+                            //echo Calendar::text('fecha'); ?>
+                        </td>
+                        
+                        <th>Raciones </th>
+                        <td>
+                            <?php echo Form::hidden('idreceta'); ?>
+                            <?php echo Form::text('raciones',array('onblur'=>'recalcular(this);')); ?>
+<!--                            <input type="text" name="raciones" id="raciones" size="5" value="0" onblur="recalcular(this);">-->
+                        </td>
+                    </tr>
+                </table>    
+            </fieldset>
+        </td>
+    </tr>
+    
+    <tr><td align="right" colspan="10">
+            Producto con disponibilidad <span style="background-color: green;"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            Producto con poca disponibilidad <span style="background-color: red;"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span> </td></tr>
+ <!--  FIN DE  INFORMACION DE LA FACTURA-->   
+     <?php
+        //echo Form::dbSelect('recetas.idtipoprep','tipo_prep', array('tipo_preparacion','getSelect'),'',array('multiple'=>'multiple' ,'onchange'=>'buscarReceta(this),;'));
+            ?>
+    <tr>
+<!--        LISTADO DE PRODUCTOS-->
+        <td class="span3" valign="top">
+            <fieldset>
+                
+                <h5>Preparaci&oacute;n</h5>
+                <br>           
+                 <select name='recetas[]' id='recetas' multiple="true" size='15' onchange="buscarIngredientes(this)" style="width: 200px;">
+                     <option value="">  </option>
+                     <?php
+                     foreach($recetas as $items):
+                         ?>
+                       <option value='<?php echo $items->idreceta; ?>'> <?php echo $items->preparacion ?>  </option>
+
+                     <?php endforeach; ?>
+                 </select>  
+            </fieldset> 
+        </td>
+        
+        <td valign="top"> 
+            <table bgcolor="#000000" border="1" id="prod_detalle" style="border-collapse: collapse;">
+                 <tbody>
+                    <tr bgcolor="#cccccc">
+                        <th colspan="1">Ingredientes</th>
+                        <td colspan="7"></td>
+                    </tr>
+                    <tr bgcolor="#cccccc">
+                        <th class="span5">
+                            PRODUCTO
+                        </th>
+
+                        <th width="80">
+                            DISP
+                        </th>
+                        <th width="80">
+                            SUG
+                        </th>
+                        <th width="80">
+                            PED
+                        </th>
+                        <th width="80">
+                            ENT
+                        </th>
+                        <th width="80">
+                            Simulado
+                        </th>
+                        <th width="30">
+                            Unidad
+                        </th>
+                        <th width="30">
+                            Estatus
+                        </th> 
+<!--                        <th width="30">
+                            N. Ent
+                        </th> -->
+                    </tr>
+                    
+                 </tbody>
+            </table>   
+        </td>
+    </tr>
+    
+</table> 
+<br>
+<input name="cant_row" id="cant_row" type="hidden" value="0">
+<input name="cant_porcion_receta" id="cant_porcion_receta" type="hidden" value="">
+<center><?php echo Form::submit('Guardar') ?></center>
+
+<?php echo Form::close() ?> 
+
+
+<script type="text/javascript">
+   
+     function recalcular(str){  
+        if((str.value == "") || isNaN(str.value) || (str.value <= 0) ){
+            alert('Ingrese un valor válido en el campo de raciones');
+            str.focus();
+            return;
+        }
+        
+        var cant_filas = $("#cant_row").val();
+        
+        if(cant_filas > 0){
+            var estimada = 0;
+            var existencia = 0;
+            var promedio_sug = 0;
+            var sugerido = 0;
+            var entregado = 0;
+            var simulado = 0;
+            
+            for(var i=1; i<=cant_filas; i++){  
+                //calcular existencia del producto
+                var merma_estimada = parseFloat($("#merma_estimada"+i).val());
+                var minima = parseFloat($("#minima"+i).val());
+                var maxima = parseFloat($("#maxima"+i).val());
+                var disp = parseFloat($("#disponible"+i).val());
+                var ped = $("#ped"+i).val();
+                
+                var cant_porcion_receta = parseInt($('#cant_porcion_receta').val());
+                var racion_prep = parseInt(str.value);
+                
+//                alert('merma_estimada:' + merma_estimada);
+//                alert('minima:' + minima);
+//                alert('maxima:' + maxima);
+//                alert('disp:' + disp);
+//                alert('ped:' + ped);
+//                alert('cant_porcion_receta:' + cant_porcion_receta);
+//                alert('racion_prep:' + racion_prep);
+                
+                //calcular estimada
+                estimada = disp * merma_estimada;
+                existencia = disp - estimada;
+
+                //CALCULAR EL PROMEDIO para determinar la sugerencia
+                promedio_sug = ((maxima + minima) / 2);
+
+                //calculo del sugerido
+//                sugerido = ((promedio_sug * cant_porcion_receta) / racion_prep);
+                sugerido = ((promedio_sug * racion_prep) / cant_porcion_receta);
+
+                //cantidad entregado si no especifica pedido entonces entregado sera el valor del sugerido de lo contrario sera el valor de pedido
+                if((ped != "") && ped > 0)
+                     entregado = ped;
+                 else 
+                     entregado = sugerido;
+
+                //calcular el simulado, el cual indica como quedaria el inventario
+                simulado = existencia - entregado;
+
+                $("#disp"+i).val(existencia.toFixed(2));
+                $("#sug"+i).val(sugerido.toFixed(2));
+                $("#ent"+i).val(entregado.toFixed(2));
+                $("#simulado"+i).val(simulado.toFixed(2)); 
+                
+                //llama la funcion que muesta alerta segun porcentaje de disponibilida
+                alertar(existencia, simulado, i);
+            }
+        }
+    }
+    
+    
+    function buscarIngredientes(str){
+        
+        if(($('#raciones').val() == "") || ($('#raciones').val() <= 0) || isNaN($('#raciones').val())){
+            alert('Ingrese un valor válido en el campo de raciones');
+            return;
+        }
+        
+        //ELIMINA TODAS LAS FILAS
+        //$("#tableId > tbody").empty();
+        
+        //elimina todas las filas excepto la primera
+        //$("prod_detalle > tbody:last").children().remove();
+        $("#prod_detalle tr:gt(1)").remove();
+        
+        $.ajax({
+        dataType:"json",
+        type: "POST",
+        url: "<?php echo PUBLIC_PATH . 'surtido_produccion/buscarIngredienteReceta'; ?>",
+        data: "idreceta="+str.value,
+        success: function (ingredientes){
+            //alert('asas');
+            //$("#prueba").html(html);
+            var estimada = 0;
+            var existencia=0;
+            var num_line = 0;
+            var racion_prep = $('#raciones').val();
+            
+            if(ingredientes.idreceta != ''){
+                
+                var i=0;
+                $.each(ingredientes, function(k,v){
+                    if(v.producto){
+                        //i++;
+                        var idreceta = v.idreceta;
+                        var idprod = v.idproducto;
+                        var idtipoprep = v.idtipoprep;
+                        var prod = v.producto;
+                        var disp = parseFloat(v.disponible);
+                        var unidad = v.unidad;
+                        var idunidad = v.idunidad;
+                        var merma_estimada = v.merma_estimada;
+                        var cant_porcion_receta = v.cant_porcion_receta;
+                        var minima = v.minima;
+                        var maxima = v.maxima;
+                        var ped = "";
+                        $('#idreceta').val(idreceta);
+                        $('#cant_porcion_receta').val(cant_porcion_receta);
+                        
+                        
+                        //calculos
+                        //estimada = existencia * merma_estimada
+                        //estimada = disp * merma_estimada;
+                        //existencia = disp - estimada;
+                        //var imagen = <?php //echo PUBLIC_PATH . 'public/img/ok.gif'; ?>;
+                        
+                        num_line++;
+                        td1 = "<td  class='span5'>";
+                           td1 = td1 + "<input name='idproducto"+num_line + "' id='idproducto"+num_line + "' type='hidden' value='" + idprod + "'> <input name='producto"+num_line + "' id='producto"+num_line + "' readonly type='text' size='40' value='" + prod + "'>";
+                        td1 = td1 + "</td>";
+                        td2 = "<td><input name='disp"+num_line + "' readonly id='disp"+num_line + "' type='text' size='5' value=''></td>";
+                        td3 = "<td> <input name='sug"+num_line + "' readonly id='sug"+num_line + "' type='text' size='5' value=''> </td>";
+                        td4 = "<td> <input name='ped"+num_line + "' id='ped"+num_line + "' type='text' size='5' onblur='calcularPedido(this,"+num_line+");'> </td>";
+                        td5 = "<td> <input name='ent"+num_line + "' id='ent"+num_line + "' readonly type='text' size='5'> </td>";
+                        td6 = "<td> <input name='simulado"+num_line + "' readonly id='simulado"+num_line + "' type='text' size='5'> \n\
+                            \n\<input name='merma_estimada"+num_line + "'  id='merma_estimada"+num_line + "' type='hidden' size='5' value='"+merma_estimada+"'>\n\
+                                <input name='minima"+num_line + "'  id='minima"+num_line + "' type='hidden' value='"+minima+"'>\n\
+                                <input name='maxima"+num_line + "'  id='maxima"+num_line + "' type='hidden' value='"+maxima+"'>\n\
+                                <input name='disponible"+num_line + "'  id='disponible"+num_line + "' type='hidden'  value='"+disp+"'>\n\
+                                <input name='idtipoprep"+num_line + "'  id='idtipoprep"+num_line + "' type='hidden'  value='"+idtipoprep+"'></td>";
+                        td7 = "<td id=unidad"+ num_line +">"+ unidad +"</td>";
+                        td8 = "<td width=10 id=alerta"+ num_line +" > &nbsp; </td>";
+                        //td9 = "<td width=10 id=no_entrega"+ num_line +"></td>";
+                        var tr = td1 + td2 + td3 + td4 + td5 + td6 + td7 + td8;
+                        $('#prod_detalle> tbody:last').append('<tr>'+ tr + '</tr>');
+                        
+                        //realizar los calculos
+                        calcular(num_line, parseFloat(disp), parseFloat(minima), parseFloat(maxima), parseInt(cant_porcion_receta), parseInt(racion_prep), parseFloat(merma_estimada), ped);
+                        
+                    }       
+                })
+            }
+            //setea cantidad de filas 
+            $('#cant_row').val(num_line);
+        }  
+     })
+   }
+   
+   function alertar(existencia, simulado, num_line){     
+        //genera el color segun la disponibilidad del producto    
+        if(simulado > (existencia * 0.5))
+           $("#alerta"+num_line).html('<span style="background-color: green;"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>');
+        else
+           $("#alerta"+num_line).html('<span style="background-color: red;"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>');
+           
+   }
+   
+   
+    
+    function calcularPedido(str,num_line){
+        //el valor del pedido no puede ser mayor a la disponibilidad
+        if(parseFloat(str.value) >  parseFloat($("#disp"+num_line).val())){
+            alert('El valor del pedido excede lo disponible en el inventario');
+            $("#ped"+num_line).focus();
+            return; 
+        }
+        
+        var ped = parseFloat(str.value);
+        var ped = parseFloat($("#ped"+num_line).val());
+        var entregado = 0;
+        var simulado = 0;
+        var existencia = parseFloat($("#disp"+num_line).val());
+        
+        
+        if((ped != "") && ped > 0)
+            entregado = ped;
+        
+        //calcular el simulado, el cual indica como quedaria el inventario
+        simulado = existencia - entregado;
+        
+        //$("#disp"+num_line).val(existencia.toFixed(2));
+        //$("#sug"+num_line).val(sugerido.toFixed(2));
+        $("#ent"+num_line).val(entregado.toFixed(2));
+        $("#simulado"+num_line).val(simulado.toFixed(2));
+        
+        //llama la funcion que muesta alerta segun porcentaje de disponibilida
+        alertar(existencia, simulado, num_line);
+        
+        
+        
+           
+        
+    }
+    
+    
+    /*  ESTA FUNCION CALCULA LA SUGERENCIA DE PEDIDO 
+    * parametros
+    * num_line : numero de linea a calcular
+    * disp: disponible
+    * minima: cantidad minima de producto requerida para el numero de raciones especificada en receta
+    * maxima: cantidad maxima de producto requerida para el numero de raciones especificada en receta
+    * merma_estimada: es la merma de perdida especifica en la creacion del producto
+    * ped pedidos
+    * cant_porcion_receta: cantidad de porcion especificada en la receta
+    * racion_prep: numero de raciones a preparar especificada aqui en produccion
+    * 
+    * */
+    function calcular(num_line, disp, minima, maxima, cant_porcion_receta, racion_prep,  merma_estimada, ped){ 
+        //alert('si');
+           var estimada = 0;
+           var existencia = 0;
+           var promedio_sug = 0;
+           var sugerido = 0;
+           var entregado = 0;
+           var simulado = 0;
+           
+           //calcular existencia del producto
+           estimada = disp * merma_estimada;
+           existencia = disp - estimada;
+            
+           //CALCULAR EL PROMEDIO para determinar la sugerencia
+           promedio_sug = (maxima + minima) / 2;
+           
+           //calculo del sugerido
+           //sugerido = (promedio_sug * cant_porcion_receta) / racion_prep;
+           sugerido = ((promedio_sug * racion_prep) / cant_porcion_receta);
+           //cantidad entregado si no especifica pedido entonces entregado sera el valor del sugerido de lo contrario sera el valor de pedido
+           if((ped != "") && ped > 0)
+                entregado = ped;
+            else 
+                entregado = sugerido;
+           
+           //calcular el simulado, el cual indica como quedaria el inventario
+           simulado = existencia - entregado;
+           
+           $("#disp"+num_line).val(existencia.toFixed(2));
+           $("#sug"+num_line).val(sugerido.toFixed(2));
+           $("#ent"+num_line).val(entregado.toFixed(2));
+           $("#simulado"+num_line).val(simulado.toFixed(2));  
+           
+           //llama la funcion que muesta alerta segun porcentaje de disponibilida
+            alertar(existencia, simulado, num_line);
+           
+           //indica si sera entregado o no
+            //if(simulado > (existencia * 0.5))
+             /*   
+                $("#no_entrega"+num_line).html("<?php echo PUBLIC_PATH . 'img/ok.gif'; ?>") &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>');
+            else
+                $("#no_entrega"+num_line).html('<span style="background-color: red;"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>');
+                */
+
+           
+           
+    
+    }
+    
+   
+    
+</script>
+
+

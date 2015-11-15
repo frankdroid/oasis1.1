@@ -42,14 +42,14 @@
 
 <div class="span12" style="text-align:center">
     <?php echo Form::submit('Actualizar','class="btn btn-primary"') ?>
-    <?php echo Form::reset('Cancelar','class="btn btn-primary"') ?>
+    <?php echo Form::reset('Cancelar','class="btn btn-cancel"') ?>
 </div>
         
 <?php 
 echo Form::close() ?> 
 
 
-<script style='javascript'>
+<script type='javascript'>
 /*
 function borrar(id){
  var rowSelected=$("body").find('#' + 'c' + id)
@@ -68,7 +68,7 @@ function borrar(id){
 </script>
 
 
-<script style='javascript'>
+<script>
 //cargarLista('1');
 
 function cargarLista(page){

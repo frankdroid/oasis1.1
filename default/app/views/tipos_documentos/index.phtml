@@ -1,0 +1,41 @@
+<div class="span12">
+	<h2>Tipo de Identificación</h2><br>
+</div>
+
+<div class="span12"><?php View::content(); ?><br></div>
+
+    <div class="span2">&nbsp;</div>
+    
+    <?php echo Form::open(); // por defecto llama a la misma url ?>
+    
+    <div class="span5">
+        
+        <label>Tipo de documento
+            <?php echo Form::text('tipo_doc') ?></label>
+     
+            <label>Descripción
+            <?php echo Form::text('descripcion') ?></label>
+            
+            <label>Prefijo
+            <?php echo Form::text('prefijo') ?></label>
+            
+            <label>Comentario
+            <?php echo Form::textarea('comentario','rows=5') ?></label>
+            
+    </div>
+    
+    <div class="span3">
+            Documentos registrados
+            
+            <textarea name="docs" cols="20" rows="10" readonly id="docs"><?php 	foreach ($listaDocs as $items => $item) :
+																					echo $item->tipo_doc; echo "\n";
+																				endforeach; ?>
+            </textarea>
+            
+    </div>       
+    
+    <div class="span2">&nbsp;</div>
+
+<div class="span12" style="text-align:center"><?php echo Form::submit('Agregar','class="btn btn-primary"') ?></div>
+        
+<?php echo Form::close() ?> 

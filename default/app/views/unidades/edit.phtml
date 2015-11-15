@@ -9,12 +9,16 @@
     <br>
 </div>
 
-    <div class="span2">&nbsp;</div>
+
+
+    <div class="span1">&nbsp;</div>
     
     <?php echo Form::open(); // por defecto llama a la misma url ?>
     
-        <div id="div_create" class="span5">
-            
+    <div class="span3" id="div_create">
+    
+    		<fieldset>
+            <legend>Modificar Unidad de Medida</legend>
             <?php echo Form::hidden('unidades.idunidad') ?>
             <label>Unidad de Medida
             <?php echo Form::text('unidades.unidad') ?></label>
@@ -29,19 +33,21 @@
             <label>Comentario
             <?php echo Form::textarea('unidades.comentario','rows=5') ?></label>
             
+           </fieldset>
+            
     </div>
     
-    <div id="list" class="span3" style="width: 300px; height:400px;">
-        <?php echo Html::link("unidades/create", 'Crear nuevo') ?>
-        <br>
+    <div class="span1">&nbsp;</div>
+    
+    <div id="list" class="span4">
+        <?php echo Html::link("unidades/create", 'Crear nuevo', 'class=btn btn-info') ?>
+        <br><br>
         <?php View::partial('productos/list_unidades',FALSE,array('list'=>$list))?>
     </div>     
     
-    <div class="span2">&nbsp;</div>
-
     <div class="span12" style="text-align:center">
         <?php echo Form::submit('Actualizar','class="btn btn-primary"') ?>
-        <?php echo Form::reset('Cancelar','class="btn btn-primary"') ?>
+        <?php echo Form::reset('Cancelar','class="btn btn-cancel"') ?>
     </div>
         
 <?php echo Form::close() ?> 

@@ -1,0 +1,71 @@
+<div class="span12">
+<h2>Cargar Formas de Pago</h2>
+</div>
+<div class="span12">
+<h2>Factura Nro: <?php echo $datosFacturac->idfacturac ?></h2>
+</div>
+<div class="span6">
+  <h3>Cedula: <?php echo $datosFacturac->identificacion ?></h3>
+  <h3>dirección: <?php echo $datosFacturac->direccion ?></h3>
+</div>
+
+<div class="span6">
+  <h3>Cliente: <?php echo $datosFacturac->nombres." ".$datosFacturac->apellidos ?></h3>
+  <h3>Telefono: <?php echo $datosFacturac->telefono ?></h3>
+</div>
+<p>&nbsp;</p>
+<div class="span9">
+<table class="table table-striped table-bordered">
+  <tbody>
+    <tr>
+      <td>Cod Producto</td>
+      <td>Descripcion</td>
+      <td>Cantidad</td>
+      <td>Precio</td>
+      <td>Importe</td>
+    </tr>
+    <?php foreach($listaItems as $items => $detalle): ?>
+    <tr>
+      <td><?php echo $detalle->cod_producto ?></td>
+      <td><?php echo $detalle->descripcion ?></td>
+      <td><?php echo $detalle->cantidad ?></td>
+      <td><?php echo $detalle->precio_venta ?></td>
+      <td><?php echo $detalle->importe ?></td>
+      <?php $subtotal = 0; $subtotal = $subtotal + $detalle->importe ?>
+    </tr>
+    <?php endforeach; ?>
+  </tbody>
+</table>
+</div>
+
+<div class="span6">
+  <h3>Subtotal: <?php echo $subtotal ?></h3>
+  <h3>IVA: <?php echo $datosFacturac->iva ?></h3>
+  <h3>Total: <?php echo $datosFacturac->monto ?></h3>
+</div>
+
+<script>
+
+function cambiaRestante() {
+
+	var efe = parseFloat($("#efe").val());
+	var tdd = parseFloat($("#tdd").val());
+	var tdc = parseFloat($("#tdc").val());
+	var tae = parseFloat($("#tae").val());
+	var taf = parseFloat($("#taf").val());
+	var restante = parseFloat($("#restante").val());
+	var subtotal = parseFloat($("#subtotal").val());
+	var vuelto = parseFloat($("#vuelto").val());
+	
+	restante = subtotal - (efe + tdd + tdc + tae + taf);
+	$("#restante").val(restante.toFixed(2));
+	if (restante < 0){
+		vuelto = (efe + tdd + tdc + tae + taf) -subtotal;
+		$("#vuelto").val(vuelto.toFixed(2))
+		$("#restante").val(0);
+	} else {
+		$("#vuelto").val(0);
+	}
+	
+}
+</script>

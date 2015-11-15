@@ -1,0 +1,24 @@
+<?php 
+
+if ($msg == "Cliente no existe") {
+	$cliente = array (
+					"idcliente" => "",
+		 			"nombres" => "",
+		  			"apellidos" => "",
+		  			"direccion" => "",
+		  			"telefono" => ""
+				);	
+} else {
+	$cliente = array (
+					"idcliente" => "$clientes->idcliente",
+		 			"nombres" => "$clientes->nombres",
+		  			"apellidos" => "$clientes->apellidos",
+		  			"direccion" => "$clientes->direccion",
+		  			"telefono" => "$clientes->telefono"
+				);
+}
+
+echo json_encode($cliente);
+?>
+	 
+

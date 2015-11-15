@@ -31,9 +31,7 @@ class Productos extends ActiveRecord{
     
     public function todos()
     {
-
-            return $this->find();
-
+        return $this->find();
     }
 	
 	
@@ -55,7 +53,7 @@ class Productos extends ActiveRecord{
     //busca la unidad del producto
     public function getProductoUnidad($idproducto){
         $sql = "select u.unidad, p.idunidad from productos p, unidades u "
-                . " where p.idunidad = u.idunidad and p.idproducto = $idproducto";
+                . " where p.idunidad = u.idunidad and p.idproducto = '$idproducto'";
         
         return $this->find_by_sql($sql);
     }
@@ -64,6 +62,15 @@ class Productos extends ActiveRecord{
     {	
             return $this->find_by_identificacion($cedula);
     }
+    
+    
+    public function generarCodProducto() 
+    {	
+        $sql = "Select max(substring(idproducto from 2 for 6)) from productos";        
+        
+            return $this->find_by_identificacion($cedula);
+    }
+    
 	
 }
 ?>

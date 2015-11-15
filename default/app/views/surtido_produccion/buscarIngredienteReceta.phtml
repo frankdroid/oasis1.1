@@ -1,27 +1,37 @@
+<?php View::content(); ?>
 <?php
 //echo "id: ".  $dato;
-//echo var_dump($recetas_prod);
+//echo var_dump($ingredientes);
 if($existe){
-    $receta = array (
-                    "idreceta" =>  "$recetas->idreceta",
-                    "cant" =>    "$recetas->cant",
-                    "preparacion" =>  "$recetas->preparacion",
-            );
+//    $receta = array (
+//                    "idreceta" =>  "$recetas->idreceta",
+//                    "cant" =>    "$recetas->cant",
+//            );
             
-            $receta_prod = array();
-            foreach ($recetas_productos as $items =>$item){
-               $receta_prod[] = array(
+            $ingredientes = array();
+            foreach ($surtido_prod as $items =>$item){
+               $ingredientes[] = array(
                    "idproducto" => $item->idproducto,
+                   "idtipoprep" => $item->idtipoprep,
+                   "disponible" => $item->disponible,
+                   "minima" => $item->minima,
+                   "maxima" => $item->maxima,
+                   "merma_estimada" => $item->merma_estimada,
+                   "cant_porcion_receta" => $item->cant,
+                   //"disponible" => $item->disponible,
                    "producto" => $item->marca.'/'.$item->tipo_prod.'/'.$item->cant_empaque,
-                    "id"=>$item->id,
-                    "idunidad" => $item->idunidad,
-                    "minima" => $item->minima,
-                    "maxima" => $item->maxima,
-                    "unidad" => $item->unidad);
+                   "unidad" => $item->unidad,
+                   "idreceta" => $item->idreceta);
+               
+//                    "id"=>$item->id,
+//                    "idunidad" => $item->idunidad,
+//                    "minima" => $item->minima,
+//                    "maxima" => $item->maxima,
+                   
                 //$prod_proveedor[] = array("idproducto" => $item->idproducto, "producto" => $item->marca.'/'.$item->tipo_prod.'/'.$item->cant_empaque); 
             }
             
-            $receta = array_merge($receta, $receta_prod);
+            //$receta = array_merge($receta, $receta_prod);
             
             /*
             $prod_proveedor = array();
@@ -39,13 +49,10 @@ if($existe){
             
     //$productos_prov = $productos_proveedor;
 }else{
-     $receta = array (
+     $ingredientes = array (
     "idreceta" => "",
     "cant" =>    "",
-    "preparacion" =>    "",
-         
     );
 }
-
-echo json_encode($receta);
+echo json_encode($ingredientes);
 ?>

@@ -1,11 +1,10 @@
 <?php
-Load::models('punto_venta'); // carga modelo Ventas
-Load::models('ventas'); // carga modelo Ventas
-//Load::models('surtido_produccion'); 
+Load::models('punto_venta'); // carga modelo PuntoVenta
+Load::models('surtido_produccion'); 
 //Load::models('receta_prod'); 
 Load::models('productos');
 //Load::models('unidades');
-class VentasController extends AppController {
+class PuntoVentaController extends AppController {
 	
 	public $titulo_pagina = 'Oasis Service C.A.- Puntos de Ventas'; //titulo de la pagina
 	       
@@ -32,15 +31,15 @@ class VentasController extends AppController {
         // funcion index
 	public function lista($page=1) 
         {
-            $Ventas = new Ventas();
-            $this->list = $Ventas->getAll($page); //getAll();
+            $PuntoVenta = new PuntoVenta();
+            $this->list = $PuntoVenta->getAll($page); //getAll();
             View::template(NULL);
             
         }
 	
        //buscar el ultimo precio y disponibilidad 
        public function getDetalleElaborados() {
-           $punto_venta = new Ventas();
+           $punto_venta = new PuntoVenta();
             //buscar los productos  elaborados es decir preparados
             $this->existe = false;
             
@@ -59,18 +58,13 @@ class VentasController extends AppController {
            }           
        }
         
-        public function datosCliente()
-        {
-            
-        }
-       
         public function create()
         {
             $this->titulo = 'Punto de Venta'; 
             
             $fecha = (Input::hasPost('fe_surtido') ? Input::post('fe_surtido') : date('Y-m-d') ); 
             
-            $punto_venta = new Ventas();
+            $punto_venta = new PuntoVenta();
             $this->elaborados = $punto_venta->getElaborados($fecha);
             
             $producto = new Productos;
@@ -85,7 +79,7 @@ class VentasController extends AppController {
                 
                 for($i=1; $i<=$cant_row; $i++){
                     if(Input::post("carga$i") == "1"){
-                        $punto_venta = new Ventas(); 
+                        $punto_venta = new PuntoVenta(); 
 
                         $punto_venta->idtipopuntoventa = Input::post("idtipopuntoventa");
                         $punto_venta->idproducto  = Input::post("idproducto$i");
@@ -110,7 +104,7 @@ class VentasController extends AppController {
         
         Flash::info('gfododfko');
         //View::template(null);
-        $surtido_prod = new Ventas();
+        $surtido_prod = new PuntoVenta();
         //$receta_prod = new RecetaProd();
         $this->existe = false;
         //$this->datos = 2; //Input::post('');
@@ -127,8 +121,8 @@ class VentasController extends AppController {
 //                $idreceta = $receta->idreceta;
 //                $this->dato = $idreceta;
 //                
-//                $this->Ventas_productos = $receta_prod->getRecetaProductos((int)$idreceta);
-//                //$this->Ventas_productos = $receta->getRecetaProductos($idreceta);
+//                $this->PuntoVenta_productos = $receta_prod->getRecetaProductos((int)$idreceta);
+//                //$this->PuntoVenta_productos = $receta->getRecetaProductos($idreceta);
                 
             }  
         //}
@@ -144,7 +138,7 @@ class VentasController extends AppController {
                 
         if(Input::hasPost('idreceta')){
             $idreceta = Input::post('idreceta');
-            $surtido_prod = new Ventas();  
+            $surtido_prod = new PuntoVenta();  
             
             $this->surtido_prod = $surtido_prod->ingredientesReceta(Input::post('idreceta'));
              if(count($surtido_prod) > 0 ) {   
@@ -160,8 +154,8 @@ class VentasController extends AppController {
 //                $idreceta = $receta->idreceta;
 //                //$this->dato = $idreceta;
 //                
-//                $this->Ventas_productos = $receta_prod->getRecetaProductos((int)$idreceta);
-//                //$this->Ventas_productos = $receta->getRecetaProductos($idreceta);
+//                $this->PuntoVenta_productos = $receta_prod->getRecetaProductos((int)$idreceta);
+//                //$this->PuntoVenta_productos = $receta->getRecetaProductos($idreceta);
 //            }  
        }
     }
@@ -169,52 +163,52 @@ class VentasController extends AppController {
       
     public function buscarReceta(){
         View::template(NULL);
-        $receta = new Ventas();
+        $receta = new PuntoVenta();
         $receta_prod = new RecetaProd();
         $this->existe = false;
         //$this->datos = 2; //Input::post('');
         //if(Input::hasPost('idtipoprep')){
             $idtipoprep = Input::post('idtipoprep');
-            //$this->query = "select * from Ventas where idtipoprep=$idtipoprep";
+            //$this->query = "select * from PuntoVenta where idtipoprep=$idtipoprep";
                    
             
-            $this->Ventas = $receta->getReceta($idtipoprep);
-            if(count($this->Ventas) > 0 ) {   
+            $this->PuntoVenta = $receta->getReceta($idtipoprep);
+            if(count($this->PuntoVenta) > 0 ) {   
                 $this->existe = true;
                 
                 //busco los productos de la receta
                 $idreceta = $receta->idreceta;
                 $this->dato = $idreceta;
                 
-                $this->Ventas_productos = $receta_prod->getRecetaProductos((int)$idreceta);
-                //$this->Ventas_productos = $receta->getRecetaProductos($idreceta);
+                $this->PuntoVenta_productos = $receta_prod->getRecetaProductos((int)$idreceta);
+                //$this->PuntoVenta_productos = $receta->getRecetaProductos($idreceta);
             }
     }
     
     
 //    public function edit($id = null)
 //    {      
-//        $this->titulo = 'Incorporaci&oacute;n de Ventas'; 
+//        $this->titulo = 'Incorporaci&oacute;n de PuntoVenta'; 
 //        
-//    	$Ventas = new Ventas();
+//    	$PuntoVenta = new PuntoVenta();
 //        if($id != null){
-//            $Ventas = $Ventas->find((int)$id);
+//            $PuntoVenta = $PuntoVenta->find((int)$id);
 //        
-//            if(Input::hasPost('Ventas')){
+//            if(Input::hasPost('PuntoVenta')){
 //                
-//                $request = Input::post('Ventas');
+//                $request = Input::post('PuntoVenta');
 //               
-//                if($Ventas->update($request)){
+//                if($PuntoVenta->update($request)){
 //                  
-//                    Router::redirect('Ventas/create');
-//                    //se hacen persistente los datoVentas en el formulario
+//                    Router::redirect('PuntoVenta/create');
+//                    //se hacen persistente los datoPuntoVenta en el formulario
 //                    //$this->tipodoc = $this->post('tipo_cliente');
 //                } else
 //                    Flash::error('Falló la Operación');
 //
 //
 //            }else
-//                $this->Ventas = $Ventas->find((int)$id);
+//                $this->PuntoVenta = $PuntoVenta->find((int)$id);
 //        }else {
 //            Flash::error('El id llego null');
 //        }
@@ -227,8 +221,8 @@ class VentasController extends AppController {
     /* Esta funcion devuelve una lista de los tipos de documentos*/
     public function getList(){
         //$page=1;
-        $Ventas = new Ventas();
-        $this->list = $Ventas->getAll();
+        $PuntoVenta = new PuntoVenta();
+        $this->list = $PuntoVenta->getAll();
 
         return $this->list;
     }

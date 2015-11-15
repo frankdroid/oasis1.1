@@ -1,0 +1,45 @@
+<div class="span12">
+	<h2>Condición de Pago</h2>
+</div>
+
+<div class="span12"><?php View::content(); ?><br></div>
+
+    <div class="span2">&nbsp;</div>
+    
+    <?php echo Form::open(); // por defecto llama a la misma url ?>
+    
+    <div class="span5">
+        
+        <label>Tipo de Condición
+            <?php echo Form::text('tipo_cond') ?></label>
+     
+            <label>Descripción
+            <?php echo Form::pass('descripcion') ?></label>
+            
+            <label>Prefijo
+            <?php echo Form::text('prefijo') ?></label>
+            
+            Contado
+            <?php echo Form::radio('tipo_pago','contado','required','false') ?><br>
+            
+            Crédito
+            <?php echo Form::radio('tipo_pago','credito','required','false') ?>Dias de Crédito<?php echo Form::text('dias_credito','size="1"') ?><br>
+            
+            Mixto
+            <?php echo Form::radio('tipo_pago','mixto','required','false') ?><br>
+            
+            <label>Comentario
+            <?php echo Form::textarea('comentario','rows=5') ?></label>
+            
+    </div>
+    
+    <div class="span3">
+            <label>Condiciones Registradas
+            <textarea name="docs" rows="10" readonly id="docs">CI</textarea></label>
+    </div>       
+    
+    <div class="span2">&nbsp;</div>
+
+<div class="span12" style="text-align:center"><?php echo Form::submit('Agregar','class="btn btn-primary"') ?></div>
+        
+<?php echo Form::close() ?> 

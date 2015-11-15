@@ -1,0 +1,265 @@
+<style>
+fieldset {
+    padding: 0px 10px 5px 10px;
+    margin: 0 0 10px 0;
+    border: 1px solid #00598D;
+    width:inherit;
+    background-color:#F2F2F2;      /*   F2F2F2  DBF1FF;*/
+}
+</style>
+<h2><?php echo $titulo; ?>  <span id="titulo"></span> </h2>
+<?php View::content(); ?>
+<div id="resultado"></div>
+<div id="prueba"></div>
+<?php //echo Form::open(); ?>
+<?php echo Ajax::form("resultado"); ?>
+<table border="01" style="border-collapse: collapse;">
+<!--    INFORMACION DE LA FACTURA-->
+    <tr>
+<!--        DATOS DEL CLIENTE-->
+        <td class="span8">
+            <div id='cliente'> </div> 
+            
+            <br>
+            
+            <table>
+                <tr>
+                    <th colspan="2">PRODUCTOS A VENDER</th>
+                </tr>
+                <tr>
+                    <td>            
+                      <select name='elaborado[]' id='elaborado' multiple="true" size='15' onchange="agregarElaborados(this,'prep')" style="width: 200px;">
+<!--                     <option value="">  </option>-->
+                            <?php
+                            foreach($elaborados as $items):
+                                ?>
+                              <option value='<?php echo $items->idtipoprep; ?>'> <?php echo $items->preparacion ?>  </option>
+
+                            <?php endforeach; ?>
+                        </select>    
+                    </td>
+                    
+                    <td>
+                        
+                      <select name='productos[]' id='productos' multiple="true" size='15' onchange="agregarElaborados(this,'prep')" style="width: 200px;">
+<!--                     <option value="">  </option>-->
+                            <?php
+                            foreach($elaborados as $items):
+                                ?>
+                              <option value='<?php echo $items->idtipoprep; ?>'> <?php echo $items->preparacion ?>  </option>
+
+                            <?php endforeach; ?>
+                        </select>    
+                        
+                    </td>
+                        
+                </tr>
+            </table>
+             
+             
+        </td>
+        
+<!--        FACTURA-->
+        <td class="span8">
+                
+        </td>
+    </tr>
+    
+    
+</table> 
+<br>
+<input name="cant_row" id="cant_row" type="hidden" value="0">
+<center> <?php echo Form::reset('Reset') ?> &nbsp;&nbsp;<?php echo Form::submit('Guardar', array('onclick'=>'return validar();')) ?></center>
+
+<?php echo Form::close() ?> 
+
+<script type="text/javascript">
+    //carga el formulario de clientes
+     $(document).ready(function(){
+        $.ajax({
+        //dataType:"json",
+        type: "POST",
+        url: "<?php echo PUBLIC_PATH . 'ventas/datosCliente'; ?>",
+        data: "idtipoprep=1",
+        success: function (html){
+           $("#cliente").html(html);        
+        }
+           
+        });
+    });
+    
+    
+
+    
+    
+    /*
+    
+    
+    
+    
+    function validar(){
+        if($('#idtipopuntoventa option:selected').val() == ''){
+            alert('Debe seleccionar el tipo de punto venta');
+            return false;
+        }
+        
+        if(!($('#cant_row').val() > 0)){
+           alert('No hay productos cargados');
+           return false; 
+        }  
+        
+        var num_line =  $("#cant_row").val();
+        var valid = false;
+        for(var i=1; i<=num_line; i++){
+            if($("#carga"+i).prop("checked"))
+               valid = true; 
+           
+        }
+        if(!valid){
+           alert('No hay productos marcados para cargar');
+           return false; 
+        }
+         
+        if(!confirm('Esta seguro de guardar?'))
+            return false;
+    }
+    function mostrarTittulo(str){
+        $('#titulo').html($('#idtipopuntoventa option:selected').text());
+    }  
+    
+    function agregarElaborados(str, tipo){
+        var num_line = $('#cant_row').val(); 
+        //alert(num_line);
+        
+        for(var i=1; i<=num_line; i++){
+            //alert(str.value);
+            //alert($('#idproducto'+i).val());
+            
+          
+            if(str.value == $('#idproducto'+i).val()){
+                alert('Ya fue agregado esta opcion');
+                return false;
+            }
+        }
+        
+        $.ajax({
+        dataType:"json",
+        type: "POST",
+        url: "<?php //echo PUBLIC_PATH . 'punto_venta/getDetalleElaborados'; ?>",
+        data: "idtipoprep="+str.value,
+        success: function (detalle){
+           //$("#prueba").html(html);
+            num_line++;
+            
+            var preparacion = (tipo == 'prep' ? $('#elaborado option:selected').text() : $('#productos option:selected').text()); 
+            var idproducto = str.value; 
+            var precio = (isNaN(parseFloat(detalle.precio_sin_iva)) ? 0 : parseFloat(detalle.precio_sin_iva)  );
+            var disp = (isNaN(parseFloat(detalle.disponible)) ? 0 : parseFloat(detalle.disponible)  );
+            //var cant_entrada = (isNaN(parseFloat(detalle.cant_entrada)) ? 0 : parseFloat(detalle.cant_entrada)  );
+            
+            var td1 = "<td><span id=preparacion> "+preparacion+" </span>\n\
+                        <input name='idproducto"+num_line + "'  id='idproducto"+num_line + "' type='hidden' size='5' value='"+ idproducto +"'></td>";
+            //alert(td1);
+            var td2 = "<td> <input name='ultimo_precio"+num_line + "' readonly id='ultimo_precio"+num_line + "' type='text' size='10' value='" + detalle.precio_sin_iva + "'> </td>";
+            //alert(td2);
+            var td3 = "<td> <input name='precio"+num_line + "' id='precio"+num_line + "' type='text' size='10' value=''  onblur='totalizar("+num_line+");'> </td>";
+            
+            var td4 = "<td> <input name='disp"+num_line + "' id='disp"+num_line + "' readonly type='text' size='10' value='"+disp+"'> </td>";
+            //alert(td4);
+            var td5 = "<td> <input name='surtido"+num_line + "' id='surtido"+num_line + "'  type='text' size='10' value='' onblur='totalizar("+num_line+");'> </td>";
+            
+            var td6 = "<td> <input name='restante"+num_line + "' id='restante"+num_line + "' readonly type='text' size='10' value='"+disp+"'> </td>";
+            
+            var td7 = "<td> <input name='total"+num_line + "' id='total"+num_line + "' readonly type='text' size='10' value=''> </td>";
+            
+            var td8 = "<td> <input type='checkbox' checked name='carga"+num_line +"' id='carga"+num_line +"' value='1' onclick='totalizar("+num_line+");'> </td>";
+            
+            var tr = td1 + td2 + td3 + td4 + td5 + td6 + td7 + td8;
+            
+            $('#prod_detalle> tbody:last').append('<tr>'+ tr + '</tr>');    
+                
+            $('#cant_row').val(num_line); 
+            
+            //llama la funcion para totalizar la linea
+            totalizar(num_line); 
+        }
+           
+        });
+    } 
+    
+    
+    function totalizar(num_line){
+        
+        var ultimo_precio = 0;
+        var precio = 0;
+        var precio_neto = 0;
+        var surtido = 0;
+        var disp = 0;
+        var total = 0;
+        
+        if(!isNaN(parseFloat($("#precio"+num_line).val())))
+            precio = parseFloat($("#precio"+num_line).val());
+        
+        if(!isNaN(parseFloat($("#ultimo_precio"+num_line).val())))
+            ultimo_precio = parseFloat($("#ultimo_precio"+num_line).val());
+        
+        if(!isNaN(parseFloat($("#surtido"+num_line).val())))
+            surtido = parseFloat($("#surtido"+num_line).val());
+        
+        if(!isNaN(parseFloat($("#disp"+num_line).val())))
+            disp = parseFloat($("#disp"+num_line).val());
+        
+        //valida que el surtido no puede exceder lo disponible
+        if(surtido > disp){
+            alert('El valor del surtido no debe ser mayor a lo disponible');
+            return false;
+        }
+            
+        
+        if(precio > 0)
+             precio_neto = precio;
+        else
+             precio_neto = ultimo_precio; 
+        
+        total = precio * surtido;
+        
+        
+        $("#restante"+num_line).val(disp - surtido);
+        $("#total"+num_line).val(total);
+        
+        //llama la funcion para totalizar todo
+        totalizarTodo();
+    }
+    
+    
+    function totalizarTodo(){
+        var num_line =  $("#cant_row").val();
+        
+        var precio_neto = 0;
+        var totalGeneral = 0;
+        var surtido = 0;
+        var disp = 0;
+        
+        for(var i=1; i<=num_line; i++){
+            total = parseFloat($("#total"+i).val());
+            
+            if(!isNaN(parseFloat($("#surtido"+i).val())))
+                surtido = parseFloat($("#surtido"+i).val());
+        
+            if(!isNaN(parseFloat($("#disp"+i).val())))
+                disp = parseFloat($("#disp"+i).val());
+            
+            
+            if($("#carga"+i).prop("checked"))
+                totalGeneral += total;
+                
+                $("#restante"+i).val(disp - surtido);            
+        }
+        
+        $("#total_general").html(totalGeneral);
+    }
+    
+    */
+</script>
+
+

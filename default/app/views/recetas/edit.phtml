@@ -43,7 +43,7 @@
             <?php echo Form::text('productos.merma_estimada') ?></label>
     </div>
     
-    <div id="list" class="span3" style="width: 300px; height:400px;">
+    <div id="list" class="span3" >
         <?php echo Html::link("productos/create", 'Crear nuevo') ?>
         <br>
         <?php View::partial('productos/list_productos',FALSE,array('list'=>$list))?>

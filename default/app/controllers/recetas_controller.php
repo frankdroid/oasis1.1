@@ -136,7 +136,7 @@ class RecetasController extends AppController {
         
         //Flash::info(var_dump($producto->getProductoUnidad(Input::post('idproducto'))));
                 
-        if(Input::hasPost('idproducto'))
+        //if(Input::hasPost('idproducto'))
             $this->unidades = $producto->getProductoUnidad(Input::post('idproducto'));     
     }
     /**

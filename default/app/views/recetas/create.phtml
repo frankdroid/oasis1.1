@@ -5,7 +5,7 @@
 <?php //echo Form::open(); ?>
 <?php echo Ajax::form("resultado"); ?>
 
-<div class="span6">
+<div class="span9">
             <fieldset>
                         Tipo de Prepaci&oacute;n
                             <?php
@@ -15,9 +15,13 @@
                         Cantidad de Raciones
                             <?php echo Form::hidden('recetas.idreceta'); ?>
                             <?php echo Form::text('recetas.cant'); ?>
+                        Preparacion: 
+							<?php echo Form::text('recetas.preparacion'); ?>
 
             </fieldset>
  </div>
+ 
+ <div class="span3">&nbsp;</div>
  
  <div class="span12">&nbsp;</div>  
  
@@ -96,6 +100,10 @@
 
 <script type="text/javascript">
     
+    function listarRecetas(){
+        
+    }
+    
     function sumar(item){
         
         var cant = parseFloat($("#cant"+item).val());
@@ -150,11 +158,11 @@
          
         //var num_line = tablaElementos.childElementCount;
 
-        td1.innerHTML = "<input name='idproducto"+num_line + "' id='idproducto"+num_line + "' type='hidden' value='" + idprod + "'> <input name='producto"+num_line + "' id='producto"+num_line + "' type='text' size='25' value='" + prod + "'>";
-        td2.innerHTML = "<input name='minima"+num_line + "' id='minima"+num_line + "' type='text' size='5' value='" + num_line + "' >";
-        td3.innerHTML = "<input name='maxima"+num_line + "' id='maxima"+num_line + "' type='text' size='5' value='" + num_line + "'>";
+        td1.innerHTML = "<input name='idproducto"+num_line + "' id='idproducto"+num_line + "' type='hidden' value='" + idprod + "'> <input name='producto"+num_line + "' id='producto"+num_line + "' type='text' size='60' value='" + prod + "'>";
+        td2.innerHTML = "<input name='minima"+num_line + "' id='minima"+num_line + "' type='text' size='10' value='" + 0 + "' >";
+        td3.innerHTML = "<input name='maxima"+num_line + "' id='maxima"+num_line + "' type='text' size='10' value='" + 0 + "'>";
         //td4.innerHTML = "<div id='div_unidad"+num_line + "'>";      
-        td4.innerHTML = "<input name='unidad"+num_line + "' id='unidad"+num_line + "' type='text' readonly size='5'> <input name='idunidad"+num_line + "' id='idunidad"+num_line + "' type='hidden'>";
+        td4.innerHTML = "<input name='unidad"+num_line + "' id='unidad"+num_line + "' type='text' readonly size='10'> <input name='idunidad"+num_line + "' id='idunidad"+num_line + "' type='text'>";
        
         tr.appendChild(td1);
         tr.appendChild(td2);
@@ -184,19 +192,12 @@
             $("#idunidad"+line).val(unidad_medida.idunidad); 
         }  
         });
-//        function cargarDatos(unidad_medida) {
-//            alert(unidad_medida.unidad);
-//                //$("#unidad1").val(unidad_medida.unidad); 
-//            }
     }
     
     function buscarReceta(str){
         idtipoprep = str.value;
         var num_line = $('#cant_row').val();
         var tablaElementos = document.getElementById('prod_detalle');
-        
-        //$('#prod').html($('#prod').html);
-        
         
         if(num_line > 0){
            var cont = num_line;
@@ -232,9 +233,6 @@
 //            tablaElementos.removeChild(fc)
 //            fc=tablaElementos.firstChild;
 //        }
-//        
-        
-        
         //$('#cant_row').val(0);
                  
         $.ajax({
@@ -257,6 +255,7 @@
             if(receta.idreceta != ''){
                 $("#recetas_cant").val(receta.cant); 
                 $("#recetas_idreceta").val(receta.idreceta);
+                $("#recetas_preparacion").val(receta.preparacion); 
                 var td1 = document.createElement('td');
                 var td2 = document.createElement('td');
                 var td3 = document.createElement('td');
@@ -282,12 +281,12 @@
                         var idunidad = v.idunidad;
 
                         td1.innerHTML = "<input name='idproducto"+num_line + "' id='idproducto"+num_line + "' type='hidden' value='" + idprod + "'>\n\
-                                        <input name='producto"+num_line + "' id='producto"+num_line + "' type='text' size='25' value='" + prod + "'>\n\
+                                        <input name='producto"+num_line + "' id='producto"+num_line + "' type='text' size='60' value='" + prod + "'>\n\
                                          <input name='id"+num_line + "' id='id"+num_line + "' type='hidden' value='" + id + "'>";
-                        td2.innerHTML = "<input name='minima"+num_line + "' id='minima"+num_line + "' type='text' size='5' value='" + minima + "'>";
-                        td3.innerHTML = "<input name='maxima"+num_line + "' id='maxima"+num_line + "' type='text' size='5' value='" + maxima + "'>";
+                        td2.innerHTML = "<input name='minima"+num_line + "' id='minima"+num_line + "' type='text' size='10' value='" + minima + "'>";
+                        td3.innerHTML = "<input name='maxima"+num_line + "' id='maxima"+num_line + "' type='text' size='10' value='" + maxima + "'>";
                         //td4.innerHTML = "<div id='div_unidad"+num_line + "'>";      
-                        td4.innerHTML = "<input name='unidad"+num_line + "' id='unidad"+num_line + "' type='text' readonly size='5' value='" + unidad + "'> <input name='idunidad"+num_line + "' id='idunidad"+num_line + "' type='hidden' value='" + idunidad + "'>";
+                        td4.innerHTML = "<input name='unidad"+num_line + "' id='unidad"+num_line + "' type='text' readonly size='10' value='" + unidad + "'> <input name='idunidad"+num_line + "' id='idunidad"+num_line + "' type='hidden' value='" + idunidad + "'>";
 
                         tr.appendChild(td1);
                         tr.appendChild(td2);

@@ -9,11 +9,13 @@
     <br>
 </div>
 
-    <div class="span2">&nbsp;</div>
+<?php echo Form::open(); // por defecto llama a la misma url ?>
+
+    <div class="span1">&nbsp;</div>
+
+    <div class="span3" id="div_create" >
     
-    <?php echo Form::open(); // por defecto llama a la misma url ?>
-    
-        <div id="div_create" class="span5">
+        <fieldset>
             
             <?php echo Form::hidden('marcas.idmarca') ?>
             <label>Marcas
@@ -29,19 +31,21 @@
             <label>Comentario
             <?php echo Form::textarea('marcas.comentario','rows=5') ?></label>
             
-    </div>
+        </fieldset>
+        
+	</div>
+
+	<div class="span1"></div>
     
-    <div id="list" class="span3" style="width: 300px; height:400px;">
-        <?php echo Html::link("marcas/create", 'Crear nuevo') ?>
-        <br>
+    <div id="list" class="span7">
+        <?php echo Html::link("marcas/create", 'Crear nuevo','class="btn btn-info"') ?>
+        <br><br>
         <?php View::partial('productos/list_marcas',FALSE,array('list'=>$list))?>
     </div>     
     
-    <div class="span2">&nbsp;</div>
-
     <div class="span12" style="text-align:center">
         <?php echo Form::submit('Actualizar','class="btn btn-primary"') ?>
-        <?php echo Form::reset('Cancelar','class="btn btn-primary"') ?>
+        <?php echo Form::reset('Cancelar','class="btn btn-cancel"') ?>
     </div>
         
 <?php echo Form::close() ?> 

@@ -52,19 +52,18 @@ class ProductosController extends AppController {
             
 	}
         
-        /**
+    /**
      * Edita un Registro
-     */
+    */
     public function edit($id = null)
     {      
         $this->titulo = 'Incorporaci&oacute;n de Productos'; 
         
+        
     	$productos = new Productos();
         if($id != null){
-            $productos = $productos->find((int)$id);
-        
             if(Input::hasPost('productos')){
-                
+                $this->productos = $productos->find_first("conditions: idproducto='$id'"); //$productos->find("$id");
                 $request = Input::post('productos');
                
                 if($productos->update($request)){
@@ -77,7 +76,9 @@ class ProductosController extends AppController {
 
 
             }else
-                $this->productos = $productos->find((int)$id);
+                $this->productos = $productos->find_first("conditions: idproducto='$id'");
+                  
+                    //Flash::error(var_dump($this->productos->idproducto));
         }else {
             Flash::error('El id llego null');
         }

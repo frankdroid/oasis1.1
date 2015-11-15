@@ -81,9 +81,9 @@ class ProveedoresController extends AppController {
     }
     
     /* function quer permite agregar un proveesor */
-    public function actualizarProveedor(){
+    public function actualizarProveedorAAAAAAA(){
         
-        View::template(null);
+        //View::template(null);
         //$this->valido = "false";
         //$this->valido = Input::post('idprov');
         //View::response('hola', null);
@@ -91,7 +91,9 @@ class ProveedoresController extends AppController {
         //if((Input::hasPost('idprov')) && (Input::post('idprov') != null) && (Input::post('idprov')) ){
         if(Session::has('idprov'))
             Session::delete ('idprov');
-            
+        
+        echo var_dump($_POST);
+        
         if((Input::hasPost('idprov')) && (Input::hasPost('nombre')) ){
             
             $proveedor = new Proveedores();
@@ -153,24 +155,83 @@ class ProveedoresController extends AppController {
         }
     }
     
-            
-    
-	/*
-    public function buscarproveedor($cedula) {
-		
-            View::template(NULL); // se carga sin template
-            Load::models('proveedores');  // se carga el modelo de proveedores
-
-            $this->msg = "";
+    /* function quer permite agregar un proveesor */
+    public function actualizarProveedor(){
+        
+        //View::template(null);
+        //$this->valido = "false";
+        //$this->valido = Input::post('idprov');
+        //View::response('hola', null);
+        //echo "theiriieieie";
+        //if((Input::hasPost('idprov')) && (Input::post('idprov') != null) && (Input::post('idprov')) ){
+        if(Session::has('idprov'))
+            Session::delete ('idprov');
+        
+        //echo var_dump($_POST['proveedores']['idprov']);
+        $request = $_POST['proveedores'];
+        
+        //if((Input::hasPost('proveedores_idprov')) && (Input::hasPost('proveedores_nombre')) ){
+        if(Input::hasPost('proveedores')){
             $proveedor = new Proveedores();
-            if($proveedor->exists("identificacion=$cedula")) {
-                    $this->proveedores = $proveedor->Buscar($cedula);
-            } else {
-                    $this->msg = "Proveedor no existe";
+            //$idprov = Input::post('idprov');
+            
+            //$proveedor = $proveedor->find((int)$idprov);
+            //$proveedor = $proveedor->find_by_idprov(1);
+            $proveedor->idprov = $request['idprov'];
+            $proveedor->idtipodoc = $request['idtipodoc'];
+            $proveedor->identificacion = $request['identificacion'];
+            $proveedor->nombre = $request['nombre'];
+            $proveedor->apellido = $request['apellido'];
+            $proveedor->direccion = $request['direccion'];
+            $proveedor->telefono = $request['telefono'];
+            $proveedor->comentario = $request['comentario'];
+            $proveedor->contacto1 = $request['contacto1'];
+            $proveedor->contacto2 = $request['contacto2'];
+            $proveedor->correo1 = $request['correo1'];
+            $proveedor->correo2 = $request['correo2'];
+            $proveedor->idcondicion = $request['idcondicion'];
+            
+            if($_POST['productos_prov']){
+                $productos = $request['productos_prov'];
+                $productos = str_split($productos);
+                
+            }    
+            
+            if($proveedor->save()){
+                //guardamos los productos
+                if(is_array($productos)){
+                    for($i=0; $i<count($productos); $i++){
+                        if((is_int((int)$productos[$i])) && ((int)$productos[$i] > 0)){
+                            $producto_prov = new ProductoProv();
+                            
+                            //verificamos is existe
+                            if(!$producto_prov->exists("idprov=".$proveedor->idprov." and idproducto=".$productos[$i]))
+                            {       
+                                $producto_prov->idprov = $proveedor->idprov;
+                                $producto_prov->idproducto = $productos[$i];
+
+                                //guarda el producto
+                                if($producto_prov->save()){
+                                    //Flash::valid('producto cargado');
+                                }
+                            }else{
+                                Flash::error("el proveedor ya tiene el producto asociado");
+                            }    
+                        }
+                            
+                    }
+                }
+                
+            }else{
+                //$this->valido = "false";
+                Flash::error("Falló el proceso de carga del proveedor");  
             }
-		
-	}
-    */
+        }else{
+            Flash::error("Hay campos vacios");
+        }
+    }
+    
+     
     
     public function getSelect(){
         //return $this->find("columns: idproducto,tipo_cliente", "order: tipo_cliente" );
