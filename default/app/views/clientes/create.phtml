@@ -106,6 +106,7 @@
 
 <?php echo Form::close() ?>
 
+
 <script>
     
     function accionRif(str){
@@ -130,7 +131,7 @@
             return false;
         }
             
-		var identificacion = $('#clientes_identificacion').val();
+	var identificacion = $('#clientes_identificacion').val();
         var idtipodoc = $('#clientes_idtipodoc').val();
         if($('#digito_rif').val() != '')
             identificacion = identificacion + "-" + $('#digito_rif').val();
@@ -156,13 +157,13 @@
         function cargarDatos(cliente) {
                 $("#clientes_accion").val(cliente.idcliente); 
                 $("#clientes_idcliente").val(cliente.idcliente); 
-                //$("#clientes_identificacion").val(cliente.identificacion); 
+                $("#clientes_identificacion").val(cliente.identificacion); 
                 $("#clientes_nombre").val(cliente.nombre); 
                 $("#clientes_apellido").val(cliente.apellido); 
                 $("#clientes_telefono").val(cliente.telefono); 
                 $("#clientes_direccion").val(cliente.direccion); 
                 $("#clientes_idtipocliente").val(cliente.idtipocliente); 
-                //$("#clientes_idtipodoc").val(cliente.idtipodoc); 
+                $("#clientes_idtipodoc").val(cliente.idtipodoc); 
                 $("#clientes_fe_nac").val(cliente.fe_nac); 
                 $("#clientes_gusto_preferencia").val(cliente.gusto_preferencia); 
                 $("#clientes_contacto_adic1").val(cliente.contacto_adic1);

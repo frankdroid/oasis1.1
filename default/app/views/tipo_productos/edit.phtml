@@ -13,7 +13,7 @@
     
     <?php echo Form::open(); // por defecto llama a la misma url ?>
     
-        <div class="span5" id="div_create">
+        <div class="span3" id="div_create">
         
         	<fieldset>
             
@@ -37,9 +37,9 @@
     
     <div class="span1">&nbsp;</div>
     
-    <div id="list" class="span3">
-        <?php echo Html::link("tipo_productos/create", 'Crear nuevo') ?>
-        <br>
+    <div id="list" class="span5">
+        <?php echo Html::link("tipo_productos/create", 'Crear nuevo','class="btn btn-info"') ?>
+        <br><br>
         <?php View::partial('productos/list_tipo_productos',FALSE,array('list'=>$list))?>
     </div>     
     

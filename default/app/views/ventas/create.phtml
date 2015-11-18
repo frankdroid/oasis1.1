@@ -1,265 +1,359 @@
-<style>
-fieldset {
-    padding: 0px 10px 5px 10px;
-    margin: 0 0 10px 0;
-    border: 1px solid #00598D;
-    width:inherit;
-    background-color:#F2F2F2;      /*   F2F2F2  DBF1FF;*/
-}
-</style>
-<h2><?php echo $titulo; ?>  <span id="titulo"></span> </h2>
 <?php View::content(); ?>
 <div id="resultado"></div>
-<div id="prueba"></div>
-<?php //echo Form::open(); ?>
-<?php echo Ajax::form("resultado"); ?>
-<table border="01" style="border-collapse: collapse;">
-<!--    INFORMACION DE LA FACTURA-->
-    <tr>
-<!--        DATOS DEL CLIENTE-->
-        <td class="span8">
-            <div id='cliente'> </div> 
-            
-            <br>
-            
-            <table>
+<div class="span12">
+     
+    <h2>Facturación y Venta</h2>
+     <br>
+    <span style='font-size: 15px; font-weight: bold;' class="btn btn-primary">
+    Punto de venta: <?php echo Session::get("puntoventa");?>
+    </span>   
+
+</div>
+
+<?php //echo Ajax::form("resultado"); 
+    echo Form::open();
+?>
+<div class="span5">
+    
+    <fieldset>
+        <legend>Datos Generales</legend>
+        
+            Identificación
+            <?php
+                //echo Form::dbSelect('clientes.idtipodoc','tipo_doc', array('tipo_documentos','getSelect'),'Seleccione',array('onchange'=>'buscarCliente(this)'));
+                echo Form::dbSelect('clientes.idtipodoc','tipo_doc', array('tipo_documentos','getSelect'),'Seleccione' ,array('onchange'=>'accionRif(this)'));
+                echo Form::text('clientes.identificacion','size="20"');
+            ?>
+            <span id="div_digito_rif" style="display: none"> - <?php echo Form::text('digito_rif', array('size'=>'1', 'id'=>'digito_rif',  'maxlenght'=>'1')); ?></span>
+            <?php echo Form::button("Siguiente", array('onclick'=>'buscarCliente()'))?>
+            <table>   
                 <tr>
-                    <th colspan="2">PRODUCTOS A VENDER</th>
+                 <th align='left'>
+                         <?php echo Form::hidden('clientes.idcliente') ?>Nombre
+                 </th>
+                 <td><?php echo Form::text('clientes.nombre') ?></td>
+                 <th align='left'>Apellido </th> 
+                 <td><?php echo Form::text('clientes.apellido') ?></td>
+             </tr> 
+             <t>
+                 <th align='left'>Direccion </th>
+                 <td>
+                     <?php echo Form::textarea('clientes.direccion','rows=5') ?>
+                 </td>  
+
+                 <th align='left'>Telefono</th>
+                 <td>
+                      <?php echo Form::text('clientes.telefono') ?>
+                 </td>
+             </t>
+             <tr>
+                <th>Tipo de Cliente
+
+                </th>
+                <td colspan="4">
+                    <?php
+                    echo Form::dbSelect('clientes.idtipocliente','tipo_cliente', array('tipo_clientes','getSelect'));
+                    ?> 
+                </td>
+            </tr>
+            </table>
+    </fieldset>
+    
+    <fieldset>
+        
+        <legend>Productos a Vender</legend>
+        
+        <div >
+             Preparaciones
+            <select name='elaborado[]' id='elaborado' multiple="true" size='10' onclick="agregarElaborados(this,'prep')" style="width: 200px;">
+<!--                     <option value="">  </option>-->
+                <?php
+                foreach($elaborados as $items):
+                    ?>
+                  <option value='<?php echo $items->idproducto; ?>'> <?php echo $items->preparacion ."/ PVP:".$items->precio_sin_iva ."/ DISP:".$items->disp  ?>  </option>
+
+                <?php endforeach; ?>
+            </select>
+        </div>
+        
+        <div >           
+<!--           Filtrar Preparaciones
+           <br>   
+            Fecha desde &nbsp; <?php //echo Form::date('fe_desde') ?>  hasta &nbsp; <?php //echo Form::date('fe_hasta') ?>      
+            <br>-->
+            Productos 
+            <select name='productos[]' id='productos' multiple="true" size='10' onclick="agregarElaborados(this,'prep')" style="width: 350px;">
+             <?php
+            foreach($productos as $items => $item):
+                //$prod = $item->marca."/".$item->tipo_prod."/".$item->presentacion;
+                $prod = $item->marca."/".$item->tipo_prod."/".$item->presentacion." / PVP:".$item->precio_sin_iva ."/ DISP:".$item->disp
+                ?>
+                <option value='<?php echo $item->idproducto ?>'> <?php echo $prod ?>  </option>
+
+            <?php endforeach; ?>
+            </select> 
+
+            <input name="cant_row" id="cant_row" type="hidden" value="0">
+        </div>
+    </fieldset>
+</div>
+
+<div class="span1">&nbsp;</div>
+    
+<div class="span6">
+       
+        
+        <fieldset> 
+            <legend>Articulos</legend>
+            <div style="overflow: auto; max-height:300px;">
+            <table id="prod_detalle" class="table">
+                <tbody>
+                    <tr bgcolor='#cccccc'>
+                        <td>Codigo</td>
+                        <td>Articulo</td>
+                        <td>Precio</td>
+                        <td>Borrar</td>
+                    </tr>
+                </tbody>
+            </table>
+            </div>
+        </fieldset>
+        <br>
+       <fieldset>
+           
+            <legend>Totalización</legend>
+        
+                Subtotal <?php echo Form::text('subtotal','readonly="true" size="10"') ?>
+
+                IVA <?php echo Form::text('iva','onblur="totalizarTodo()" size="10"') ?>
+
+                Total <?php echo Form::text('total', 'readonly="true" size="10"') ?>
+
+        </fieldset>
+        <br>
+        <fieldset> 
+            <legend>CONDICI&Oacute;N DE PAGO:</legend>
+            <table width=200 border="1" class="table" style="width: 300px; height: 200px; font-size: 11px;">
+                <tr>
+                    <th>Efectico</th>
+                    <td><?php echo Form::text("efectivo") ?></td>
+                    <td><?php echo Form::check("ch_efectivo",'1') ?></td>
+                </tr>    
+                    <th>Cesta Ticket</th>
+                    <td><?php echo Form::text("ticket") ?></td>
+                    <td><?php echo Form::check("ch_ticket",'1') ?></td>
+                <tr>
                 </tr>
+                    <th>D&eacute;bito</th>
+                    <td><?php echo Form::text("debito") ?></td>
+                    <td><?php echo Form::check("ch_debito",'1') ?></td>
                 <tr>
-                    <td>            
-                      <select name='elaborado[]' id='elaborado' multiple="true" size='15' onchange="agregarElaborados(this,'prep')" style="width: 200px;">
-<!--                     <option value="">  </option>-->
-                            <?php
-                            foreach($elaborados as $items):
-                                ?>
-                              <option value='<?php echo $items->idtipoprep; ?>'> <?php echo $items->preparacion ?>  </option>
-
-                            <?php endforeach; ?>
-                        </select>    
-                    </td>
-                    
-                    <td>
-                        
-                      <select name='productos[]' id='productos' multiple="true" size='15' onchange="agregarElaborados(this,'prep')" style="width: 200px;">
-<!--                     <option value="">  </option>-->
-                            <?php
-                            foreach($elaborados as $items):
-                                ?>
-                              <option value='<?php echo $items->idtipoprep; ?>'> <?php echo $items->preparacion ?>  </option>
-
-                            <?php endforeach; ?>
-                        </select>    
-                        
-                    </td>
-                        
+                </tr>
+                    <th>Tarjeta de Cr&eacute;dito</th>
+                    <td><?php echo Form::text("tc") ?></td>
+                    <td><?php echo Form::check("ch_tc",'1') ?></td>
+                </tr>
+                </tr>
+                    <th>Cr&eacute;dito Oasis </th>
+                    <td><?php echo Form::text("credito_oasis") ?></td>
+                    <td><?php echo Form::check("ch_credito_oasis",'1') ?></td>
                 </tr>
             </table>
-             
-             
-        </td>
-        
-<!--        FACTURA-->
-        <td class="span8">
+        </fieldset>
+        <br>
+        <fieldset>   
+            <div class="span2">&nbsp;</div>
+                <br>
+                ON/OFF:
+                <?php
+                    echo Form::check('ch_imprimir','1');
+                ?>
+            <div class="span3">
+             <?php echo Form::submit('EFECTUAR VENTA',array('class'=>'btn btn-primary', 'onclick'=>'return validar();')); // ?>
+            <?php echo Form::reset('CANCELAR',array('class'=>'btn btn-cancel')); // ?>  
                 
-        </td>
-    </tr>
-    
-    
-</table> 
-<br>
-<input name="cant_row" id="cant_row" type="hidden" value="0">
-<center> <?php echo Form::reset('Reset') ?> &nbsp;&nbsp;<?php echo Form::submit('Guardar', array('onclick'=>'return validar();')) ?></center>
+<!--            <input type="submit" value="EFECTUAR VENTA" class="btn btn-primary" onclick="return validar();">    -->
+<!--            <a href="#" class="btn btn-cancel">CANCELAR</a>-->
+            </div>
+        </fieldset>
+</div>
 
-<?php echo Form::close() ?> 
-
-<script type="text/javascript">
-    //carga el formulario de clientes
-     $(document).ready(function(){
-        $.ajax({
-        //dataType:"json",
-        type: "POST",
-        url: "<?php echo PUBLIC_PATH . 'ventas/datosCliente'; ?>",
-        data: "idtipoprep=1",
-        success: function (html){
-           $("#cliente").html(html);        
-        }
-           
-        });
-    });
-    
-    
-
-    
-    
-    /*
-    
-    
-    
-    
+<div id="prueba"></div>
+<?php echo Form::close(); ?>
+<script>
     function validar(){
-        if($('#idtipopuntoventa option:selected').val() == ''){
-            alert('Debe seleccionar el tipo de punto venta');
-            return false;
-        }
-        
-        if(!($('#cant_row').val() > 0)){
-           alert('No hay productos cargados');
-           return false; 
-        }  
-        
-        var num_line =  $("#cant_row").val();
-        var valid = false;
-        for(var i=1; i<=num_line; i++){
-            if($("#carga"+i).prop("checked"))
-               valid = true; 
-           
-        }
-        if(!valid){
-           alert('No hay productos marcados para cargar');
-           return false; 
-        }
-         
-        if(!confirm('Esta seguro de guardar?'))
-            return false;
+//        if($('#cant_row').val() == ''){
+//            alert('No hay articulos para factura');
+//            return false;
+//        }else{
+//            if(!confirm('Esta seguro?'))
+//               return false; 
+//        }
     }
-    function mostrarTittulo(str){
-        $('#titulo').html($('#idtipopuntoventa option:selected').text());
-    }  
+    
+    function accionRif(str){
+       var tipo_doc = $("#clientes_idtipodoc option:selected").html();
+       if(tipo_doc.toUpperCase() == 'RIF'){
+           document.getElementById('div_digito_rif').style.display = '';
+           
+       }else{
+           document.getElementById('div_digito_rif').style.display = 'none';
+           document.getElementById('digito_rif').value = '';
+       }
+    }
+    
+    function  buscarCliente(){
+        if($('#clientes_idtipodoc').val() == ''){
+            alert('Seleccione el tipo de documento');
+            return false;
+        }
+        if($('#clientes_identificacion').val() == ''){
+            alert('Ingrese el numero de identificacion');
+            return false;
+        }
+            
+	var identificacion = $('#clientes_identificacion').val();
+        var idtipodoc = $('#clientes_idtipodoc').val();
+        if($('#digito_rif').val() != '')
+            identificacion = identificacion + "-" + $('#digito_rif').val();
+        
+        $.ajax({
+        dataType:"json",
+        type: "POST",
+        url: "<?php echo PUBLIC_PATH . 'clientes/buscarCliente/'; ?>",
+        data: "idtipodoc=" + idtipodoc + "&identificacion=" + identificacion,
+        success: cargarDatos
+        });
+        
+        function cargarDatos(cliente) {
+                //$("#clientes_accion").val(cliente.idcliente); 
+                $("#clientes_idcliente").val(cliente.idcliente); 
+                //$("#clientes_identificacion").val(cliente.identificacion); 
+                $("#clientes_nombre").val(cliente.nombre); 
+                $("#clientes_apellido").val(cliente.apellido); 
+                $("#clientes_telefono").val(cliente.telefono); 
+                $("#clientes_direccion").val(cliente.direccion); 
+                $("#clientes_idtipocliente").val(cliente.idtipocliente); 
+                //$("#clientes_idtipodoc").val(cliente.idtipodoc); 
+                
+                //muestra el formulario
+                document.getElementById('form').style.display = '';
+            
+        }   
+    }
+    
+    function borrarProducto(linea){
+        
+        $("#prod_detalle tr:gt("+linea+")").remove();
+        
+//        var num_line = $('#cant_row').val(); 
+//        for(var i=1; i<=num_line; i++){
+//            if(is$(('#precio'+num_line)) ){
+//                alert($('#precio'+num_line).val());
+//            }  
+//        }
+        
+//        
+//        //alert(num_line);
+//        
+//        
+        //$('#cant_row').val(num_line); 
+    }
     
     function agregarElaborados(str, tipo){
         var num_line = $('#cant_row').val(); 
-        //alert(num_line);
-        
+        /*
         for(var i=1; i<=num_line; i++){
-            //alert(str.value);
-            //alert($('#idproducto'+i).val());
-            
           
             if(str.value == $('#idproducto'+i).val()){
                 alert('Ya fue agregado esta opcion');
                 return false;
             }
-        }
+        }*/
         
-        $.ajax({
+        
+        $.ajax({            
         dataType:"json",
         type: "POST",
-        url: "<?php //echo PUBLIC_PATH . 'punto_venta/getDetalleElaborados'; ?>",
+        url: "<?php echo PUBLIC_PATH . 'ventas/getDetalleElaborados'; ?>",
         data: "idtipoprep="+str.value,
         success: function (detalle){
+                
            //$("#prueba").html(html);
             num_line++;
-            
-            var preparacion = (tipo == 'prep' ? $('#elaborado option:selected').text() : $('#productos option:selected').text()); 
+            var producto = '';
+            //var tipo_prod_final;
+            if(tipo == 'prep'){
+                producto = $('#elaborado option:selected').text();
+                //tipo_prod_final =  'R';       
+            }else{
+                producto = $('#productos option:selected').text();
+                //tipo_prod_final =  'P';  
+            }  
+            /*var preparacion = (tipo == 'prep' ? $('#elaborado option:selected').text() : $('#productos option:selected').text()); 
+            //var tipo_prod_final (tipo == 'prep') ? 'R' : 'P');*/
+        
+            //var producto = preparacion //$('#productos option:selected').text();
             var idproducto = str.value; 
-            var precio = (isNaN(parseFloat(detalle.precio_sin_iva)) ? 0 : parseFloat(detalle.precio_sin_iva)  );
-            var disp = (isNaN(parseFloat(detalle.disponible)) ? 0 : parseFloat(detalle.disponible)  );
-            //var cant_entrada = (isNaN(parseFloat(detalle.cant_entrada)) ? 0 : parseFloat(detalle.cant_entrada)  );
-            
-            var td1 = "<td><span id=preparacion> "+preparacion+" </span>\n\
+            var precio = (isNaN(parseFloat(detalle.precio)) ? 0 : parseFloat(detalle.precio)  );
+           
+            var td1 = "<td> <span id=txt_idproducto"+num_line + "> "+idproducto+" </span> </td>";
+            var td2 = "<td><span id=txt_producto"+num_line + "> "+producto+" </span>\n\
                         <input name='idproducto"+num_line + "'  id='idproducto"+num_line + "' type='hidden' size='5' value='"+ idproducto +"'></td>";
             //alert(td1);
-            var td2 = "<td> <input name='ultimo_precio"+num_line + "' readonly id='ultimo_precio"+num_line + "' type='text' size='10' value='" + detalle.precio_sin_iva + "'> </td>";
-            //alert(td2);
-            var td3 = "<td> <input name='precio"+num_line + "' id='precio"+num_line + "' type='text' size='10' value=''  onblur='totalizar("+num_line+");'> </td>";
+            var td3 = "<td> <span id=txt_precio"+num_line + "> "+precio+" </span>\n\
+                        <input name='precio"+num_line + "' id='precio"+num_line + "' type='hidden' size='10' value='" + precio + "'> </td>";
+           
+            var td4 = "<td> <a href='#' id='borrar"+num_line + "' onclick='borrarProducto("+ num_line +");'>Borrar</a> </td>";
             
-            var td4 = "<td> <input name='disp"+num_line + "' id='disp"+num_line + "' readonly type='text' size='10' value='"+disp+"'> </td>";
-            //alert(td4);
-            var td5 = "<td> <input name='surtido"+num_line + "' id='surtido"+num_line + "'  type='text' size='10' value='' onblur='totalizar("+num_line+");'> </td>";
+            var tr = td1 + td2 + td3 + td4;
             
-            var td6 = "<td> <input name='restante"+num_line + "' id='restante"+num_line + "' readonly type='text' size='10' value='"+disp+"'> </td>";
-            
-            var td7 = "<td> <input name='total"+num_line + "' id='total"+num_line + "' readonly type='text' size='10' value=''> </td>";
-            
-            var td8 = "<td> <input type='checkbox' checked name='carga"+num_line +"' id='carga"+num_line +"' value='1' onclick='totalizar("+num_line+");'> </td>";
-            
-            var tr = td1 + td2 + td3 + td4 + td5 + td6 + td7 + td8;
-            
-            $('#prod_detalle> tbody:last').append('<tr>'+ tr + '</tr>');    
+            $('#prod_detalle> tbody:last').append('<tr bgcolor="#ffffff">'+ tr + '</tr>');    
                 
             $('#cant_row').val(num_line); 
             
             //llama la funcion para totalizar la linea
-            totalizar(num_line); 
+            totalizarTodo(); 
         }
            
         });
     } 
     
     
-    function totalizar(num_line){
-        
-        var ultimo_precio = 0;
-        var precio = 0;
-        var precio_neto = 0;
-        var surtido = 0;
-        var disp = 0;
-        var total = 0;
-        
-        if(!isNaN(parseFloat($("#precio"+num_line).val())))
-            precio = parseFloat($("#precio"+num_line).val());
-        
-        if(!isNaN(parseFloat($("#ultimo_precio"+num_line).val())))
-            ultimo_precio = parseFloat($("#ultimo_precio"+num_line).val());
-        
-        if(!isNaN(parseFloat($("#surtido"+num_line).val())))
-            surtido = parseFloat($("#surtido"+num_line).val());
-        
-        if(!isNaN(parseFloat($("#disp"+num_line).val())))
-            disp = parseFloat($("#disp"+num_line).val());
-        
-        //valida que el surtido no puede exceder lo disponible
-        if(surtido > disp){
-            alert('El valor del surtido no debe ser mayor a lo disponible');
-            return false;
-        }
-            
-        
-        if(precio > 0)
-             precio_neto = precio;
-        else
-             precio_neto = ultimo_precio; 
-        
-        total = precio * surtido;
-        
-        
-        $("#restante"+num_line).val(disp - surtido);
-        $("#total"+num_line).val(total);
-        
-        //llama la funcion para totalizar todo
-        totalizarTodo();
-    }
-    
-    
     function totalizarTodo(){
         var num_line =  $("#cant_row").val();
+        //alert(num_line);
+        var subtotal = 0;
+        var total = 0;
+        var iva = 0;
+        var total_iva = 0;
+        var precio = 0;
         
-        var precio_neto = 0;
-        var totalGeneral = 0;
-        var surtido = 0;
-        var disp = 0;
+        if(!isNaN(parseFloat($("#iva").val())))
+            iva = parseFloat($("#iva").val());
+        else
+            iva = 0;
         
         for(var i=1; i<=num_line; i++){
-            total = parseFloat($("#total"+i).val());
+            //total = parseFloat($("#total"+i).val());
+            if(!isNaN(parseFloat($("#precio"+i).val())))
+                precio = parseFloat($("#precio"+i).val());
+            else
+                precio = 0;
             
-            if(!isNaN(parseFloat($("#surtido"+i).val())))
-                surtido = parseFloat($("#surtido"+i).val());
-        
-            if(!isNaN(parseFloat($("#disp"+i).val())))
-                disp = parseFloat($("#disp"+i).val());
-            
-            
-            if($("#carga"+i).prop("checked"))
-                totalGeneral += total;
-                
-                $("#restante"+i).val(disp - surtido);            
+            subtotal += precio;
         }
         
-        $("#total_general").html(totalGeneral);
+        //calculo del total con iva
+        total_iva = (subtotal * iva) / 100;
+        
+        total = subtotal + total_iva;
+        
+        $("#subtotal").val(subtotal);
+        $("#total").val(total); 
     }
     
-    */
 </script>
+
 
 

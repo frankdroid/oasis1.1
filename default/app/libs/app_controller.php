@@ -19,7 +19,6 @@ class AppController extends Controller
 
 	public $acl; //variable objeto ACL
 	public $menu = 'menu1';
-	public $active = "";
 	public $userRol = ""; //variable con el rol del usuario autenticado
 	protected $usuario;
 	
@@ -44,11 +43,11 @@ class AppController extends Controller
 
 				//Se agregan los roles
 				
-				$this->acl->add_role(new AclRole("")); // Visitantes
+				$this->acl->add_role(new AclRole("")); // Gerentes
 		
-				$this->acl->add_role(new AclRole("1")); // Administradores
+				$this->acl->add_role(new AclRole("1")); // Alamacen
 		
-				$this->acl->add_role(new AclRole("2")); // Usuarios
+				$this->acl->add_role(new AclRole("2")); // Cajeros
 
 		
 				//Se agregan los recursos

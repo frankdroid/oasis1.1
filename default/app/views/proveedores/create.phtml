@@ -138,7 +138,6 @@ function  buscarProveedor(){
             productos_p.find('option').remove();
             limpiar();
         },
-        
             
         success: function(proveedor){
              productos_p.find('option').remove();
@@ -257,8 +256,8 @@ function agregarProductos(){
     var prod = document.getElementById('productos');
     //var sl = document.getElementById('productos_prov');    
     for (i = 0; i < prod.options.length; i++){
-       if(prod.options[i].selected){
-           
+       if(prod.options[i].selected == true){
+           //alert(prod.options[i].value);
            //verifica si existe el producto antes de agregarlo
             if(isExistProduct(prod.options[i].value)){
                 alert('El proveedor ya tiene agregado este producto');
@@ -330,7 +329,6 @@ function guardarProveedor(){
     
     //alert($("#productos_prov").val());
     //return;
-    
     var idprov = $("#proveedores_idprov").val(); 
     var idtipodoc = $("#proveedores_idtipodoc").val(); 
     var identificacion = $("#proveedores_identificacion").val(); 
@@ -360,22 +358,22 @@ function guardarProveedor(){
     request =  request +'&correo2='+correo2;
     request =  request +'&comentario='+comentario;
     request =  request +'&productos='+prod_prov;
-    alert(request);
+    //alert(request);
     $.ajax({
         //dataType:"json",
         type: "POST",
         url: "<?php echo PUBLIC_PATH . 'proveedores/actualizarProveedor/'; ?>",
         //data: "idtipodoc=" + idtipodoc + "&identificacion=" + identificacion,
         data: request,
-        beforeSend: function () 
-        {
-            //alert('antes');
-            //productos_p.prop('disabled', true);
-            // Limpiamos el select
-            //productos_p.find('option').remove();
-            //limpiar();
-        },
-        
+//        beforeSend: function () 
+//        {
+//            //alert('antes');
+//            //productos_p.prop('disabled', true);
+//            // Limpiamos el select
+//            //productos_p.find('option').remove();
+//            //limpiar();
+//        },
+//        
             
         success: function(html){
             
@@ -390,14 +388,14 @@ function guardarProveedor(){
             $("#proveedores_nombre").focus();*/
             
             
-        },
-        error: function()
-            {
-                alert('Ocurrio un error en el servidor ..');
-                //limpiar();
-                //productos_p.find('option').remove();
-                //alumnos.prop('disabled', false);
-            }
+        }
+//        error: function()
+//            {
+//                alert('Ocurrio un error en el servidor ..');
+//                //limpiar();
+//                //productos_p.find('option').remove();
+//                //alumnos.prop('disabled', false);
+//            }
     }); 
 }       
             

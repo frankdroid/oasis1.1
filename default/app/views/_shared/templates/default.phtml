@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <title><?php echo $titulo_pagina; ?></title>
@@ -23,13 +23,13 @@
 <body>
 <?php View::partial('header',FALSE,array('nombre_usuario'=>$nombre_usuario))?>
 
-<?php View::partial($menu);// View::partial($menu,FALSE,array('active'=>$active))?>
+<?php View::partial($menu)?>
 
 
 <div class="main">
   <div class="main-inner">
     <div class="container">
-      <div class="row logoagua">
+      <div class="row">
           <?php View::content(); ?>
       </div>
       <!-- /row --> 

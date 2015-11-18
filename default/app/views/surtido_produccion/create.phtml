@@ -1,12 +1,3 @@
-<style>
-fieldset {
-    padding: 0px 10px 5px 10px;
-    margin: 0 0 10px 0;
-    border: 1px solid #00598D;
-    width:inherit;
-    background-color:#cccccc;      /*   F2F2F2  DBF1FF;*/
-}
-</style>
 <h2><?php echo $titulo;  
 ?></h2>
 <?php View::content(); ?>
@@ -14,49 +5,43 @@ fieldset {
 <div id="prueba"></div>
 <?php echo Form::open(); ?>
 <?php //echo Ajax::form("resultado"); ?>
-<table border="01" style="border-collapse: collapse;">
-<!--    INFORMACION DE LA FACTURA-->
-    <tr>
-        <td colspan="15" class="span13">
+
+<div class="span6">
             <fieldset>
-                <table border="0">
-                    <tr>
-                        <th>Fecha </th> 
-                        
-                        <td>
+                        Fecha
                             <?php echo Form::date('fecha','',date('Y-m-d')); 
                             //echo Calendar::text('fecha'); ?>
-                        </td>
                         
-                        <th>Raciones </th>
-                        <td>
+                        Raciones
                             <?php echo Form::hidden('idreceta'); ?>
                             <?php echo Form::text('raciones',array('onblur'=>'recalcular(this);')); ?>
 <!--                            <input type="text" name="raciones" id="raciones" size="5" value="0" onblur="recalcular(this);">-->
-                        </td>
-                    </tr>
-                </table>    
+                       
             </fieldset>
-        </td>
-    </tr>
+</div>
+
+<div class="span12">&nbsp;</div>
     
-    <tr><td align="right" colspan="10">
-            Producto con disponibilidad <span style="background-color: green;"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            Producto con poca disponibilidad <span style="background-color: red;"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span> </td></tr>
- <!--  FIN DE  INFORMACION DE LA FACTURA-->   
+<div class="span6">
+        Producto con disponibilidad <span style="background-color: green;"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>
+        &nbsp;&nbsp;&nbsp;&nbsp;
+        Producto con poca disponibilidad <span style="background-color: red;"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>
+        <br> 
+</div>
+
+<div class="span12">&nbsp;</div>
+   
      <?php
         //echo Form::dbSelect('recetas.idtipoprep','tipo_prep', array('tipo_preparacion','getSelect'),'',array('multiple'=>'multiple' ,'onchange'=>'buscarReceta(this),;'));
             ?>
-    <tr>
+            
 <!--        LISTADO DE PRODUCTOS-->
-        <td class="span3" valign="top">
+<div class="span3">
             <fieldset>
                 
-                <h5>Preparaci&oacute;n</h5>
+                <h4>Preparaci&oacute;n</h4>
                 <br>           
                  <select name='recetas[]' id='recetas' multiple="true" size='15' onchange="buscarIngredientes(this)" style="width: 200px;">
-                     <option value="">  </option>
                      <?php
                      foreach($recetas as $items):
                          ?>
@@ -65,17 +50,17 @@ fieldset {
                      <?php endforeach; ?>
                  </select>  
             </fieldset> 
-        </td>
+</div>
         
-        <td valign="top"> 
-            <table bgcolor="#000000" border="1" id="prod_detalle" style="border-collapse: collapse;">
+<div class="span9">
+            <table class="table table-striped table-bordered" id="prod_detalle">
                  <tbody>
                     <tr bgcolor="#cccccc">
                         <th colspan="1">Ingredientes</th>
                         <td colspan="7"></td>
                     </tr>
                     <tr bgcolor="#cccccc">
-                        <th class="span5">
+                        <th>
                             PRODUCTO
                         </th>
 
@@ -107,14 +92,11 @@ fieldset {
                     
                  </tbody>
             </table>   
-        </td>
-    </tr>
-    
-</table> 
-<br>
+</div>
+
 <input name="cant_row" id="cant_row" type="hidden" value="0">
 <input name="cant_porcion_receta" id="cant_porcion_receta" type="hidden" value="">
-<center><?php echo Form::submit('Guardar') ?></center>
+<div class="span12" style="text-align:center"><?php echo Form::submit('Guardar','class="btn btn-primary"') ?></div>
 
 <?php echo Form::close() ?> 
 
@@ -246,14 +228,14 @@ fieldset {
                         
                         num_line++;
                         td1 = "<td  class='span5'>";
-                           td1 = td1 + "<input name='idproducto"+num_line + "' id='idproducto"+num_line + "' type='hidden' value='" + idprod + "'> <input name='producto"+num_line + "' id='producto"+num_line + "' readonly type='text' size='40' value='" + prod + "'>";
+                           td1 = td1 + "<input name='idproducto"+num_line + "' id='idproducto"+num_line + "' type='hidden' value='" + idprod + "'> <input name='producto"+num_line + "' id='producto"+num_line + "' readonly type='text' size='20' value='" + prod + "'>";
                         td1 = td1 + "</td>";
-                        td2 = "<td><input name='disp"+num_line + "' readonly id='disp"+num_line + "' type='text' size='5' value=''></td>";
-                        td3 = "<td> <input name='sug"+num_line + "' readonly id='sug"+num_line + "' type='text' size='5' value=''> </td>";
-                        td4 = "<td> <input name='ped"+num_line + "' id='ped"+num_line + "' type='text' size='5' onblur='calcularPedido(this,"+num_line+");'> </td>";
-                        td5 = "<td> <input name='ent"+num_line + "' id='ent"+num_line + "' readonly type='text' size='5'> </td>";
-                        td6 = "<td> <input name='simulado"+num_line + "' readonly id='simulado"+num_line + "' type='text' size='5'> \n\
-                            \n\<input name='merma_estimada"+num_line + "'  id='merma_estimada"+num_line + "' type='hidden' size='5' value='"+merma_estimada+"'>\n\
+                        td2 = "<td><input name='disp"+num_line + "' readonly id='disp"+num_line + "' type='text' size='3' value=''></td>";
+                        td3 = "<td> <input name='sug"+num_line + "' readonly id='sug"+num_line + "' type='text' size='3' value=''> </td>";
+                        td4 = "<td> <input name='ped"+num_line + "' id='ped"+num_line + "' type='text' size='3' onblur='calcularPedido(this,"+num_line+");'> </td>";
+                        td5 = "<td> <input name='ent"+num_line + "' id='ent"+num_line + "' readonly type='text' size='3'> </td>";
+                        td6 = "<td> <input name='simulado"+num_line + "' readonly id='simulado"+num_line + "' type='text' size='3'> \n\
+                            \n\<input name='merma_estimada"+num_line + "'  id='merma_estimada"+num_line + "' type='hidden' size='3' value='"+merma_estimada+"'>\n\
                                 <input name='minima"+num_line + "'  id='minima"+num_line + "' type='hidden' value='"+minima+"'>\n\
                                 <input name='maxima"+num_line + "'  id='maxima"+num_line + "' type='hidden' value='"+maxima+"'>\n\
                                 <input name='disponible"+num_line + "'  id='disponible"+num_line + "' type='hidden'  value='"+disp+"'>\n\

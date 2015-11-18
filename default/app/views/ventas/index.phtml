@@ -1,0 +1,35 @@
+<?php View::content(); ?>
+
+<?php echo Form::open() ?> 
+
+<div class="span12"><h2>SELECCION DE PUNTOS DE VENTAS</h2>
+    <br><br>
+    <?php
+        echo Form::dbSelect('idtipopuntoventa','tipo_punto_venta', array('tipo_punto_venta','getSelect'));
+        echo Form::hidden('puntoventa');
+    ?>  
+    
+    <br><br><br><br>
+    <?php echo Form::submit('Siguiente', array('onclick'=>'return validar();')) ?> 
+    
+    <br><br><br><br>
+    <br><br><br><br>
+    <br><br><br><br>
+</div>
+
+<?php echo Form::close() ?> 
+
+<script>
+    function validar(){
+        if($('#idtipopuntoventa option:selected').val() == ''){
+            alert('Debe seleccionar el tipo de punto venta');
+            //$('#puntoventa').val($('#idtipopuntoventa option:selected').text());
+            return false;
+        }else
+            $('#puntoventa').val($('#idtipopuntoventa option:selected').text());
+        
+    }  
+</script>
+
+
+

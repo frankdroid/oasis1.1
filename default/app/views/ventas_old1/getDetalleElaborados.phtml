@@ -5,20 +5,20 @@
 
 if($existe){
     foreach ($detalle_elaborados as $items => $item){
-        $precio = $item->precio;
-        //$producto = $item->producto;
-        /*$disponible = ($item->disponible == '') ? 0 : $item->disponible;
+        $idproducto = $item->idproducto;
+        $disponible = ($item->disponible == '') ? 0 : $item->disponible;
         $precio_sin_iva = ($item->precio_sin_iva == '') ? 0 : $item->precio_sin_iva; 
         $fe_surtido = $item->fe_surtido;
-        $cant_entrada = ($item->cant_entrada == '') ? 0 : $item->cant_entrada; */
+        $cant_entrada = ($item->cant_entrada == '') ? 0 : $item->cant_entrada; 
     }
+    
 
     $detalle = array (
-                    "precio" =>  "$precio",
-                    /*"disponible" =>    "$disponible",
+                    "idreceta" =>  "$idproducto",
+                    "disponible" =>    "$disponible",
                     "precio_sin_iva" =>    "$precio_sin_iva",
                     "fe_surtido" =>    "$fe_surtido",
-                    "cant_entrada" =>    "$cant_entrada",*/
+                    "cant_entrada" =>    "$cant_entrada",
             );
             
            
@@ -39,7 +39,11 @@ if($existe){
     //$productos_prov = $productos_proveedor;
 }else{
      $detalle = array (
-    "precio" => "",
+    "idreceta" => "",
+    "disponible" =>    "",
+    "precio_sin_iva" => "",
+    "fe_surtido" =>    "",
+   "cant_entrada" =>    "",
     );
 }
 

@@ -1,113 +1,101 @@
+<style>
+fieldset {
+    padding: 0px 10px 5px 10px;
+    margin: 0 0 10px 0;
+    border: 1px solid #00598D;
+    width:inherit;
+    background-color:#F2F2F2;      /*   F2F2F2  DBF1FF;*/
+}
+</style>
 <h2><?php echo $titulo; ?>  <span id="titulo"></span> </h2>
 <?php View::content(); ?>
 <div id="resultado"></div>
 <div id="prueba"></div>
 <?php //echo Form::open(); ?>
 <?php echo Ajax::form("resultado"); ?>
-
-<div class="span6">
-	
-    <fieldset>
-            Fecha del Surtido: &nbsp; &nbsp; <?php echo date('Y-m-d'); ?>&nbsp;&nbsp;
-        	
-            <strong>Punto de Venta:</strong> &nbsp; &nbsp;  <?php echo Form::dbSelect('idtipopuntoventa','tipo_punto_venta', array('tipo_punto_venta','getSelect'), 'Seleccione el punto de venta', array('onchange'=>'mostrarTittulo(this);'));?>
-	</fieldset>
-    
- </div>
+<table border="01" style="border-collapse: collapse;">
+<!--    INFORMACION DE LA FACTURA-->
+    <tr>
+<!--        DATOS DEL CLIENTE-->
+        <td class="span8">
+            <div id='cliente'> </div> 
+            
             <br>
             
-        
-<div class="span12" style="text-align:right"> 
-            <h3>Valor estimado de surtido en el punto de venta: <span id='total_general' style="font-size: 16px; font-weight: bold; color: 000">Bs. &nbsp;7500000 </span></h3>
-            
-</div>
- <!--  FIN DE  INFORMACION DE LA FACTURA-->   
-     <?php
-        //echo Form::dbSelect('recetas.idtipoprep','tipo_prep', array('tipo_preparacion','getSelect'),'',array('multiple'=>'multiple' ,'onchange'=>'buscarReceta(this),;'));
-            ?>
-
-<!--        LISTADO DE PRODUCTOS-->
-<div class="span3">
-    <fieldset>
-        <h4 style='font-weight: bold; color: #000;'>Lista de Elaborados a Seleccionar</h4>
-        <br>           
-         <select name='elaborado[]' id='elaborado' multiple="true" size='10' onchange="agregarElaborados(this,'prep')" style="width: 200px;">
+            <table>
+                <tr>
+                    <th colspan="2">PRODUCTOS A VENDER</th>
+                </tr>
+                <tr>
+                    <td>            
+                      <select name='elaborado[]' id='elaborado' multiple="true" size='15' onchange="agregarElaborados(this,'prep')" style="width: 200px;">
 <!--                     <option value="">  </option>-->
-             <?php
-             foreach($elaborados as $items):
-                 ?>
-               <option value='<?php echo $items->idtipoprep; ?>'> <?php echo $items->preparacion ?>  </option>
-               
-             <?php endforeach; ?>
-         </select>  
-        
-        <h5 style='font-weight: bold; color: #000;'>Lista de Productos Finalizados</h5>
-        <br>           
-         <select name='productos[]' id='productos' multiple="true" size='10' onchange="agregarElaborados(this,'prod')" style="width: 200px;">
+                            <?php
+                            foreach($elaborados as $items):
+                                ?>
+                              <option value='<?php echo $items->idtipoprep; ?>'> <?php echo $items->preparacion ?>  </option>
+
+                            <?php endforeach; ?>
+                        </select>    
+                    </td>
+                    
+                    <td> 
+                      <select name='productos[]' id='productos' multiple="true" size='15' onchange="agregarElaborados(this,'prep')" style="width: 200px;">
 <!--                     <option value="">  </option>-->
-              <?php
-             foreach($productos as $items => $item):
-                 $prod = $item->marca."/".$item->tipo_prod."/".$item->presentacion;
-                 ?>
-                 <option value='<?php echo $item->idproducto ?>'> <?php echo $prod ?>  </option>
+                            <?php
+                            foreach($elaborados as $items):
+                                ?>
+                              <option value='<?php echo $items->idtipoprep; ?>'> <?php echo $items->preparacion ?>  </option>
 
-             <?php endforeach; ?>
-         </select>  
-    </fieldset> 
-</div>            
-
-<div class="span9">       
-            <table border="1" id="prod_detalle" class="table table-bordered">
-                 <tbody>
-                    
-                    <tr bgcolor="#F2F2F2">
-                        <th></th>
-                        <th colspan="2">PRECIOS SIN IVA</th>
-                        <th colspan="6"></th>
-                    </tr>
-                    <tr bgcolor="#cccccc">
-                        <th class="span5">
-                            ELABORADOS
-                        </th>
-                        <th width="80">
-                            Ultimo
-                        </th>
-                        <th width="80">
-                            Venta
-                        </th>
-                        <th width="80">
-                            Disponible
-                        </th>
-                        <th width="80">
-                            Surtido
-                        </th>
-                        <th width="80">
-                            Restante
-                        </th>
-                        <th width="80">
-                            Total
-                        </th>
-                        <th>
-                            Accion
-                        </th>
-                    </tr>
-                    
-                 </tbody>
-            </table>   
+                            <?php endforeach; ?>
+                        </select>    
+                        
+                    </td>
+                        
+                </tr>
+            </table>
+             
+             
+        </td>
+        
+<!--        FACTURA-->
+        <td class="span8">
+                
         </td>
     </tr>
     
-</table>
-</div>
+    
+</table> 
 <br>
 <input name="cant_row" id="cant_row" type="hidden" value="0">
-<div class="span12" style="text-align:center"><?php echo Form::submit('Guardar', 'class="btn btn-primary" onclick="return validar();"') ?>&nbsp;&nbsp;<?php echo Form::reset('Cancel','class="btn btn-cancel"') ?></div>
+<center> <?php echo Form::reset('Reset') ?> &nbsp;&nbsp;<?php echo Form::submit('Guardar', array('onclick'=>'return validar();')) ?></center>
 
 <?php echo Form::close() ?> 
 
-
-
 <script type="text/javascript">
+    //carga el formulario de clientes
+     $(document).ready(function(){
+        $.ajax({
+        //dataType:"json",
+        type: "POST",
+        url: "<?php echo PUBLIC_PATH . 'ventas/datosCliente'; ?>",
+        data: "idtipoprep=1",
+        success: function (html){
+           $("#cliente").html(html);        
+        }
+           
+        });
+    });
+    
+    
+
+    
+    
+    /*
+    
+    
+    
+    
     function validar(){
         if($('#idtipopuntoventa option:selected').val() == ''){
             alert('Debe seleccionar el tipo de punto venta');
@@ -156,31 +144,20 @@
         $.ajax({
         dataType:"json",
         type: "POST",
-        url: "<?php echo PUBLIC_PATH . 'punto_venta/getDetalleElaborados'; ?>",
+        url: "<?php //echo PUBLIC_PATH . 'punto_venta/getDetalleElaborados'; ?>",
         data: "idtipoprep="+str.value,
         success: function (detalle){
            //$("#prueba").html(html);
             num_line++;
-            var preparacion;
-            var tipo_prod_final;
-            if(tipo == 'prep'){
-                preparacion = $('#elaborado option:selected').text();
-                tipo_prod_final =  'R';       
-            }else{
-                preparacion = $('#productos option:selected').text();
-                tipo_prod_final =  'P';  
-            }  
-            /*var preparacion = (tipo == 'prep' ? $('#elaborado option:selected').text() : $('#productos option:selected').text()); 
-            var tipo_prod_final (tipo == 'prep') ? 'R' : 'P');*/
             
+            var preparacion = (tipo == 'prep' ? $('#elaborado option:selected').text() : $('#productos option:selected').text()); 
             var idproducto = str.value; 
             var precio = (isNaN(parseFloat(detalle.precio_sin_iva)) ? 0 : parseFloat(detalle.precio_sin_iva)  );
             var disp = (isNaN(parseFloat(detalle.disponible)) ? 0 : parseFloat(detalle.disponible)  );
             //var cant_entrada = (isNaN(parseFloat(detalle.cant_entrada)) ? 0 : parseFloat(detalle.cant_entrada)  );
             
             var td1 = "<td><span id=preparacion> "+preparacion+" </span>\n\
-                        <input name='idproducto"+num_line + "'  id='idproducto"+num_line + "' type='hidden' size='5' value='"+ idproducto +"'>\n\
-                        <input name='tipo_prod_final"+num_line + "'  id='tipo_prod_final"+num_line + "' type='hidden' size='5' value='"+ tipo_prod_final +"'></td>";
+                        <input name='idproducto"+num_line + "'  id='idproducto"+num_line + "' type='hidden' size='5' value='"+ idproducto +"'></td>";
             //alert(td1);
             var td2 = "<td> <input name='ultimo_precio"+num_line + "' readonly id='ultimo_precio"+num_line + "' type='text' size='10' value='" + detalle.precio_sin_iva + "'> </td>";
             //alert(td2);
@@ -281,7 +258,7 @@
         $("#total_general").html(totalGeneral);
     }
     
-    
+    */
 </script>
 
 

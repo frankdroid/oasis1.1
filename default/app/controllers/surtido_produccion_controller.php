@@ -15,10 +15,11 @@ class SurtidoProduccionController extends AppController {
              */
         }
         
-        protected function after_filter() {
+         protected function after_filter() {
             //parent::after_filter();
             if(Input::isAjax()){
                 View::template(null);
+                //View::select('vista_resultado');
             }
         } 
         
@@ -50,7 +51,8 @@ class SurtidoProduccionController extends AppController {
             //$unidad = new Unidades();
             //$this->unidades = $unidad->getSelect();
         
-            if(Input::hasPost('idreceta') && Input::hasPost('raciones')){            
+            if(Input::hasPost('idreceta') && Input::hasPost('raciones')){  
+				View::select('vista_resultado');          
                 $valid = false;
                 $cant_row = Input::post('cant_row');
                 $valid = false;
@@ -70,7 +72,6 @@ class SurtidoProduccionController extends AppController {
                             $surtido->pedido = $pedido;
                             $surtido->fecha = Input::post("fecha");
                             $surtido->entregado = floatval (Input::post("ent$i"));
-
                             //Flash::valid(var_dump($pedido));
                             $surtido->idproducto = Input::post("idproducto$i");
                             $surtido->idtipoprep = Input::post("idtipoprep$i");

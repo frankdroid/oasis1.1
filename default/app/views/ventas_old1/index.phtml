@@ -1,0 +1,128 @@
+
+<div class="span12"><h2>Facturación y Venta</h2></div>
+
+<div class="span5">
+    
+    <fieldset>
+        
+        <legend>Datos Generales</legend>
+            
+            Identificación
+               <select>
+                   <option>CEDULA</option>
+                   <option>RIF</option>
+               </select>
+               
+
+               <?php echo Form::text('cedula') ?>
+            
+            <label>Nombre
+               <?php echo Form::text('nombre') ?></label>
+
+            <label>Apellido
+            <?php echo Form::text('clientes.apellido') ?></label>
+
+            <label>Dirección
+                <?php echo Form::textarea('clientes.direccion','rows=3') ?></label>          
+
+            <label>Telefono
+            <?php echo Form::text('clientes.telefono') ?></label>
+
+    </fieldset>
+    
+    <fieldset>
+        
+        <legend>Productos a Vender</legend>
+        
+        <div class="span2">
+            <select multiple size="10">
+                       <option>POLLO A LA PLANCHA</option>
+                       <option>PORCION ARROZ</option>
+                       <option value="">TAJADAS</option>
+            </select>
+        </div>
+        
+        <div class="span2">
+            <select multiple size="10">
+                       <option>REFRESCO</option>
+                       <option>MALTA</option>
+                       <option value="">JUGO LITRO</option>
+            </select>
+        </div>
+        
+    </fieldset>
+    
+    </div>
+    
+    <div class="span7">
+       
+       <fieldset>
+           
+            <legend>Totalización</legend>
+        
+                Subtotal<?php echo Form::text('subtotal') ?>
+
+                IVA<?php echo Form::text('iva') ?>
+
+                Total<?php echo Form::text('total') ?>
+
+        </fieldset>
+        
+        <fieldset>
+            
+            <table border="1" class="table">
+                <tr>
+                    <td>Codigo</td>
+                    <td>Articulo</td>
+                    <td>Precio</td>
+                    <td>Borrar</td>
+                    
+                </tr>
+                
+            </table>
+            
+        </fieldset>
+        
+
+        
+        <fieldset style="min-height:300px">
+            
+            <table border="1" class="table">
+                <tr>
+                    <td>10002</td>
+                    <td>POLLO PLANCHA</td>
+                    <td>Bs. 1500</td>
+                    <td><a href="#">Borrar</a></td>
+                    
+                </tr>
+                
+                <tr>
+                    <td>10003</td>
+                    <td>COCA COLA</td>
+                    <td>Bs. 200</td>
+                    <td><a href="#">Borrar</a></td>
+                    
+                </tr>
+                
+            </table>
+            
+        </fieldset>
+        
+        <fieldset>
+            
+            <div class="span2">&nbsp;</div>
+            
+            <div class="span3">
+            <a href="#" class="btn btn-primary">EFECTUAR VENTA</a>
+            <a href="#" class="btn btn-cancel">CANCELAR</a>
+            
+            </div>
+            
+            
+        </fieldset>
+        
+    </div>
+
+
+
+

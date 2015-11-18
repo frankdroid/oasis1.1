@@ -25,17 +25,9 @@ class VentasController extends AppController {
             }
         } 
         
-	
+	// funcion index
 	public function index() 
         {
-            //Flash::notice(Input::post('idtipopuntoventa'));
-            if(Input::hasPost('idtipopuntoventa')){
-                Session::set('idtipopuntoventa', Input::post('idtipopuntoventa'));
-                Session::set('puntoventa', Input::post('puntoventa'));
-                
-                
-                Router::toAction("create");
-            }
         }
 	
         // funcion index
@@ -48,18 +40,18 @@ class VentasController extends AppController {
 	
        //buscar el ultimo precio y disponibilidad 
        public function getDetalleElaborados() {
-           $venta = new Ventas();
+           $punto_venta = new Ventas();
             //buscar los productos  elaborados es decir preparados
             $this->existe = false;
             
-            $idtipoprep = 4; // Input::post('idtipoprep');
+            $idtipoprep = Input::post('idtipoprep');
             /*
            $query = "select i.idproducto, cant disponible, p.precio_sin_iva, p.fe_surtido from punto_venta p
                     right join inventario i on (p.idproducto = i.idproducto)
                     where i.idproducto = '$idproducto'";           
            */
-           //$this->detalle_elaborados = $venta->getElaborados(Input::post('idreceta'));
-           $this->detalle_elaborados = $venta->getDetalleElaborados($idtipoprep);
+           //$this->detalle_elaborados = $punto_venta->getElaborados(Input::post('idreceta'));
+           $this->detalle_elaborados = $punto_venta->getDetalleElaborados($idtipoprep);
            //Flash::notice(var_dump($this->detalle_elaborados));            
            
            if(count($this->detalle_elaborados) > 0 ){
@@ -75,65 +67,42 @@ class VentasController extends AppController {
         public function create()
         {
             $this->titulo = 'Punto de Venta'; 
-            //$fecha = (Input::hasPost('fe_surtido') ? Input::post('fe_surtido') : date('Y-m-d') ); }
+            
+            $fecha = (Input::hasPost('fe_surtido') ? Input::post('fe_surtido') : date('Y-m-d') ); 
+            
             $venta = new Ventas();
-            $idtipopuntoventa = Session::get('idtipopuntoventa');
             $this->elaborados = $venta->getElaborados($idtipopuntoventa);
             
-            //$producto = new Productos;
-            $this->productos =  $venta->getProductosFinal($idtipopuntoventa);
-          
-            if(Session::has('idtipopuntoventa') && Input::hasPost('cant_row')){   
-               
+            $producto = new Productos;
+            $this->productos =  $producto->getAll();
+            
+           
+            if(Input::hasPost('idtipopuntoventa')){   
+                //Flash::notice(date('Y-m-d'));
+                
                 $valid = false;
                 $cant_row = Input::post('cant_row');
                 
                 for($i=1; $i<=$cant_row; $i++){
-                    //if(Input::post("carga$i") == "1"){
-                    //guarda los datos del cliente
-                    $venta = new Ventas(); 
-                    
-                    if(Input::post("idcliente") != '')
-                        $venta->idcliente = Input::post("idcliente");
-                    else    
-                        $venta->idcliente = "";
-                        
-                    $venta->idtipopuntoventa = Session::get('idtipopuntoventa');
-                    $venta->idproducto = Input::post("idproducto$i");
-                    
-                    $venta->precio = Input::post("precio$i");
-                     //Flash::notice(Input::post("precio$i"));
-                     
-                    if(Input::post("ch_efectivo") == "1")
-                        $venta->efectivo = Input::post("efectivo");
-                    if(Input::post("ch_ticket") == "1")
-                        $venta->ticket = Input::post("ticket");
-                    if(Input::post("ch_debito") == "1")
-                        $venta->debito = Input::post("debito");
-                    if(Input::post("ch_tc") == "1")
-                        $venta->tc = Input::post("tc");
-                    if(Input::post("ch_creadito_oasis") == "1")
-                        $venta->creadito_oasis = Input::post("creadito_oasis");
-                    
-                    $venta->cant = 1;
-                    $venta->subtotal = 0;
-                    
-                    if(substr(Input::post("idproducto$i"), 0, 1) == 'P')
-                        $venta->tipo_prod_final = 'P';
-                    else
-                       $venta->tipo_prod_final = 'R'; 
-                    
-                    //
-                    //$surtido->idusuario = Session::get('idusuario');
+                    if(Input::post("carga$i") == "1"){
+                        $punto_venta = new Ventas(); 
 
-                    if($venta->create()){
-                        Flash::valid("producto_$i guardado");
-                    }else{
-                       Flash::error("rerror guardando el producto_$i "); 
+                        $punto_venta->idtipopuntoventa = Input::post("idtipopuntoventa");
+                        $punto_venta->idproducto  = Input::post("idproducto$i");
+                        $punto_venta->precio_sin_iva = (Input::post("precio$i") > 0 ? Input::post("precio$i") :  Input::post("ultimo_precio$i")) ;
+                        $punto_venta->cant_entrada = Input::post("surtido$i");
+                        $punto_venta->cant_salida = "0";
+                        $punto_venta->fecha = date('Y-m-d');
+                        //$surtido->idusuario = Session::get('idusuario');
+
+                        if($punto_venta->save()){
+                            Flash::valid("producto_$i guardado");
+                        }else{
+                           Flash::error("rerror guardando el producto_$i "); 
+                        }
                     }
-                    //}
-                }
-                //View::select('vista_resultado');
+                } 
+                
             }
     }
     

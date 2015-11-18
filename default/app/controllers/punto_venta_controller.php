@@ -73,7 +73,7 @@ class PuntoVentaController extends AppController {
            
             if(Input::hasPost('idtipopuntoventa')){   
                 //Flash::notice(date('Y-m-d'));
-                
+                View::select('vista_resultado');
                 $valid = false;
                 $cant_row = Input::post('cant_row');
                 
@@ -86,7 +86,9 @@ class PuntoVentaController extends AppController {
                         $punto_venta->precio_sin_iva = (Input::post("precio$i") > 0 ? Input::post("precio$i") :  Input::post("ultimo_precio$i")) ;
                         $punto_venta->cant_entrada = Input::post("surtido$i");
                         $punto_venta->cant_salida = "0";
-                        $punto_venta->fecha = date('Y-m-d');
+                        $punto_venta->tipo_prod_final = Input::post("tipo_prod_final$i");
+                        $punto_venta->cant_entrada = Input::post("surtido$i");
+                        //$punto_venta->fecha = date('Y-m-d');
                         //$surtido->idusuario = Session::get('idusuario');
 
                         if($punto_venta->save()){
